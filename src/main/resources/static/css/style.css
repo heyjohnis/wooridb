@@ -1,1 +1,3 @@
 .pagination{justify-content: center}
+td.print{display:none;}
+label{margin-bottom:0 !important;}

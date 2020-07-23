@@ -30,5 +30,10 @@ public class AdminServiceImpl implements AdminService {
 		return dao.countDb(vo);
 	}
 
+	@Override
+	public int updateDb(DbVO vo) {
+		return dao.updateDb(vo);
+	}
+
 	
 }

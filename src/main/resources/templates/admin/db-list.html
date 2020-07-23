@@ -4,12 +4,18 @@
 <head>
 <title>Consult</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="/css/style.css"
-	rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
 <script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="/jslib/jquery/jquery.twbsPagination.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+<script type="text/javascript"
+	src="/jslib/jquery/jquery.twbsPagination.js"></script>
+	
+<script type="text/javascript"
+	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
+	
 
 </head>
 
@@ -19,6 +25,7 @@
 	<nav class="navbar navbar-dark bg-primary">
 		<a class="navbar-brand" href="#">우리무역</a>
 	</nav>
+
 	<div class="container">
 		<table class="table">
 			<thead>
@@ -33,53 +40,222 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="db, stat: ${list}">
-					<td th:date="${db.getReg_date()}">2020-07-20</td>
-					<td th:text="${db.getCust_nm()}">홍길동</td>
-					<td th:text="${db.getCust_tel()}">010-1234-5678</td>
-					<td th:text="${db.getComment()}">궁금한사항이 많아요~ 궁금한사항이 많아요~ 궁금한사항이 많아요~ 궁금한사항이 많아요~</td>
-					<td th:text="${db.getManager()}">김담당</td>
-					<td th:text="${db.getOrder_cnt()}">1</td>
-					<td th:text="${db.getOrder_amount()}">50,000</td>
+				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}" data-toggle="modal"
+		data-target="#detailModal">
+					<td class="seq print" th:text="${db.getSeq()}">등록번호</td>
+					<td class="reg_date" th:text="${db.getReg_date()}">등록일</td>
+					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
+					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
+					<td class="comment" th:text="${db.getComment()}">문의사항</td>
+					<td class="manager" th:text="${db.getManager()}">담당자</td>
+					<td class="gender" th:text="${db.getGender()}">성별</td>		
+					<td class="gender" th:text="${db.getAge()}">나이</td>		
+					<td class="memo print" th:text="${db.getMemo()}">상담내용</td>
+					<td class="addr print" th:text="${db.getAddr()}">주소</td>
+					<td class="order_date print" th:text="${db.getOrder_date()}">주문일</td>
+					<td class="order_cnt" th:text="${db.getOrder_cnt()}">수량</td>
+					<td class="order_amount" th:text="${db.getOrder_amount()}">단가</td>
+					<td class="bank_account print" th:text="${db.getBank_account()}">계좌번호</td>
+					<td class="card_number print" th:text="${db.getCard_number()}">카드번호</td>
+					<td class="expire_date" th:text="${db.getExpire_date()}">유효기간</td>
+					<td class="following_date" th:text="${db.getFollowing_date()}">구매접촉일</td>
 				</tr>
 			</tbody>
 		</table>
-   		<nav aria-label="Page navigation">
-      		<ul class="pagination" id="pagination"></ul>
+		<nav aria-label="Page navigation">
+			<ul class="pagination" id="pagination"></ul>
 		</nav>
 	</div>
-	
-	
-	
-<script type="text/javascript">
-/*<![CDATA[*/
-	var total_pages = "[[${total_pages}]]";
-	var start_page = Number("[[${start_page}]]");
-	console.log("total_pages", total_pages);
-	console.log("start_page", start_page);
-    $(function () {
-        window.pagObj = $('#pagination').twbsPagination({
-            totalPages: total_pages,	// 총 페이지 수
-            startPage: start_page,		//현재 시작페이지
-            visiblePages: 5,
-            first : "처음",
-          	prev: "이전",
-          	next: "다음",
-          	last: "마지막",
-          		
-            onPageClick: function (event, page) {
-                console.info(page + ' (from options)');
-            }
-        }).on('page', function (event, page) {
-            gotoPage(page);
-            console.info(page + ' (from event listening)');
-        });
-    });
-    
-    function gotoPage(page) {
-    	window.location.href="/admin/db-list?page=" + page;
-    }
-	/*]]*/
-</script>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">제품문의 DB</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form name="request" id="request">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_seq">순번</label>					
+								<input type="text" id="modal_seq" name="seq" class="form-control seq" readonly />
+							</div>
+							<div class="col-6">
+								<label for="modal_reg_date">신청일시</label>					
+								<input type="text" id="modal_reg_date" name="reg_date" class="form-control reg_date" readonly />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_cust_nm">고객명</label>					
+								<input type="text" id="modal_cust_nm" name="cust_nm" class="form-control cust_nm" readonly />
+							</div>
+							<div class="col-6">
+								<label for="modal_cust_nm">연락처</label>					
+								<input type="text" id="modal_cust_tel" name="cust_tel" class="form-control cust_tel" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_gender">성별</label>					
+								<input type="text" id="modal_gender" name="gender" class="form-control gender" />
+							</div>
+							<div class="col-6">
+								<label for="modal_age">나이</label>					
+								<input type="text" id="modal_age" name="age" class="form-control age" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_comment">문의내용</label>					
+								<textarea id="modal_comment" name="comment" class="form-control comment" ></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_cust_nm">담당자</label>		
+								<input type="text" id="modal_manager" name="manager" class="form-control manager" />
+							</div>
+							<div class="col-6">
+								<label for="modal_following_date">접촉일</label>		
+								<input type="text" id="modal_following_date" name="following_date" class="form-control following_date" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_order_cnt">주문수량</label>							
+								<input type="text" id="modal_order_cnt" name="order_cnt" class="form-control order_cnt" />
+							</div>
+							<div class="col-6">
+								<label for="modal_order_amount">주문수량</label>							
+								<input type="text" id="modal_order_amount" name="order_amount" class="form-control order_amount" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_addr">주소</label>		
+								<input type="text" id="modal_addr" name="addr" class="form-control addr" />
+							</div>
+							<div class="col-12">
+								<label for="modal_memo">상담메모</label>		
+								<textarea id="modal_memo" name="memo" class="form-control memo"></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_bank_account">계좌번호</label>		
+								<input type="text" id="modal_bank_account" name="bank_account" class="form-control bank_account" />
+							</div>
+							<div class="col-8">
+								<label for="modal_card_number">카드번호</label>							
+								<input type="text" id="modal_card_number" name="card_number" class="form-control card_number" />
+							</div>
+							<div class="col-4">
+								<label for="modal_expire_date">유효기간</label>							
+								<input type="text" id="modal_expire_date" name="expire_date" class="form-control expire_date" />
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" onclick="saveDb();">저장</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+		/*<![CDATA[*/
+		var total_pages = "[[${total_pages}]]";
+		var start_page = Number("[[${start_page}]]");
+		console.log("total_pages", total_pages);
+		console.log("start_page", start_page);
+		$(function() {
+			window.pagObj = $('#pagination').twbsPagination({
+				totalPages : total_pages, // 총 페이지 수
+				startPage : start_page, //현재 시작페이지
+				visiblePages : 5,
+				first : "처음",
+				prev : "이전",
+				next : "다음",
+				last : "마지막",
+
+				onPageClick : function(event, page) {
+					console.info(page + ' (from options)');
+				}
+			}).on('page', function(event, page) {
+				gotoPage(page);
+				console.info(page + ' (from event listening)');
+			});
+		});
+
+		function gotoPage(page) {
+			window.location.href = "/admin/db-list?page=" + page;
+		}
+		/*]]*/
+		
+		
+		$('#detailModal').on('shown.bs.modal', function (e) {
+		  var id_obj = e.relatedTarget;
+		  console.log("modal : ", id_obj);
+		  var seq = $(id_obj).find(".seq").text();
+		  var reg_date = $(id_obj).find(".reg_date").text();
+		  var cust_nm = $(id_obj).find(".cust_nm").text();
+		  var cust_tel = $(id_obj).find(".cust_tel").text();
+		  var gender = $(id_obj).find(".gender").text();
+		  var age = $(id_obj).find(".age").text();
+		  var following_date = $(id_obj).find(".following_date").text();
+		  var bank_account = $(id_obj).find(".bank_account").text();
+		  var card_number = $(id_obj).find(".card_number").text();
+		  var comment = $(id_obj).find(".comment").text();
+		  var manager = $(id_obj).find(".manager").text();
+		  var order_cnt = $(id_obj).find(".order_cnt").text();
+		  var order_amount = $(id_obj).find(".order_amount").text();
+		  var expire_date = $(id_obj).find(".expire_date").text();
+
+		  $("#modal_seq").val(seq);
+		  $("#modal_reg_date").val(reg_date);
+		  $("#modal_cust_nm").val(cust_nm); 
+		  $("#modal_cust_tel").val(cust_tel);
+		  $("#modal_gender").val(gender);
+		  $("#modal_age").val(age);
+		  $("#modal_following_date").val(following_date);
+		  $("#modal_bank_account").val(bank_account);
+		  $("#modal_card_number").val(card_number);
+		  $("#modal_comment").val(comment);
+		  $("#modal_manager").val(manager);
+		  $("#modal_order_cnt").val(order_cnt);
+		  $("#modal_order_amount").val(order_amount);
+		  $("#modal_expire_date").val(expire_date);
+		});
+		
+		function saveDb(){
+			var dbObj = $("#request").serializeObject();
+			console.log("dbObj : ", dbObj);
+			
+			$.post("/admin/updateDb", dbObj, function(data){
+				if(data == "1" || data == 1)
+					alert("저장되었습니다.");
+			}).fail(function(){
+				alert("저장이 실패되었습니다.\n다시 시도하세요.");
+			});	
+		}
+		
+		function updateList(){
+			
+		}
+		
+		
+	</script>
 </body>
 </html>

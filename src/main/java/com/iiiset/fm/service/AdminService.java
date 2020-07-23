@@ -12,4 +12,6 @@ public interface AdminService {
 
 	int countDb(DbVO vo);
 
+	int updateDb(DbVO vo);
+
 }

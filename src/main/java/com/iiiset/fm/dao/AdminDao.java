@@ -11,4 +11,6 @@ public interface AdminDao {
 
 	int countDb(DbVO vo);
 
+	int updateDb(DbVO vo);
+
 }

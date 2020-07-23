@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,6 +66,16 @@ public class AdminController {
 		vo.setComment(comment);
 		
 		int result = service.insertDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/updateDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int updateDb(@ModelAttribute DbVO vo) throws Exception {
+		
+		System.out.println("cust_nm : " + vo.getCust_nm());
+		int result = service.updateDb(vo);
 
 		return result;
 	}
