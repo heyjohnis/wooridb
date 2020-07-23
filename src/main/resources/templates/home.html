@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Consult</title>
+<link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/jslib/bootstrap/css/bootstrap-theme.min.css"
+	rel="stylesheet" />
+<link href="/jslib/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" />
+<script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
+</head>
+
+<body>
+
+	<div class="container">
+		<form>
+			<div class="form-group">
+				<label for="exampleFormControlInput1">성명</label> <input type="text"
+					class="form-control" id="cust_nm"
+					placeholder="성명을 입력해주세요">
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlInput1">연락처</label> <input type="text"
+					class="form-control" id="cust_tel"
+					placeholder="전화번호를 입력해주세요">
+			</div>
+			<div class="form-group">
+				<label for="exampleFormControlTextarea1">문의사항</label>
+				<textarea class="form-control" id="comment"
+					rows="3" placeholder="궁금하신 사항을 입력해주세요"></textarea>
+			</div>
+			<button type="button" class="btn btn-secondary btn-lg btn-block" id="send_db">작성완료</button>
+		</form>
+	</div>
+</body>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#send_db").click(function(){
+		send();
+	});
+});
+
+function send(){
+	var db = {};
+	db.cust_nm = $("#cust_nm").val();
+	db.cust_tel = $("#cust_tel").val();
+	db.comment = $("#comment").val();
+	
+	$.post("/insertDb", db, function(data){
+		alert("data : " + data);
+	}).fail(function(){
+		alert("실패");
+	});	
+}
+
+
+</script>
+</html>
