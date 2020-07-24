@@ -14,7 +14,27 @@
 	</insert>
 	
 	<select id="selectDb" parameterType="com.iiiset.fm.model.DbVO" resultType="com.iiiset.fm.model.DbVO">
-		SELECT * FROM db_data ORDER BY seq DESC LIMIT ${page_size} OFFSET ${page_scope}
+		SELECT * FROM db_data
+			<where>
+				<if test="srh_sta_date != null and srh_sta_date != '' ">
+				AND reg_date > STR_TO_DATE(#{srh_sta_date}, '%Y%m%d')
+				</if>
+				<if test="srh_sta_date != null and srh_sta_date != '' ">
+				AND reg_date &lt; STR_TO_DATE(#{srh_end_date}, '%Y%m%d')
+				</if>
+				<if test="srh_key != null and srh_key != '' ">
+				AND (
+					cust_nm like '%${srh_key}%'
+					OR cust_tel like '%${srh_key}%' 
+					OR comment like '%${srh_key}%'
+					OR manager like '%${srh_key}%'
+				)
+				</if>
+			</where> 
+			 
+			ORDER BY seq DESC 
+			
+			LIMIT ${page_size} OFFSET ${page_scope}
 	</select>
 
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO" resultType="java.lang.Integer">
@@ -38,7 +58,7 @@
 				expire_date = #{expire_date},
 				manager = #{manager},
 				following_date = #{following_date},
-				mod_date = sysdate
+				mod_date = now()
 			WHERE seq = #{seq}
 	</update>
 

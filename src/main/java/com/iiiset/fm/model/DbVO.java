@@ -27,8 +27,12 @@ public class DbVO {
 	String reg_date = "";
 	String mod_date = "";
 	int page_size = 0;
-	int page = 0;
+	int page = 1;
 	int page_scope = 0;
+	
+	String srh_sta_date = "";
+	String srh_end_date = "";
+	String srh_key = "";
 	
 }
 

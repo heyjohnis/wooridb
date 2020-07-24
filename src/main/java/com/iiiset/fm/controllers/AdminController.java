@@ -32,14 +32,13 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/admin/db-list")
-	public @ResponseBody ModelAndView dbList(@RequestParam("page") int page) throws Exception {
+	public @ResponseBody ModelAndView dbList(@ModelAttribute DbVO vo) throws Exception {
 		
 		ModelAndView mv = new ModelAndView();
-		
+		int page = vo.getPage();
 		int page_size = 10;
 		int page_scope = (page - 1) * page_size;
 		
-		DbVO vo = new DbVO();
 		vo.setPage_size(page_size);
 		vo.setPage_scope(page_scope);
 		List<DbVO> list = service.selectDb(vo);
@@ -49,6 +48,7 @@ public class AdminController {
 		double total_page_cnt = Math.ceil(total_cnt / (double)page_size );
 		
 		mv.addObject("list", list);
+		mv.addObject("search", vo);
 		mv.addObject("total_pages", total_page_cnt);
 		mv.addObject("start_page", page);
 		mv.setViewName("admin/db-list");

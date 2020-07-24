@@ -8,14 +8,17 @@
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
 <script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+	integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+	crossorigin="anonymous"></script>
 
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.twbsPagination.js"></script>
-	
+
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
-	
+
 
 </head>
 
@@ -27,38 +30,77 @@
 	</nav>
 
 	<div class="container">
-		<table class="table">
+		<form id="search" name="search">
+			<div class="row mt-3 mb-3">
+				<div class="col-3 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">시작일</span>
+					</div>
+					<input type="date" id="srh_sta_date" class="form-control srh_sta_date" th:value="${search.getSrh_sta_date()}">
+				</div>
+				<div class="col-3 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">종료일</span>
+					</div>
+					<input type="date" id="srh_end_date" class="form-control srh_end_date" th:value="${search.getSrh_end_date()}">
+				</div>
+				<div class="col-3 input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">검색어</span>
+					</div>
+					<input type="text" id="srh_key" class="form-control srh_key" th:value="${search.getSrh_key()}">
+				</div>
+				<div class="col-3 text-right">
+					<div class="btn-group mw-100" role="group" aria-label="Basic example">
+						<button type="button" class="btn btn-primary pr-4 pl-4" onclick="gotoPage(1)">조회</button>
+						<button type="button" class="btn btn-secondary w-35">리셋</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<table class="table table-hover">
 			<thead>
 				<tr>
+					<th scope="col" class="print">등록번호</th>
 					<th scope="col">접수일자</th>
 					<th scope="col">고객명</th>
 					<th scope="col">연락처</th>
 					<th scope="col">문의사항</th>
 					<th scope="col">담당자</th>
+					<th scope="col" class="print">성별</th>
+					<th scope="col" class="print">나이</th>
+					<th scope="col" class="print">상담내용</th>
+					<th scope="col" class="print">주소</th>
+					<th scope="col" class="print">주문일</th>
 					<th scope="col">수량</th>
 					<th scope="col">금액</th>
+					<th scope="col" class="print">계좌번호</th>
+					<th scope="col" class="print">카드번호</th>
+					<th scope="col" class="print">유효기간</th>
+					<th scope="col" class="print">구매접촉일</th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}" data-toggle="modal"
-		data-target="#detailModal">
+			<tbody class="">
+				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
+					data-toggle="modal" data-target="#detailModal">
 					<td class="seq print" th:text="${db.getSeq()}">등록번호</td>
 					<td class="reg_date" th:text="${db.getReg_date()}">등록일</td>
 					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
 					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
 					<td class="comment" th:text="${db.getComment()}">문의사항</td>
 					<td class="manager" th:text="${db.getManager()}">담당자</td>
-					<td class="gender" th:text="${db.getGender()}">성별</td>		
-					<td class="gender" th:text="${db.getAge()}">나이</td>		
+					<td class="gender print" th:text="${db.getGender()}">성별</td>
+					<td class="age print" th:text="${db.getAge()}">나이</td>
 					<td class="memo print" th:text="${db.getMemo()}">상담내용</td>
 					<td class="addr print" th:text="${db.getAddr()}">주소</td>
 					<td class="order_date print" th:text="${db.getOrder_date()}">주문일</td>
 					<td class="order_cnt" th:text="${db.getOrder_cnt()}">수량</td>
-					<td class="order_amount" th:text="${db.getOrder_amount()}">단가</td>
+					<td class="order_amount" th:text="${db.getOrder_amount()}">금액</td>
 					<td class="bank_account print" th:text="${db.getBank_account()}">계좌번호</td>
 					<td class="card_number print" th:text="${db.getCard_number()}">카드번호</td>
-					<td class="expire_date" th:text="${db.getExpire_date()}">유효기간</td>
-					<td class="following_date" th:text="${db.getFollowing_date()}">구매접촉일</td>
+					<td class="expire_date print" th:text="${db.getExpire_date()}">유효기간</td>
+					<td class="following_date print"
+						th:text="${db.getFollowing_date()}">구매접촉일</td>
 				</tr>
 			</tbody>
 		</table>
@@ -84,82 +126,92 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-6">
-								<label for="modal_seq">순번</label>					
-								<input type="text" id="modal_seq" name="seq" class="form-control seq" readonly />
+								<label for="modal_seq">순번</label> <input type="text"
+									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
 							<div class="col-6">
-								<label for="modal_reg_date">신청일시</label>					
-								<input type="text" id="modal_reg_date" name="reg_date" class="form-control reg_date" readonly />
+								<label for="modal_reg_date">신청일시</label> <input type="text"
+									id="modal_reg_date" name="reg_date"
+									class="form-control reg_date" readonly />
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-6">
-								<label for="modal_cust_nm">고객명</label>					
-								<input type="text" id="modal_cust_nm" name="cust_nm" class="form-control cust_nm" readonly />
+								<label for="modal_cust_nm">고객명</label> <input type="text"
+									id="modal_cust_nm" name="cust_nm" class="form-control cust_nm"
+									readonly />
 							</div>
 							<div class="col-6">
-								<label for="modal_cust_nm">연락처</label>					
-								<input type="text" id="modal_cust_tel" name="cust_tel" class="form-control cust_tel" />
+								<label for="modal_cust_nm">연락처</label> <input type="text"
+									id="modal_cust_tel" name="cust_tel"
+									class="form-control cust_tel" />
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-6">
-								<label for="modal_gender">성별</label>					
-								<input type="text" id="modal_gender" name="gender" class="form-control gender" />
+								<label for="modal_gender">성별</label> <input type="text"
+									id="modal_gender" name="gender" class="form-control gender" />
 							</div>
 							<div class="col-6">
-								<label for="modal_age">나이</label>					
-								<input type="text" id="modal_age" name="age" class="form-control age" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<label for="modal_comment">문의내용</label>					
-								<textarea id="modal_comment" name="comment" class="form-control comment" ></textarea>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-6">
-								<label for="modal_cust_nm">담당자</label>		
-								<input type="text" id="modal_manager" name="manager" class="form-control manager" />
-							</div>
-							<div class="col-6">
-								<label for="modal_following_date">접촉일</label>		
-								<input type="text" id="modal_following_date" name="following_date" class="form-control following_date" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-6">
-								<label for="modal_order_cnt">주문수량</label>							
-								<input type="text" id="modal_order_cnt" name="order_cnt" class="form-control order_cnt" />
-							</div>
-							<div class="col-6">
-								<label for="modal_order_amount">주문수량</label>							
-								<input type="text" id="modal_order_amount" name="order_amount" class="form-control order_amount" />
+								<label for="modal_age">나이</label> <input type="text"
+									id="modal_age" name="age" class="form-control age" />
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<label for="modal_addr">주소</label>		
-								<input type="text" id="modal_addr" name="addr" class="form-control addr" />
+								<label for="modal_comment">문의내용</label>
+								<textarea id="modal_comment" name="comment"
+									class="form-control comment"></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_cust_nm">담당자</label> <input type="text"
+									id="modal_manager" name="manager" class="form-control manager" />
+							</div>
+							<div class="col-6">
+								<label for="modal_following_date">접촉일</label> <input type="text"
+									id="modal_following_date" name="following_date"
+									class="form-control following_date" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_order_cnt">주문수량</label> <input type="text"
+									id="modal_order_cnt" name="order_cnt"
+									class="form-control order_cnt" />
+							</div>
+							<div class="col-6">
+								<label for="modal_order_amount">금액</label> <input type="text"
+									id="modal_order_amount" name="order_amount"
+									class="form-control order_amount" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_addr">주소</label> <input type="text"
+									id="modal_addr" name="addr" class="form-control addr" />
 							</div>
 							<div class="col-12">
-								<label for="modal_memo">상담메모</label>		
+								<label for="modal_memo">상담메모</label>
 								<textarea id="modal_memo" name="memo" class="form-control memo"></textarea>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<label for="modal_bank_account">계좌번호</label>		
-								<input type="text" id="modal_bank_account" name="bank_account" class="form-control bank_account" />
+								<label for="modal_bank_account">계좌번호</label> <input type="text"
+									id="modal_bank_account" name="bank_account"
+									class="form-control bank_account" />
 							</div>
 							<div class="col-8">
-								<label for="modal_card_number">카드번호</label>							
-								<input type="text" id="modal_card_number" name="card_number" class="form-control card_number" />
+								<label for="modal_card_number">카드번호</label> <input type="text"
+									id="modal_card_number" name="card_number"
+									class="form-control card_number" />
 							</div>
 							<div class="col-4">
-								<label for="modal_expire_date">유효기간</label>							
-								<input type="text" id="modal_expire_date" name="expire_date" class="form-control expire_date" />
+								<label for="modal_expire_date">유효기간</label> <input type="text"
+									id="modal_expire_date" name="expire_date"
+									class="form-control expire_date" />
 							</div>
 						</div>
 					</div>
@@ -200,62 +252,69 @@
 		});
 
 		function gotoPage(page) {
-			window.location.href = "/admin/db-list?page=" + page;
+			var srh_sta_date = $("#srh_sta_date").val();
+			var srh_end_date = $("#srh_end_date").val();
+			var srh_key = $("#srh_key").val();
+			window.location.href = "/admin/db-list?page=" + page 
+					+ "&srh_sta_date=" + srh_sta_date 
+					+ "&srh_end_date=" + srh_end_date
+					+ "&srh_key=" + srh_key;
 		}
 		/*]]*/
-		
-		
-		$('#detailModal').on('shown.bs.modal', function (e) {
-		  var id_obj = e.relatedTarget;
-		  console.log("modal : ", id_obj);
-		  var seq = $(id_obj).find(".seq").text();
-		  var reg_date = $(id_obj).find(".reg_date").text();
-		  var cust_nm = $(id_obj).find(".cust_nm").text();
-		  var cust_tel = $(id_obj).find(".cust_tel").text();
-		  var gender = $(id_obj).find(".gender").text();
-		  var age = $(id_obj).find(".age").text();
-		  var following_date = $(id_obj).find(".following_date").text();
-		  var bank_account = $(id_obj).find(".bank_account").text();
-		  var card_number = $(id_obj).find(".card_number").text();
-		  var comment = $(id_obj).find(".comment").text();
-		  var manager = $(id_obj).find(".manager").text();
-		  var order_cnt = $(id_obj).find(".order_cnt").text();
-		  var order_amount = $(id_obj).find(".order_amount").text();
-		  var expire_date = $(id_obj).find(".expire_date").text();
 
-		  $("#modal_seq").val(seq);
-		  $("#modal_reg_date").val(reg_date);
-		  $("#modal_cust_nm").val(cust_nm); 
-		  $("#modal_cust_tel").val(cust_tel);
-		  $("#modal_gender").val(gender);
-		  $("#modal_age").val(age);
-		  $("#modal_following_date").val(following_date);
-		  $("#modal_bank_account").val(bank_account);
-		  $("#modal_card_number").val(card_number);
-		  $("#modal_comment").val(comment);
-		  $("#modal_manager").val(manager);
-		  $("#modal_order_cnt").val(order_cnt);
-		  $("#modal_order_amount").val(order_amount);
-		  $("#modal_expire_date").val(expire_date);
+		$('#detailModal').on('shown.bs.modal', function(e) {
+			var id_obj = e.relatedTarget;
+			console.log("modal : ", id_obj);
+			var seq = $(id_obj).find(".seq").text();
+			var reg_date = $(id_obj).find(".reg_date").text();
+			var cust_nm = $(id_obj).find(".cust_nm").text();
+			var cust_tel = $(id_obj).find(".cust_tel").text();
+			var gender = $(id_obj).find(".gender").text();
+			var age = $(id_obj).find(".age").text();
+			var following_date = $(id_obj).find(".following_date").text();
+			var bank_account = $(id_obj).find(".bank_account").text();
+			var card_number = $(id_obj).find(".card_number").text();
+			var comment = $(id_obj).find(".comment").text();
+			var manager = $(id_obj).find(".manager").text();
+			var order_cnt = $(id_obj).find(".order_cnt").text();
+			var order_amount = $(id_obj).find(".order_amount").text();
+			var expire_date = $(id_obj).find(".expire_date").text();
+
+			$("#modal_seq").val(seq);
+			$("#modal_reg_date").val(reg_date);
+			$("#modal_cust_nm").val(cust_nm);
+			$("#modal_cust_tel").val(cust_tel);
+			$("#modal_gender").val(gender);
+			$("#modal_age").val(age);
+			$("#modal_following_date").val(following_date);
+			$("#modal_bank_account").val(bank_account);
+			$("#modal_card_number").val(card_number);
+			$("#modal_comment").val(comment);
+			$("#modal_manager").val(manager);
+			$("#modal_order_cnt").val(order_cnt);
+			$("#modal_order_amount").val(order_amount);
+			$("#modal_expire_date").val(expire_date);
 		});
-		
-		function saveDb(){
+
+		function saveDb() {
 			var dbObj = $("#request").serializeObject();
-			console.log("dbObj : ", dbObj);
-			
-			$.post("/admin/updateDb", dbObj, function(data){
-				if(data == "1" || data == 1)
+
+			$.post("/admin/updateDb", dbObj, function(data) {
+				if (data == "1" || data == 1) {
 					alert("저장되었습니다.");
-			}).fail(function(){
+				}
+
+			}).done(function() {
+				console.log("dbObj : ", dbObj);
+				var id = "#db_" + dbObj.seq;
+				$.each(dbObj, function(key, value) {
+					$(id + " ." + key).text(value);
+				});
+
+			}).fail(function() {
 				alert("저장이 실패되었습니다.\n다시 시도하세요.");
-			});	
+			});
 		}
-		
-		function updateList(){
-			
-		}
-		
-		
 	</script>
 </body>
 </html>
