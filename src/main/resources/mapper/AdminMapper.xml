@@ -4,62 +4,92 @@
 
 <mapper namespace="com.iiiset.fm.dao.AdminDao">
 
-	
+
 
 	<insert id="insertDb" parameterType="com.iiiset.fm.model.DbVO">
 		INSERT INTO db_data
-		(cust_nm,cust_tel,comment,reg_date,mod_date)
+		(cust_nm,cust_tel,comment,site,reg_date,mod_date)
 		VALUES
-		(#{cust_nm},#{cust_tel},#{comment},now(),now())
+		(#{cust_nm},#{cust_tel},#{comment},#{site},now(),now())
 	</insert>
-	
-	<select id="selectDb" parameterType="com.iiiset.fm.model.DbVO" resultType="com.iiiset.fm.model.DbVO">
+
+	<select id="selectDb" parameterType="com.iiiset.fm.model.DbVO"
+		resultType="com.iiiset.fm.model.DbVO">
 		SELECT * FROM db_data
-			<where>
-				<if test="srh_sta_date != null and srh_sta_date != '' ">
+		<where>
+			<if test="srh_sta_date != null and srh_sta_date != '' ">
 				AND reg_date > STR_TO_DATE(#{srh_sta_date}, '%Y%m%d')
-				</if>
-				<if test="srh_sta_date != null and srh_sta_date != '' ">
+			</if>
+			<if test="srh_end_date != null and srh_end_date != '' ">
 				AND reg_date &lt; STR_TO_DATE(#{srh_end_date}, '%Y%m%d')
-				</if>
-				<if test="srh_key != null and srh_key != '' ">
+			</if>
+			<if test="srh_key != null and srh_key != '' ">
 				AND (
-					cust_nm like '%${srh_key}%'
-					OR cust_tel like '%${srh_key}%' 
-					OR comment like '%${srh_key}%'
-					OR manager like '%${srh_key}%'
+				cust_nm like '%${srh_key}%'
+				OR cust_tel like '%${srh_key}%'
+				OR comment like '%${srh_key}%'
+				OR manager like '%${srh_key}%'
+				OR site like '%${srh_key}%'
+				
 				)
-				</if>
-			</where> 
-			 
-			ORDER BY seq DESC 
-			
-			LIMIT ${page_size} OFFSET ${page_scope}
+			</if>
+		</where>
+		<if test="page_size > 0">
+		ORDER BY seq DESC
+		LIMIT ${page_size} OFFSET ${page_scope}
+		</if>
 	</select>
 
-	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO" resultType="java.lang.Integer">
+	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
+		resultType="java.lang.Integer">
 		SELECT COUNT(seq) FROM db_data
+		<where>
+			<if test="srh_sta_date != null and srh_sta_date != '' ">
+				AND reg_date > STR_TO_DATE(#{srh_sta_date}, '%Y%m%d')
+			</if>
+			<if test="srh_end_date != null and srh_end_date != '' ">
+				AND reg_date &lt; STR_TO_DATE(#{srh_end_date}, '%Y%m%d')
+			</if>
+			<if test="srh_key != null and srh_key != '' ">
+				AND (
+				cust_nm like '%${srh_key}%'
+				OR cust_tel like '%${srh_key}%'
+				OR comment like '%${srh_key}%'
+				OR manager like '%${srh_key}%'
+				OR site like '%${srh_key}%'
+				
+				)
+			</if>
+		</where>
 	</select>
-	
+
 	<update id="updateDb" parameterType="com.iiiset.fm.model.DbVO">
-		UPDATE 
-			db_data SET 
-				cust_tel = #{cust_tel},
-				comment = #{comment},
-				gender = #{gender},
-				age = #{age},
-				memo = #{memo},
-				addr = #{addr},
-				order_cnt = #{order_cnt},
-				order_amount = #{order_amount},
-				order_date = #{order_date},
-				bank_account = #{bank_account},
-				card_number = #{card_number},
-				expire_date = #{expire_date},
-				manager = #{manager},
-				following_date = #{following_date},
-				mod_date = now()
-			WHERE seq = #{seq}
+		UPDATE
+		db_data SET
+		cust_tel = #{cust_tel},
+		comment = #{comment},
+		gender = #{gender},
+		age = #{age},
+		memo = #{memo},
+		addr = #{addr},
+		order_cnt = #{order_cnt},
+		order_amount = #{order_amount},
+		order_date = #{order_date},
+		bank_account = #{bank_account},
+		card_number = #{card_number},
+		expire_date = #{expire_date},
+		manager = #{manager},
+		following_date = #{following_date},
+		mod_date = now()
+		WHERE seq = #{seq}
 	</update>
+
+	<select id="loginCheck"
+		parameterType="com.iiiset.fm.model.UserVO"
+		resultType="java.lang.Integer">
+		SELECT IFNULL(SUM(grade), 0) FROM user WHERE user_id = #{user_id} AND
+		password = #{password}
+	</select>
+
 
 </mapper>

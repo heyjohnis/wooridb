@@ -26,6 +26,7 @@ public class DbVO {
 	String following_date = "";
 	String reg_date = "";
 	String mod_date = "";
+	String site = "";
 	int page_size = 0;
 	int page = 1;
 	int page_scope = 0;
@@ -33,6 +34,7 @@ public class DbVO {
 	String srh_sta_date = "";
 	String srh_end_date = "";
 	String srh_key = "";
+	int excel_down = 0;
 	
 }
 

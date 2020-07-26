@@ -23,14 +23,14 @@
 			<div class="form-group">
 				<label for="exampleFormControlInput1">연락처</label> <input type="text"
 					class="form-control" id="cust_tel"
-					placeholder="전화번호를 입력해주세요">
+					placeholder="연락처를 입력해주세요">
 			</div>
 			<div class="form-group">
 				<label for="exampleFormControlTextarea1">문의사항</label>
 				<textarea class="form-control" id="comment"
 					rows="3" placeholder="궁금하신 사항을 입력해주세요"></textarea>
 			</div>
-			<button type="button" class="btn btn-secondary btn-lg btn-block" id="send_db">작성완료</button>
+			<button type="button" class="btn btn-secondary btn-lg btn-block" id="send_db">신청하기</button>
 		</form>
 	</div>
 </body>
@@ -43,18 +43,42 @@ $(document).ready(function(){
 });
 
 function send(){
+	
 	var db = {};
-	db.cust_nm = $("#cust_nm").val();
-	db.cust_tel = $("#cust_tel").val();
+	if($("#cust_nm").val() != "") db.cust_nm = $("#cust_nm").val();
+	else {
+		alert("성명을 입력해주세요");
+		return;
+	}
+	if($("#cust_tel").val() != "") db.cust_tel = $("#cust_tel").val();
+	else {
+		alert("연락처를 입력해주세요");
+		return;
+	}
 	db.comment = $("#comment").val();
+	db.site = getParam('site');
 	
 	$.post("/insertDb", db, function(data){
-		alert("data : " + data);
+		alert("신청이 완료되었습니다");
+		$("#cust_nm").val("");
+		$("#cust_tel").val("");
+		$("#comment").val("");
+
 	}).fail(function(){
 		alert("실패");
 	});	
 }
 
+function getParam(sname) {
+    var params = location.search.substr(location.search.indexOf("?") + 1);
+    var sval = "";
+    params = params.split("&");
+    for (var i = 0; i < params.length; i++) {
+        temp = params[i].split("=");
+        if ([temp[0]] == sname) { sval = temp[1]; }
+    }
+    return sval;
 
+}
 </script>
 </html>

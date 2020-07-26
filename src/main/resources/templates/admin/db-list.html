@@ -27,6 +27,7 @@
 	<!-- Just an image -->
 	<nav class="navbar navbar-dark bg-primary">
 		<a class="navbar-brand" href="#">우리무역</a>
+		<a id="excel_down" onclick="excelDown();"><button>엑셀다운로드</button></a>
 	</nav>
 
 	<div class="container">
@@ -36,13 +37,13 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">시작일</span>
 					</div>
-					<input type="date" id="srh_sta_date" class="form-control srh_sta_date" th:value="${search.getSrh_sta_date()}">
+					<input type="date" id="srh_sta_date" class="form-control srh_sta_date" th:value="${search.getSrh_sta_date()}"  placeholder="YYYYMMDD">
 				</div>
 				<div class="col-3 input-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">종료일</span>
 					</div>
-					<input type="date" id="srh_end_date" class="form-control srh_end_date" th:value="${search.getSrh_end_date()}">
+					<input type="date" id="srh_end_date" class="form-control srh_end_date" th:value="${search.getSrh_end_date()}" placeholder="YYYYMMDD">
 				</div>
 				<div class="col-3 input-group">
 					<div class="input-group-prepend">
@@ -63,6 +64,7 @@
 				<tr>
 					<th scope="col" class="print">등록번호</th>
 					<th scope="col">접수일자</th>
+					<th scope="col">출처</th>
 					<th scope="col">고객명</th>
 					<th scope="col">연락처</th>
 					<th scope="col">문의사항</th>
@@ -84,7 +86,8 @@
 				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
 					data-toggle="modal" data-target="#detailModal">
 					<td class="seq print" th:text="${db.getSeq()}">등록번호</td>
-					<td class="reg_date" th:text="${db.getReg_date()}">등록일</td>
+					<td class="reg_date" th:text="${#strings.substring(db.getReg_date(), 0, 16)}">신청일</td>
+					<td class="site" th:text="${db.getSite()}">출처</td>
 					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
 					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
 					<td class="comment" th:text="${db.getComment()}">문의사항</td>
@@ -125,14 +128,19 @@
 				<form name="request" id="request">
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-6">
+							<div class="col-3">
 								<label for="modal_seq">순번</label> <input type="text"
 									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
-							<div class="col-6">
+							<div class="col-5">
 								<label for="modal_reg_date">신청일시</label> <input type="text"
 									id="modal_reg_date" name="reg_date"
 									class="form-control reg_date" readonly />
+							</div>
+							<div class="col-4">
+								<label for="modal_site">출처</label> <input type="text"
+									id="modal_site" name="site"
+									class="form-control site" readonly />
 							</div>
 						</div>
 						<div class="row">
@@ -225,7 +233,6 @@
 		</div>
 	</div>
 
-
 	<script type="text/javascript">
 		/*<![CDATA[*/
 		var total_pages = "[[${total_pages}]]";
@@ -253,7 +260,11 @@
 
 		function gotoPage(page) {
 			var srh_sta_date = $("#srh_sta_date").val();
+			console.log("srh_sta_date : ", srh_sta_date);
+			srh_sta_date = srh_sta_date.replace(/[\-\.]/g, "");
 			var srh_end_date = $("#srh_end_date").val();
+			srh_end_date = srh_end_date.replace(/[\-\.]/g, "");
+
 			var srh_key = $("#srh_key").val();
 			window.location.href = "/admin/db-list?page=" + page 
 					+ "&srh_sta_date=" + srh_sta_date 
@@ -279,6 +290,8 @@
 			var order_cnt = $(id_obj).find(".order_cnt").text();
 			var order_amount = $(id_obj).find(".order_amount").text();
 			var expire_date = $(id_obj).find(".expire_date").text();
+			var site = $(id_obj).find(".site").text();
+
 
 			$("#modal_seq").val(seq);
 			$("#modal_reg_date").val(reg_date);
@@ -294,6 +307,8 @@
 			$("#modal_order_cnt").val(order_cnt);
 			$("#modal_order_amount").val(order_amount);
 			$("#modal_expire_date").val(expire_date);
+			$("#modal_site").val(site);
+
 		});
 
 		function saveDb() {
@@ -314,6 +329,23 @@
 			}).fail(function() {
 				alert("저장이 실패되었습니다.\n다시 시도하세요.");
 			});
+		}
+		
+		
+		function excelDown(){
+						
+			var srh_sta_date = $("#srh_sta_date").val();
+			srh_sta_date = srh_sta_date.replace(/[\-\.]/g, "");
+			var srh_end_date = $("#srh_end_date").val();
+			srh_end_date = srh_end_date.replace(/[\-\.]/g, "");
+
+			var srh_key = $("#srh_key").val();
+			
+			var url = "/download/woori-db.xlsx?srh_sta_date="+srh_sta_date+"&srh_end_date="+srh_end_date+"&srh_key="+srh_key;
+			$("#excel_down").attr("href", url);
+			$("#excel_down").get(0).click();
+			
+			
 		}
 	</script>
 </body>
