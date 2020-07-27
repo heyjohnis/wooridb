@@ -27,7 +27,7 @@
 	<!-- Just an image -->
 	<nav class="navbar navbar-dark bg-primary">
 		<a class="navbar-brand" href="#">우리무역</a>
-		<a id="excel_down" onclick="excelDown();"><button>엑셀다운로드</button></a>
+		<a id="excel_down" onclick="excelDown();"><button type="button" class="btn btn-light">엑셀다운로드</button></a>
 	</nav>
 
 	<div class="container">
@@ -54,7 +54,7 @@
 				<div class="col-3 text-right">
 					<div class="btn-group mw-100" role="group" aria-label="Basic example">
 						<button type="button" class="btn btn-primary pr-4 pl-4" onclick="gotoPage(1)">조회</button>
-						<button type="button" class="btn btn-secondary w-35">리셋</button>
+						<button type="button" class="btn btn-secondary w-35" onclick="reset()">리셋</button>
 					</div>
 				</div>
 			</div>
@@ -346,6 +346,12 @@
 			$("#excel_down").get(0).click();
 			
 			
+		}
+		
+		function reset(){
+			$("#srh_sta_date").val("");
+			$("#srh_end_date").val("");
+			$("#srh_key").val("");
 		}
 	</script>
 </body>
