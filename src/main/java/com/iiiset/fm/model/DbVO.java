@@ -27,6 +27,10 @@ public class DbVO {
 	String reg_date = "";
 	String mod_date = "";
 	String site = "";
+	String grade = "";
+	String team_cd = "";
+	String user_id = "";
+	String password = "";
 	int page_size = 0;
 	int page = 1;
 	int page_scope = 0;

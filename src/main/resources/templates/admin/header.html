@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Header</title>
+<link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+<link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+<script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+	integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+	crossorigin="anonymous"></script>
+
+<script type="text/javascript"
+	src="/jslib/jquery/jquery.twbsPagination.js"></script>
+
+<script type="text/javascript"
+	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
+<script type="text/javascript">
+getGrade();
+if(grade != 1){
+	$("#group").css("display") = "block";
+}
+</script>
+</head>
+
+<body th:fragment="mainHead">
+		<!-- Just an image -->
+	<nav class="navbar navbar-expand-sm navbar-right navbar-dark bg-primary">
+		<a class="navbar-brand" href="#" >우리무역</a>
+		
+		<ul class="nav navbar-nav navbar-right"> 
+			<li class ="nav-item" id="db-list"  ><a class="nav-link" href="#">홈</a></li>
+			<li class="nav-item" id="user" ><a class="nav-link" href="/admin/user">사용자관리</a></li>
+			<li class="nav-item" id="group" ><a class="nav-link" href="/admin/group">조직관리</a></li>
+			<li class="nav-item" id="dbAdmin" ><a class="nav-link" href="/admin/db-list">DB관리</a></li>
+		</ul>
+		
+		<a id="excel_down" onclick="excelDown();"><button type="button" class="btn btn-light">엑셀다운로드</button></a>
+	</nav>
+	
+<script>
+function excelDown(){
+	
+	var srh_sta_date = $("#srh_sta_date").val();
+	srh_sta_date = srh_sta_date.replace(/[\-\.]/g, "");
+	var srh_end_date = $("#srh_end_date").val();
+	srh_end_date = srh_end_date.replace(/[\-\.]/g, "");
+
+	var srh_key = $("#srh_key").val();
+	
+	var url = "/download/woori-db.xlsx?srh_sta_date="+srh_sta_date+"&srh_end_date="+srh_end_date+"&srh_key="+srh_key;
+	$("#excel_down").attr("href", url);
+	$("#excel_down").get(0).click();
+	
+	
+}
+</script>
+</body>

@@ -13,6 +13,12 @@
 		(#{cust_nm},#{cust_tel},#{comment},#{site},now(),now())
 	</insert>
 
+	<delete id="deleteDb" parameterType="com.iiiset.fm.model.DbVO">
+		DELETE * FROM db_data 
+		WHERE cust_nm = #{cust_nm}
+		  AND req_date = #{req_date}
+	</delete>
+	
 	<select id="selectDb" parameterType="com.iiiset.fm.model.DbVO"
 		resultType="com.iiiset.fm.model.DbVO">
 		SELECT * FROM db_data
@@ -40,6 +46,17 @@
 		</if>
 	</select>
 
+	<select id="selectUserDb" parameterType="com.iiiset.fm.model.UserVO"
+		resultType="com.iiiset.fm.model.UserVO">
+		SELECT * FROM user
+		ORDER BY seq DESC
+	</select>
+	
+	<select id="selectGroupDb" parameterType="com.iiiset.fm.model.GroupVO"
+		resultType="com.iiiset.fm.model.GroupVO">
+		SELECT * FROM group
+	</select>
+	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
 		SELECT COUNT(seq) FROM db_data

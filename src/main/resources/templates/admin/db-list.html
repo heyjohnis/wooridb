@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
+	<body th:replace="admin/header :: mainHead"> </body>
 <head>
 <title>Consult</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -18,17 +19,13 @@
 
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
+<script>
 
+</script>
 
 </head>
 
 <body>
-
-	<!-- Just an image -->
-	<nav class="navbar navbar-dark bg-primary">
-		<a class="navbar-brand" href="#">우리무역</a>
-		<a id="excel_down" onclick="excelDown();"><button type="button" class="btn btn-light">엑셀다운로드</button></a>
-	</nav>
 
 	<div class="container">
 		<form id="search" name="search">
@@ -228,6 +225,7 @@
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">닫기</button>
 					<button type="button" class="btn btn-primary" onclick="saveDb();">저장</button>
+					<button type="button" class="btn btn-primary" onclick="deleteDb();">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -331,7 +329,25 @@
 			});
 		}
 		
-		
+		function deleteDb(){
+			var dbObj = $("#request").serializeObject();
+
+			$.post("/admin/deleteDb", dbObj, function(data) {
+				if (data == "0" || data == null) {
+					alert("삭제되었습니다.");
+				}
+
+			}).done(function() {
+				console.log("dbObj : ", dbObj);
+				var id = "#db_" + dbObj.seq;
+				$.each(dbObj, function(key, value) {
+					$(id + " ." + key).text(value);
+				});
+
+			}).fail(function() {
+				alert("저장이 실패되었습니다.\n다시 시도하세요.");
+			});
+		}
 		function excelDown(){
 						
 			var srh_sta_date = $("#srh_sta_date").val();

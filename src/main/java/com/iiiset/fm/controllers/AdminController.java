@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.iiiset.fm.model.DbVO;
+import com.iiiset.fm.model.GroupVO;
 import com.iiiset.fm.model.UserVO;
 import com.iiiset.fm.service.AdminService;
 
@@ -39,7 +40,86 @@ public class AdminController {
 		mv.setViewName("admin/login");
 		return mv;
 	}
+	
+	@RequestMapping(value = "/admin/dbAdmin")
+	public @ResponseBody ModelAndView dbAdmin(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
 
+		ModelAndView mv = new ModelAndView();
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("USER") == null) {
+			mv.setViewName("admin/login");
+		} else {
+
+			int page = vo.getPage();
+			int page_size = 10;
+			int page_scope = (page - 1) * page_size;
+
+			vo.setPage_size(page_size);
+			vo.setPage_scope(page_scope);
+			List<DbVO> list = service.selectDb(vo);
+
+			int total_cnt = service.countDb(vo);
+
+			double total_page_cnt = Math.ceil(total_cnt / (double) page_size);
+
+			mv.addObject("list", list);
+			mv.addObject("search", vo);
+			mv.addObject("total_pages", total_page_cnt);
+			mv.addObject("start_page", page);
+			mv.setViewName("admin/dbAdmin");
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/header")
+	public @ResponseBody ModelAndView header() throws Exception {
+
+		ModelAndView mv = new ModelAndView();
+
+		mv.setViewName("admin/header");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/user")
+	public @ResponseBody ModelAndView user(HttpServletRequest request, @ModelAttribute UserVO vo) throws Exception {
+
+		ModelAndView mv = new ModelAndView();
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("USER") == null) {
+			mv.setViewName("admin/login");
+		} else {
+			List<UserVO> list = service.selectUserDb(vo);
+
+			mv.addObject("list", list);
+			mv.addObject("search", vo);
+			mv.setViewName("admin/user");
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/group")
+	public @ResponseBody ModelAndView group(HttpServletRequest request, @ModelAttribute GroupVO vo) throws Exception {
+
+		ModelAndView mv = new ModelAndView();
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("USER") == null) {
+			mv.setViewName("admin/login");
+		} else {
+			List<GroupVO> list = service.selectGroupDb(vo);
+
+			mv.addObject("list", list);
+			mv.addObject("search", vo);
+			mv.setViewName("admin/group");
+		}
+		return mv;
+	}
+	
 	@RequestMapping(value = "/admin/loginCheck")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int loginCheck(HttpServletRequest request, @ModelAttribute UserVO vo) throws Exception {
