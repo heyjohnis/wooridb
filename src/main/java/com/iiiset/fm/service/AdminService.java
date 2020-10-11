@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.iiiset.fm.model.DbVO;
 import com.iiiset.fm.model.UserVO;
-import com.iiiset.fm.model.GroupVO;
+import com.iiiset.fm.model.TeamVO;
 
 public interface AdminService {
 
@@ -16,7 +16,7 @@ public interface AdminService {
 
 	List<UserVO> selectUserDb(UserVO vo);
 	
-	List<GroupVO> selectGroupDb(GroupVO vo);
+	int selectGrade(UserVO vo);
 	
 	int countDb(DbVO vo);
 
@@ -25,7 +25,19 @@ public interface AdminService {
 	int deleteDb(DbVO vo);
 	
 	int loginCheck(UserVO vo);
+	
+	List<TeamVO> selectTeamDb(TeamVO vo);
+	
+	int insertTeamDb(TeamVO vo);
+	
+	int updateTeamDb(TeamVO vo);
 
+	int deleteTeamDb(TeamVO vo);
+	
+	int insertUserDb(UserVO vo);
+	
+	int updateUserDb(UserVO vo);
+	
 	ByteArrayInputStream excelDownLoad(DbVO vo) throws IOException;
 
 }

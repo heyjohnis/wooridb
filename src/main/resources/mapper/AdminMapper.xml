@@ -45,17 +45,36 @@
 		LIMIT ${page_size} OFFSET ${page_scope}
 		</if>
 	</select>
+	
 
 	<select id="selectUserDb" parameterType="com.iiiset.fm.model.UserVO"
 		resultType="com.iiiset.fm.model.UserVO">
 		SELECT * FROM user
+		<where>
+			<if test="grade == '3' ">
+				AND grade = 3
+				AND grade = 4
+			</if>
+			<if test="grade == '4' ">
+				AND grade = 4
+			</if>
+		</where>
 		ORDER BY seq DESC
 	</select>
 	
-	<select id="selectGroupDb" parameterType="com.iiiset.fm.model.GroupVO"
-		resultType="com.iiiset.fm.model.GroupVO">
-		SELECT * FROM group
+	<select id="selectTeamDb" parameterType="com.iiiset.fm.model.TeamVO"
+		resultType="com.iiiset.fm.model.TeamVO">
+		SELECT * FROM team
+		ORDER BY seq DESC
 	</select>
+	
+	<select id="selectGrade"
+		parameterType="com.iiiset.fm.model.UserVO"
+		resultType="java.lang.Integer">
+		SELECT grade FROM user WHERE user_id = 'juni0227' AND
+		password = '1234'
+	</select>
+	
 	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
@@ -101,6 +120,36 @@
 		WHERE seq = #{seq}
 	</update>
 
+	<insert id="insertTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
+		INSERT INTO team
+		(team_nm, leader_nm)
+		VALUES
+		(#{team_nm},#{leader_nm})
+	</insert>
+
+	<delete id="deleteTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
+		DELETE * FROM team
+		WHERE team_nm = #{team_nm}
+		  AND leader_nm = #{leader_nm}
+	</delete>
+	
+	<update id="updateUserDb" parameterType="com.iiiset.fm.model.UserVO">
+		UPDATE
+		user SET
+		user_nm = #{user_nm},
+		grade = #{grade},
+		team_nm = #{team_nm},
+		password = #{password}
+		WHERE seq = #{seq}
+	</update>
+	
+	<insert id="insertUserDb" parameterType="com.iiiset.fm.model.UserVO">
+		INSERT INTO user
+		(user_nm, grade, team_nm, password)
+		VALUES
+		(#{user_nm},#{grade},#{team_nm},#{password})
+	</insert>
+	
 	<select id="loginCheck"
 		parameterType="com.iiiset.fm.model.UserVO"
 		resultType="java.lang.Integer">

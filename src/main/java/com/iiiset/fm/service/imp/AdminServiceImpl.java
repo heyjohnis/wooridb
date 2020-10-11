@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.iiiset.fm.dao.AdminDao;
 import com.iiiset.fm.model.DbVO;
 import com.iiiset.fm.model.UserVO;
-import com.iiiset.fm.model.GroupVO;
+import com.iiiset.fm.model.TeamVO;
 import com.iiiset.fm.service.AdminService;
 
 @Service
@@ -39,35 +39,65 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
-	public List<GroupVO> selectGroupDb(GroupVO vo) {
-		return dao.selectGroupDb(vo);
+	public List<UserVO> selectUserDb(UserVO vo) {
+		return dao.selectUserDb(vo);
 	}
 	
 	@Override
-	public List<UserVO> selectUserDb(UserVO vo) {
-		return dao.selectUserDb(vo);
+	public int selectGrade(UserVO vo) {
+		return dao.selectGrade(vo);
 	}
 	
 	@Override
 	public int countDb(DbVO vo) {
 		return dao.countDb(vo);
 	}
-
+	
 	@Override
 	public int updateDb(DbVO vo) {
 		return dao.updateDb(vo);
 	}
-
+	
 	@Override
 	public int deleteDb(DbVO vo) {
 		return dao.deleteDb(vo);
 	}
-	
+
 	@Override
 	public int loginCheck(UserVO vo) {
 		return dao.loginCheck(vo);
 	}
 
+	@Override
+	public List<TeamVO> selectTeamDb(TeamVO vo) {
+		return dao.selectTeamDb(vo);
+	}
+	
+	@Override
+	public int insertTeamDb(TeamVO vo) {
+		return dao.insertTeamDb(vo);
+	}
+	
+	@Override
+	public int updateTeamDb(TeamVO vo) {
+		return dao.updateTeamDb(vo);
+	}
+	
+	@Override
+	public int deleteTeamDb(TeamVO vo) {
+		return dao.deleteTeamDb(vo);
+	}
+	
+	@Override
+	public int insertUserDb(UserVO vo) {
+		return dao.insertUserDb(vo);
+	}
+	
+	@Override
+	public int updateUserDb(UserVO vo) {
+		return dao.updateUserDb(vo);
+	}
+	
 	@Override
 	public ByteArrayInputStream excelDownLoad(DbVO vo) throws IOException {
 

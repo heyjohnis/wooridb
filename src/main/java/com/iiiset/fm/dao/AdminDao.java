@@ -3,7 +3,7 @@ import java.util.List;
 
 import com.iiiset.fm.model.DbVO;
 import com.iiiset.fm.model.UserVO;
-import com.iiiset.fm.model.GroupVO;
+import com.iiiset.fm.model.TeamVO;
 
 public interface AdminDao {
 
@@ -13,13 +13,27 @@ public interface AdminDao {
 
 	List<UserVO> selectUserDb(UserVO vo);
 	
-	List<GroupVO> selectGroupDb(GroupVO vo);
+	List<TeamVO> selectTeamDb(TeamVO vo);
+	
+	List<UserVO>selectTeamCd(UserVO vo);
+	
+	int selectGrade(UserVO vo);
 	
 	int countDb(DbVO vo);
 
 	int updateDb(DbVO vo);
 
 	int deleteDb(DbVO vo);
+	
+	int insertTeamDb(TeamVO vo);
+	
+	int updateTeamDb(TeamVO vo);
+	
+	int deleteTeamDb(TeamVO vo);
+	
+	int insertUserDb(UserVO vo);
+	
+	int updateUserDb(UserVO vo);
 	
 	int loginCheck(UserVO vo);
 

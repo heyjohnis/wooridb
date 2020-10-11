@@ -5,11 +5,13 @@ public class UserInfo {
 	private String id;
 	private String name;
 	private int grade;
+	private int team_cd;
 
 	public UserInfo(String id, String name, int grade) {
 		this.id = id;
 		this.name = name;
 		this.grade = grade;
+		this.team_cd = team_cd;
 	}
 
 	public String getId() {
@@ -34,6 +36,10 @@ public class UserInfo {
 
 	public void setGrade(int grade) {
 		this.grade = grade;
+	}
+
+	public int getTeamCd() {
+		return team_cd;
 	}
 
 }

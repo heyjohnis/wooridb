@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 	<body th:replace="admin/header :: mainHead"> </body>
 <head>
-<title>user</title>
+<title>team</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/css/style.css" rel="stylesheet" />
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -28,35 +28,32 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th scope="col" >등록번호</th>
-					<th scope="col" >이름</th>
-					<th scope="col" >등급</th>
-					<th scope="col" >팀명</th>
-					<th scope="col" >패스워드</th>
+					<th scope="col" class="print">등록번호</th>
+					<th scope="col" class="print">팀명</th>
+					<th scope="col" class="print">팀장</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="teamTb">
 				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
 				data-toggle="modal" data-target="#detailModal">
 					<td class="seq print" th:text="${db.getSeq()}">등록번호</td>
-					<td class="user_nm print" th:text="${db.getUser_nm()}">이름</td>
-					<td class="grade print" th:text="${db.getGrade()}">등급</td>
-					<td class="team_nm print" th:text="${db.getTeam_cd()}">팀명</td>
-					<td class="password print" th:text="${db.getPassword()}">패스워드</td>
+					<td class="team_nm print" th:text="${db.getTeam_nm()}">팀명</td>
+					<td class="leader_nm print" th:text="${db.getLeader_nm()}">팀장</td>
 				</tr>
 			</tbody>
 		</table>
 		<div class="footer">
-			<button type="button" class="btn btn-primary pull-right" id="addBtn" onclick="showModal()">사용자등록</button>	
+			<button type="button" class="btn btn-primary pull-right" onclick="addTeam()">팀등록</button>	
 		</div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">사용자 수정</h5>
+					<h5 class="modal-title" id="exampleModalLabel">팀 수정</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -70,26 +67,15 @@
 									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
 							<div class="col-5">
-								<label for="modal_user_nm">이름</label> <input type="text"
-									id="modal_user_nm" name="user_nm"
-									class="form-control user_nm" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_grade">등급</label> <input type="text"
-									id="modal_grade" name="grade"
-									class="form-control grade" readonly />
-							</div>
-							<div class="col-4">
 								<label for="modal_team_nm">팀명</label> <input type="text"
 									id="modal_team_nm" name="team_nm"
 									class="form-control team_nm" readonly />
 							</div>
 							<div class="col-4">
-								<label for="modal_password">패스워드</label> <input type="text"
-									id="modal_password" name="password"
-									class="form-control password" readonly />
+								<label for="modal_leader_nm">팀장</label> <input type="text"
+									id="modal_leader_nm" name="leader_nm"
+									class="form-control leader_nm" readonly />
 							</div>
-							
 						</div>
 					</div>
 				</form>
@@ -97,17 +83,19 @@
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">닫기</button>
 					<button type="button" class="btn btn-primary" onclick="saveDb();">저장</button>
+					<button type="button" class="btn btn-primary" onclick="deleteDb();">삭제</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	<div class="modal fade" id="detailNewModal" tabindex="-1" role="dialog"
+
+<!-- Modal -->
+<div class="modal fade" id="detailNewModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">사용자 추가</h5>
+					<h5 class="modal-title" id="exampleModalLabel">팀 추가</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -121,26 +109,15 @@
 									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
 							<div class="col-5">
-								<label for="modal_user_nm">이름</label> <input type="text"
-									id="modal_user_nm" name="user_nm"
-									class="form-control user_nm" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_grade">등급</label> <input type="text"
-									id="modal_grade" name="grade"
-									class="form-control grade" readonly />
-							</div>
-							<div class="col-4">
 								<label for="modal_team_nm">팀명</label> <input type="text"
 									id="modal_team_nm" name="team_nm"
 									class="form-control team_nm" readonly />
 							</div>
 							<div class="col-4">
-								<label for="modal_password">패스워드</label> <input type="text"
-									id="modal_password" name="password"
-									class="form-control password" readonly />
+								<label for="modal_leader_nm">팀장</label> <input type="text"
+									id="modal_leader_nm" name="leader_nm"
+									class="form-control leader_nm" readonly />
 							</div>
-							
 						</div>
 					</div>
 				</form>
@@ -148,44 +125,31 @@
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">닫기</button>
 					<button type="button" class="btn btn-primary" onclick="saveNewDb();">저장</button>
+					<button type="button" class="btn btn-primary" onclick="deleteDb();">삭제</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 
 	<script type="text/javascript">
-		
-		$(function() {
-			var id_obj1 = $("#request").serializeObject();
-			if(grade != 2 && grade != 3){
-				document.getElementById("addBtn").style.display ='block';				
-			}
-		});
-
 
 		$('#detailModal').on('shown.bs.modal', function(e) {
 			var id_obj = e.relatedTarget;
 			console.log("modal : ", id_obj);
 			var seq = $(id_obj).find(".seq").text();
-			var user_nm = $(id_obj).find(".reg_date").text();
-			var grade = $(id_obj).find(".cust_nm").text();
 			var team_nm = $(id_obj).find(".team_nm").text();
-			var password = $(id_obj).find(".password").text();
+			var leader_nm = $(id_obj).find(".leader_nm").text();
 
 			$("#modal_seq").val(seq);
-			$("#modal_user_nm").val(user_nm);
-			$("#modal_grade").val(grade);
 			$("#modal_team_nm").val(team_nm);
-			$("#modal_password").val(password);
+			$("#modal_leader_nm").val(leader_nm);
 
 		}); 
 		
-
-		function showModal(){
+		function addTeam(){
 			$('#detailNewModal').on('shown.bs.modal');
 		}
-		
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
 			
@@ -225,8 +189,27 @@
 			
 		}
 		
+		function deleteTeamDb(){
+			var dbObj = $("#request").serializeObject();
 
+			$.post("/admin/deleteTeamDb", dbObj, function(data) {
+				if (data == "0" || data == null) {
+					alert("삭제되었습니다.");
+				}
 
+			}).done(function() {
+				console.log("dbObj : ", dbObj);
+				var id = "#db_" + dbObj.seq;
+				$.each(dbObj, function(key, value) {
+					$(id + " ." + key).text(value);
+				});
+
+			}).fail(function() {
+				alert("저장이 실패되었습니다.\n다시 시도하세요.");
+			});
+		}
+		
 	</script>
+
 
 </body>

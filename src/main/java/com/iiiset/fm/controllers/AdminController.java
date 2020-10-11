@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.iiiset.fm.model.DbVO;
-import com.iiiset.fm.model.GroupVO;
+import com.iiiset.fm.model.TeamVO;
 import com.iiiset.fm.model.UserVO;
 import com.iiiset.fm.service.AdminService;
 
@@ -41,6 +41,7 @@ public class AdminController {
 		return mv;
 	}
 	
+	
 	@RequestMapping(value = "/admin/dbAdmin")
 	public @ResponseBody ModelAndView dbAdmin(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
 
@@ -51,34 +52,8 @@ public class AdminController {
 		if (session.getAttribute("USER") == null) {
 			mv.setViewName("admin/login");
 		} else {
-
-			int page = vo.getPage();
-			int page_size = 10;
-			int page_scope = (page - 1) * page_size;
-
-			vo.setPage_size(page_size);
-			vo.setPage_scope(page_scope);
-			List<DbVO> list = service.selectDb(vo);
-
-			int total_cnt = service.countDb(vo);
-
-			double total_page_cnt = Math.ceil(total_cnt / (double) page_size);
-
-			mv.addObject("list", list);
-			mv.addObject("search", vo);
-			mv.addObject("total_pages", total_page_cnt);
-			mv.addObject("start_page", page);
 			mv.setViewName("admin/dbAdmin");
 		}
-		return mv;
-	}
-	
-	@RequestMapping(value = "/admin/header")
-	public @ResponseBody ModelAndView header() throws Exception {
-
-		ModelAndView mv = new ModelAndView();
-
-		mv.setViewName("admin/header");
 		return mv;
 	}
 	
@@ -100,9 +75,10 @@ public class AdminController {
 		}
 		return mv;
 	}
+
 	
-	@RequestMapping(value = "/admin/group")
-	public @ResponseBody ModelAndView group(HttpServletRequest request, @ModelAttribute GroupVO vo) throws Exception {
+	@RequestMapping(value = "/admin/team")
+	public @ResponseBody ModelAndView team(HttpServletRequest request, @ModelAttribute TeamVO vo) throws Exception {
 
 		ModelAndView mv = new ModelAndView();
 
@@ -111,11 +87,11 @@ public class AdminController {
 		if (session.getAttribute("USER") == null) {
 			mv.setViewName("admin/login");
 		} else {
-			List<GroupVO> list = service.selectGroupDb(vo);
+			List<TeamVO> list = service.selectTeamDb(vo);
 
 			mv.addObject("list", list);
 			mv.addObject("search", vo);
-			mv.setViewName("admin/group");
+			mv.setViewName("admin/team");
 		}
 		return mv;
 	}
@@ -169,6 +145,15 @@ public class AdminController {
 		return mv;
 	}
 
+	@RequestMapping(value = "/selectGrade")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int selectGrade(@ModelAttribute UserVO vo) throws Exception {
+
+		int result = service.selectGrade(vo);
+
+		return result;
+	}
+	
 	@RequestMapping(value = "/insertDb")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int regDb(@ModelAttribute DbVO vo) throws Exception {
@@ -187,6 +172,61 @@ public class AdminController {
 		return result;
 	}
 
+	@RequestMapping(value = "/admin/deleteDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int deleteDb(@ModelAttribute DbVO vo) throws Exception {
+
+		int result = service.deleteDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/insertTeamDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int regTeamDb(@ModelAttribute TeamVO vo) throws Exception {
+
+		int result = service.insertTeamDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/updateTeamDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int updateTeamDb(@ModelAttribute TeamVO vo) throws Exception {
+
+		int result = service.updateTeamDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/deleteTeamDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int deleteTeamDb(@ModelAttribute TeamVO vo) throws Exception {
+
+		int result = service.deleteTeamDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/insertUserDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int regUserDb(@ModelAttribute UserVO vo) throws Exception {
+
+		int result = service.insertUserDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/updateTeamDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int updateUserDb(@ModelAttribute UserVO vo) throws Exception {
+
+		int result = service.updateUserDb(vo);
+
+		return result;
+	}
+	
+	
 	@GetMapping("/download/woori-db.xlsx")
 	public void downloadCsv(HttpServletResponse response, @RequestParam("srh_sta_date") String srh_sta_date,
 			@RequestParam("srh_end_date") String srh_end_date, @RequestParam("srh_key") String srh_key)

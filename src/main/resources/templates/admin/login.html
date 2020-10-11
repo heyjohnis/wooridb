@@ -34,10 +34,14 @@
 	<script>
 		function loginCheck() {
 			var dbObj = $("#login").serializeObject();
+			var id = $("#user_id").val();
+			var password = $("#password").val();
 			console.log("dblogin ", dbObj);
 			$.post("/admin/loginCheck", dbObj, function(data) {
 				console.log("data : ", data);
-				if(data > 0) window.location.href = "/admin/db-list";
+				if(data > 0){
+					window.location.href = "/admin/dbAdmin";	
+				}
 				else {
 					alert("아이디나 패스워드가 틀립니다. 다시 확인해주세요");
 					$("#usr_id").val("");
@@ -45,6 +49,7 @@
 				}
 			});
 		}
+		
 	</script>
 </body>
 </html>
