@@ -217,7 +217,7 @@ public class AdminController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/admin/updateTeamDb")
+	@RequestMapping(value = "/admin/updateUserDb")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int updateUserDb(@ModelAttribute UserVO vo) throws Exception {
 
