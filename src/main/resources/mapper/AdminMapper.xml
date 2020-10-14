@@ -14,7 +14,7 @@
 	</insert>
 
 	<delete id="deleteDb" parameterType="com.iiiset.fm.model.DbVO">
-		DELETE * FROM db_data 
+		DELETE FROM db_data 
 		WHERE cust_nm = #{cust_nm}
 		  AND req_date = #{req_date}
 	</delete>
@@ -50,15 +50,6 @@
 	<select id="selectUserDb" parameterType="com.iiiset.fm.model.UserVO"
 		resultType="com.iiiset.fm.model.UserVO">
 		SELECT * FROM user
-		<where>
-			<if test="grade == '3' ">
-				AND grade = 3
-				AND grade = 4
-			</if>
-			<if test="grade == '4' ">
-				AND grade = 4
-			</if>
-		</where>
 		ORDER BY seq DESC
 	</select>
 	
@@ -119,16 +110,25 @@
 		mod_date = now()
 		WHERE seq = #{seq}
 	</update>
-
+	
+	<update id="updateTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
+		UPDATE
+		team SET
+		team_nm = #{team_nm},
+		team_cd = #{team_cd},
+		leader_nm = #{leader_nm}
+		WHERE seq = #{seq}
+	</update>
+	
 	<insert id="insertTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
 		INSERT INTO team
-		(team_nm, leader_nm)
+		(team_nm, leader_nm, team_cd)
 		VALUES
-		(#{team_nm},#{leader_nm})
+		(#{team_nm},#{leader_nm}, #{team_cd})
 	</insert>
-
+	
 	<delete id="deleteTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
-		DELETE * FROM team
+		DELETE FROM team
 		WHERE team_nm = #{team_nm}
 		  AND leader_nm = #{leader_nm}
 	</delete>
@@ -138,16 +138,16 @@
 		user SET
 		user_nm = #{user_nm},
 		grade = #{grade},
-		team_nm = #{team_nm},
+		team_cd = #{team_cd},
 		password = #{password}
 		WHERE seq = #{seq}
 	</update>
 	
 	<insert id="insertUserDb" parameterType="com.iiiset.fm.model.UserVO">
 		INSERT INTO user
-		(user_nm, grade, team_nm, password)
+		(user_nm, grade, team_cd, user_id, password)
 		VALUES
-		(#{user_nm},#{grade},#{team_nm},#{password})
+		(#{user_nm},#{grade},#{team_cd},#{user_id}, #{password})
 	</insert>
 	
 	<select id="loginCheck"

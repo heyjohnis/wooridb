@@ -40,47 +40,47 @@
 	</nav>
 	
 <script type="text/javascript">
-window.onload = function() { 
-	selectGrade();
-};
+//window.onload = function() { 
+//	selectGrade();
+//};
 
-function selectGrade() {
-	var dbObj = $("#request").serializeObject();
+// function selectGrade() {
+//	var dbObj = $("#request").serializeObject();
 
-	$.post("/selectGrade", dbObj, function(data) {
-		if (data == "1" || data == 1) {
-			alert("데이터가 성공적으로 들어왔습니다")
-		}
-
-	}).done(function() {
-		console.log("dbObj : ", dbObj);
+//	$.post("/selectGrade", dbObj, function(data) {
+//		if (data == "1" || data == 1) {
+//			alert("데이터가 성공적으로 들어왔습니다")
+//		}
+//
+//	}).done(function() {
+//		console.log("dbObj : ", dbObj);
 		//grade(1: 슈퍼관리자,전산담당자, 2: 관리자, 3: 팀장, 4: 팀원, 5: db업체)
-		var thisGrade = dbObj.grade
-		$("#thisGrade").val(thisGrade);
-		
-		if(thisGrade == 5){
-			document.getElementById("user").style.display ='block';
-			document.getElementById("team").style.display ='block';
-			document.getElementById("db-list").style.display ='block';
-		}
-		
-		if(thisGrade != 2){
-			document.getElementById("team").style.display ='block';
-		}
-		
-		if(thisGrade == 1 || thisGrade == 4 || thisGrade == 5){
-			document.getElementById("user").style.display ='block';
-		}
-		var id = "#db_" + dbObj.seq;
-		$.each(dbObj, function(key, value) {
-			$(id + " ." + key).text(value);
-		});
+//		var thisGrade = dbObj.grade
+//		$("#thisGrade").val(thisGrade);
+//		
+//		if(thisGrade == 5){
+//			document.getElementById("user").style.display ='block';
+//			document.getElementById("team").style.display ='block';
+//			document.getElementById("db-list").style.display ='block';
+//		}
+//		
+//		if(thisGrade != 2){
+//			document.getElementById("team").style.display ='block';
+//		}
+//		
+//		if(thisGrade == 1 || thisGrade == 4 || thisGrade == 5){
+//			document.getElementById("user").style.display ='block';
+//		}
+//		var id = "#db_" + dbObj.seq;
+//		$.each(dbObj, function(key, value) {
+//			$(id + " ." + key).text(value);
+//		});
 
-		console.log("dbObj : ", dbObj);
-	}).fail(function() {
-		alert("직원 정보를 가져오지 못했습니다");
-	});
-}
+//		console.log("dbObj : ", dbObj);
+//	}).fail(function() {
+//		alert("직원 정보를 가져오지 못했습니다");
+//	});
+//}
 
 function excelDown(){
 	

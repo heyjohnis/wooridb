@@ -25,7 +25,7 @@
 
 <body>
 <div class="container">
-		<table class="table table-hover">
+		<table class="table table-hover" id="userTb">
 			<thead>
 				<tr>
 					<th scope="col" >등록번호</th>
@@ -33,21 +33,22 @@
 					<th scope="col" >등급</th>
 					<th scope="col" >팀명</th>
 					<th scope="col" >패스워드</th>
+					<input type="hidden" id="newYn"/>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody >
 				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
-				data-toggle="modal" data-target="#detailModal">
-					<td class="seq print" th:text="${db.getSeq()}">등록번호</td>
-					<td class="user_nm print" th:text="${db.getUser_nm()}">이름</td>
-					<td class="grade print" th:text="${db.getGrade()}">등급</td>
-					<td class="team_nm print" th:text="${db.getTeam_cd()}">팀명</td>
-					<td class="password print" th:text="${db.getPassword()}">패스워드</td>
+				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
+					<td class="seq" th:text="${db.getSeq()}">등록번호</td>
+					<td class="user_nm" th:text="${db.getUser_nm()}">이름</td>
+					<td class="grade" th:text="${db.getGrade()}">등급</td>
+					<td class="team_cd" th:text="${db.getTeam_cd()}">팀명</td>
+					<td class="password" th:text="${db.getPassword()}">패스워드</td>
 				</tr>
 			</tbody>
 		</table>
 		<div class="footer">
-			<button type="button" class="btn btn-primary pull-right" id="addBtn" onclick="showModal()">사용자등록</button>	
+			<button type="button" class="btn btn-primary pull-right" id="addBtn" data-toggle="modal" data-target="#detailModal" onclick="addNewYn()">사용자등록</button>	
 		</div>
 </div>
 <!-- Modal -->
@@ -56,7 +57,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">사용자 수정</h5>
+					<h5 class="modal-title" id="exampleModalLabel">사용자 추가/수정</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -80,9 +81,14 @@
 									class="form-control grade" readonly />
 							</div>
 							<div class="col-4">
-								<label for="modal_team_nm">팀명</label> <input type="text"
-									id="modal_team_nm" name="team_nm"
+								<label for="modal_team_cd">팀명</label> <input type="text"
+									id="modal_team_cd" name="team_cd"
 									class="form-control team_nm" readonly />
+							</div>
+							<div id = "user_id" class="col-4">
+								<label for="modal_user_id">아이디</label> <input type="text"
+									id="modal_user_id" name="user_id"
+									class="form-control user_id" readonly />
 							</div>
 							<div class="col-4">
 								<label for="modal_password">패스워드</label> <input type="text"
@@ -101,97 +107,65 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="modal fade" id="detailNewModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">사용자 추가</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<form name="request" id="request">
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-3">
-								<label for="modal_seq">등록번호</label> <input type="text"
-									id="modal_seq" name="seq" class="form-control seq" readonly />
-							</div>
-							<div class="col-5">
-								<label for="modal_user_nm">이름</label> <input type="text"
-									id="modal_user_nm" name="user_nm"
-									class="form-control user_nm" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_grade">등급</label> <input type="text"
-									id="modal_grade" name="grade"
-									class="form-control grade" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_team_nm">팀명</label> <input type="text"
-									id="modal_team_nm" name="team_nm"
-									class="form-control team_nm" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_password">패스워드</label> <input type="text"
-									id="modal_password" name="password"
-									class="form-control password" readonly />
-							</div>
-							
-						</div>
-					</div>
-				</form>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">닫기</button>
-					<button type="button" class="btn btn-primary" onclick="saveNewDb();">저장</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
 
 	<script type="text/javascript">
 		
 		$(function() {
-			var id_obj1 = $("#request").serializeObject();
-			if(grade != 2 && grade != 3){
-				document.getElementById("addBtn").style.display ='block';				
-			}
+//			var id_obj1 = $("#request").serializeObject();
+//			if(grade != 2 && grade != 3){
+//				document.getElementById("addBtn").style.display ='block';				
+//			}
 		});
 
 
 		$('#detailModal').on('shown.bs.modal', function(e) {
+			var newYn = $("#newYn").val();
 			var id_obj = e.relatedTarget;
 			console.log("modal : ", id_obj);
 			var seq = $(id_obj).find(".seq").text();
-			var user_nm = $(id_obj).find(".reg_date").text();
-			var grade = $(id_obj).find(".cust_nm").text();
-			var team_nm = $(id_obj).find(".team_nm").text();
+			var user_nm = $(id_obj).find(".user_nm").text();
+			var grade = $(id_obj).find(".grade").text();
+			var team_cd = $(id_obj).find(".team_cd").text();
 			var password = $(id_obj).find(".password").text();
-
+			var tb_length = $("#userTb tr").length;
+			if(newYn == "1"){
+				seq = tb_length;
+			}else if(newYn == "0"){
+				$("#user_id").hide();
+			}
 			$("#modal_seq").val(seq);
 			$("#modal_user_nm").val(user_nm);
 			$("#modal_grade").val(grade);
-			$("#modal_team_nm").val(team_nm);
+			$("#modal_team_cd").val(team_cd);
 			$("#modal_password").val(password);
+			
+			$("#modal_user_nm").attr("readonly", false);
+			$("#modal_user_id").attr("readonly", false);
+			$("#modal_password").attr("readonly", false);
+			$("#modal_grade").attr("readonly", false);
+			$("#modal_team_cd").attr("readonly", false);
+			
 
 		}); 
 		
 
-		function showModal(){
-			$('#detailNewModal').on('shown.bs.modal');
+		function addNewYn(){
+			$("#newYn").val("1");
+		}
+		
+		function addNewYn2(){
+			$("#newYn").val("0");
 		}
 		
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
-			
-				$.post("/admin/updateTeamDb", dbObj, function(data) {
+			var newYn = $("#newYn").val();
+			if(newYn == "0"){
+				$.post("/admin/updateUserDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {
 						alert("저장되었습니다.");
+						location.reload();
+						
 					}
 				}).done(function() {
 					console.log("dbObj : ", dbObj);
@@ -202,15 +176,13 @@
 				}).fail(function() {
 					alert("저장이 실패되었습니다.\n다시 시도하세요.");
 				});
-			
-		}
-		
-		function saveNewDb() {
-			var dbObj = $("#request").serializeObject();
-			
-				$.post("/admin/insertTeamDb", dbObj, function(data) {
+			}else if(newYn == "1"){
+				var dbObj = $("#request").serializeObject();
+				
+				$.post("/admin/insertUserDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {
 						alert("저장되었습니다.");
+						location.reload();
 					}
 				}).done(function() {
 					console.log("dbObj : ", dbObj);
@@ -221,12 +193,12 @@
 				}).fail(function() {
 					alert("저장이 실패되었습니다.\n다시 시도하세요.");
 				});
-
+				
+				
+			}
 			
 		}
 		
-
-
 	</script>
 
 </body>
