@@ -30,9 +30,9 @@
 				<tr>
 					<th scope="col" >등록번호</th>
 					<th scope="col" >팀명</th>
-					<th scope="col" >팀코드</th>
-					<th scope="col" >팀장</th>
+					<th scope="col" >팀소개</th>
 					<input type="hidden" id="newYn"/>
+					
 				</tr>
 			</thead>
 			<tbody id="teamTb">
@@ -40,8 +40,7 @@
 				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
 					<td class="seq" th:text="${db.getSeq()}">등록번호</td>
 					<td class="team_nm" th:text="${db.getTeam_nm()}">팀명</td>
-					<td class="team_cd" th:text="${db.getTeam_cd()}">팀코드</td>
-					<td class="leader_nm" th:text="${db.getLeader_nm()}">팀장</td>
+					<td class="team_info" th:text="${db.getTeam_info()}">팀소개</td>
 				</tr>
 			</tbody>
 		</table>
@@ -56,7 +55,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">팀 수정</h5>
+					<h5 class="modal-title" id="exampleModalLabel">팀 등록/수정</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -74,15 +73,12 @@
 									id="modal_team_nm" name="team_nm"
 									class="form-control team_nm" readonly />
 							</div>
-							<div id="team_cd" class="col-4">
-								<label for="modal_team_cd">팀코드</label> <input type="text"
-									id="modal_team_cd" name="team_cd"
-									class="form-control team_cd" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_leader_nm">팀장</label> <input type="text"
-									id="modal_leader_nm" name="leader_nm"
-									class="form-control leader_nm" readonly />
+						</div>
+						<div class="row" >
+							<div class="col-12">
+								<label for="modal_leader_nm">팀소개</label> <input type="text"
+									id="modal_team_info" name="team_info"
+									class="form-control team_info" readonly />
 							</div>
 						</div>
 					</div>
@@ -109,8 +105,7 @@
 			console.log("modal : ", id_obj);
 			var seq = $(id_obj).find(".seq").text();
 			var team_nm = $(id_obj).find(".team_nm").text();
-			var leader_nm = $(id_obj).find(".leader_nm").text();
-			var team_cd = $(id_obj).find(".team_cd").text();
+			var team_info = $(id_obj).find(".team_info").text();
 			var tb_length = $("#teamTb tr").length;
 			if(newYn == "1"){
 				seq = tb_length;
@@ -119,12 +114,10 @@
 			
 			$("#modal_seq").val(seq);
 			$("#modal_team_nm").val(team_nm);
-			$("#modal_team_cd").val(team_cd);
-			$("#modal_leader_nm").val(leader_nm);
+			$("#modal_team_info").val(team_info);
 			
 			$("#modal_team_nm").attr("readonly", false);
-			$("#modal_team_cd").attr("readonly", false);
-			$("#modal_leader_nm").attr("readonly", false);
+			$("#modal_team_info").attr("readonly", false);
 
 		}); 
 		

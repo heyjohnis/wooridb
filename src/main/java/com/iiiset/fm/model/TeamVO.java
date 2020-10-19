@@ -10,7 +10,7 @@ public class TeamVO {
 	int seq = 0;
 	String team_cd = "";
 	String team_nm = "";
-	String leader_nm = "";
+	String team_info = "";
 	
 }
 

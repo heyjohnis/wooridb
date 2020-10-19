@@ -13,7 +13,8 @@ public class UserVO {
     private String user_id;
     private String user_nm;
     private String password;
-    private int grade;
+    private String grade;
+    private String grade_nm;
     private String team_cd;
-
+    private String team_nm;
 }

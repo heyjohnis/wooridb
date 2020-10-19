@@ -20,7 +20,25 @@
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
 
+<script type="text/javascript" src="/js/commonCode.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 
+<script th:inline="javascript">
+    var TEAM_LIST = [[${team_list}]];
+</script>
+
+<script>
+$(document).ready(function(){
+	createSelectOption(TEAM_LIST, "modal_team_nm", "seq", "team_nm");
+	createSelectOption(GRADE, "modal_grade", "code", "code_nm");
+});
+
+
+
+
+
+
+</script>
 </head>
 
 <body>
@@ -29,10 +47,10 @@
 			<thead>
 				<tr>
 					<th scope="col" >등록번호</th>
+					<th scope="col" >아이디</th>
 					<th scope="col" >이름</th>
 					<th scope="col" >등급</th>
 					<th scope="col" >팀명</th>
-					<th scope="col" >패스워드</th>
 					<input type="hidden" id="newYn"/>
 				</tr>
 			</thead>
@@ -40,10 +58,12 @@
 				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
 				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
 					<td class="seq" th:text="${db.getSeq()}">등록번호</td>
+					<td class="user_id" th:text="${db.getUser_id()}">아이디</td>
 					<td class="user_nm" th:text="${db.getUser_nm()}">이름</td>
-					<td class="grade" th:text="${db.getGrade()}">등급</td>
-					<td class="team_cd" th:text="${db.getTeam_cd()}">팀명</td>
-					<td class="password" th:text="${db.getPassword()}">패스워드</td>
+					<td class="grade_nm"  th:text="${db.getGrade_nm()}">등급</td>
+					<td class="team_nm" th:text="${db.getTeam_nm()}">소속</td>
+					<input type="hidden" th:value="${db.getGrade()}" class="grade"/>
+					<input type="hidden" th:value="${db.getTeam_cd()}" class="team_cd"/>
 				</tr>
 			</tbody>
 		</table>
@@ -70,32 +90,38 @@
 								<label for="modal_seq">등록번호</label> <input type="text"
 									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
-							<div class="col-5">
-								<label for="modal_user_nm">이름</label> <input type="text"
-									id="modal_user_nm" name="user_nm"
-									class="form-control user_nm" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_grade">등급</label> <input type="text"
-									id="modal_grade" name="grade"
-									class="form-control grade" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_team_cd">팀명</label> <input type="text"
-									id="modal_team_cd" name="team_cd"
-									class="form-control team_nm" readonly />
-							</div>
 							<div id = "user_id" class="col-4">
 								<label for="modal_user_id">아이디</label> <input type="text"
 									id="modal_user_id" name="user_id"
 									class="form-control user_id" readonly />
 							</div>
+							<div class="col-5">
+								<label for="modal_user_nm">이름</label> <input type="text"
+									id="modal_user_nm" name="user_nm"
+									class="form-control user_nm" readonly />
+							</div>
+							
+						</div>
+						</br>
+						<div class="row">
+							<div class="col-4">
+								<label for="modal_grade">등급</label> 
+								<select id="modal_grade" name="grade">
+								</select>
+							</div>
+							<div class="col-4">
+								<label for="modal_team_cd">소속</label> 
+								</br>
+								<select id="modal_team_nm" name="team_cd">
+								</select>
+							</div>
+							
 							<div class="col-4">
 								<label for="modal_password">패스워드</label> <input type="text"
 									id="modal_password" name="password"
 									class="form-control password" readonly />
 							</div>
-							
+
 						</div>
 					</div>
 				</form>
@@ -121,29 +147,28 @@
 		$('#detailModal').on('shown.bs.modal', function(e) {
 			var newYn = $("#newYn").val();
 			var id_obj = e.relatedTarget;
-			console.log("modal : ", id_obj);
 			var seq = $(id_obj).find(".seq").text();
 			var user_nm = $(id_obj).find(".user_nm").text();
-			var grade = $(id_obj).find(".grade").text();
+			var user_id = $(id_obj).find(".user_id").text();
+			var grade = $(id_obj).find(".grade").val();
 			var team_cd = $(id_obj).find(".team_cd").text();
 			var password = $(id_obj).find(".password").text();
 			var tb_length = $("#userTb tr").length;
 			if(newYn == "1"){
 				seq = tb_length;
-			}else if(newYn == "0"){
-				$("#user_id").hide();
 			}
+			$("#modal_team_cd").val(team_cd);
+			$("#modal_grade").val(grade);
 			$("#modal_seq").val(seq);
 			$("#modal_user_nm").val(user_nm);
-			$("#modal_grade").val(grade);
-			$("#modal_team_cd").val(team_cd);
-			$("#modal_password").val(password);
+			$("#modal_user_id").val(user_id);
+			$("#modal_password").val("********");
 			
 			$("#modal_user_nm").attr("readonly", false);
-			$("#modal_user_id").attr("readonly", false);
+
 			$("#modal_password").attr("readonly", false);
 			$("#modal_grade").attr("readonly", false);
-			$("#modal_team_cd").attr("readonly", false);
+			$("#modal_team_nm").attr("readonly", false);
 			
 
 		}); 
@@ -151,6 +176,7 @@
 
 		function addNewYn(){
 			$("#newYn").val("1");
+			$("#modal_user_id").attr("readonly", false);
 		}
 		
 		function addNewYn2(){
@@ -158,8 +184,14 @@
 		}
 		
 		function saveDb() {
+			var pw = $("#modal_password").val();
 			var dbObj = $("#request").serializeObject();
 			var newYn = $("#newYn").val();
+			debugger;
+			if(pw == "********"){
+				alert("비밀번호가 기존과 동일합니다");
+				return;
+			}
 			if(newYn == "0"){
 				$.post("/admin/updateUserDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {

@@ -18,9 +18,8 @@
 
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
-<script type="text/javascript">
+	
 
-</script>
 </head>
 
 <body th:fragment="mainHead">
@@ -36,7 +35,7 @@
 		</ul>
 		
 		<a id="excel_down" onclick="excelDown();"><button type="button" class="btn btn-light">엑셀다운로드</button></a>
-		<input type="hidden" id="this-grade"/>
+		<span class="nav-link pull-right" id="logout" ><button type="button" class="btn btn-light" href="/admin/logout">로그아웃</button></span>
 	</nav>
 	
 <script type="text/javascript">

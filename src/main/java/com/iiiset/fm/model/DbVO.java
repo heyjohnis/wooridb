@@ -9,6 +9,7 @@ import lombok.Setter;
 public class DbVO {
 	
 	int seq = 0;
+	int adminYn = 1;
 	String cust_nm = "";
 	String cust_tel = "";
 	String comment = "";

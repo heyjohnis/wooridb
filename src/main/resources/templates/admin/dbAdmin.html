@@ -20,11 +20,72 @@
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
 
+<script th:inline="javascript">
+    var grade = [[${grade}]];
+    $(document).ready(function(){
+    	if(grade == "10" || grade == "99"){
+    		$("#user").show();
+    		$("#team").show();
+    	}else{
+    		$("#user").hide();
+    		$("#team").hide();
+    	}
+    });
+</script>
+
 
 </head>
 
 <body>
-<h1>관리자 db관리창 입니다.</h1>
+<h1>최근 계약 내역(5건)</h1>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col" class="print">등록번호</th>
+					<th scope="col">접수일자</th>
+					<th scope="col">출처</th>
+					<th scope="col">고객명</th>
+					<th scope="col">연락처</th>
+					<th scope="col">문의사항</th>
+					<th scope="col">담당자</th>
+					<th scope="col" class="print">성별</th>
+					<th scope="col" class="print">나이</th>
+					<th scope="col" class="print">상담내용</th>
+					<th scope="col" class="print">주소</th>
+					<th scope="col" class="print">주문일</th>
+					<th scope="col">수량</th>
+					<th scope="col">금액</th>
+					<th scope="col" class="print">계좌번호</th>
+					<th scope="col" class="print">카드번호</th>
+					<th scope="col" class="print">유효기간</th>
+					<th scope="col" class="print">구매접촉일</th>
+				</tr>
+			</thead>
+			<tbody class="">
+				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
+					data-toggle="modal" data-target="#detailModal">
+					<td class="seq print" th:text="${db.getSeq()}">등록번호</td>
+					<td class="reg_date" th:text="${#strings.substring(db.getReg_date(), 0, 16)}">신청일</td>
+					<td class="site" th:text="${db.getSite()}">출처</td>
+					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
+					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
+					<td class="comment" th:text="${db.getComment()}">문의사항</td>
+					<td class="manager" th:text="${db.getManager()}">담당자</td>
+					<td class="gender print" th:text="${db.getGender()}">성별</td>
+					<td class="age print" th:text="${db.getAge()}">나이</td>
+					<td class="memo print" th:text="${db.getMemo()}">상담내용</td>
+					<td class="addr print" th:text="${db.getAddr()}">주소</td>
+					<td class="order_date print" th:text="${db.getOrder_date()}">주문일</td>
+					<td class="order_cnt" th:text="${db.getOrder_cnt()}">수량</td>
+					<td class="order_amount" th:text="${db.getOrder_amount()}">금액</td>
+					<td class="bank_account print" th:text="${db.getBank_account()}">계좌번호</td>
+					<td class="card_number print" th:text="${db.getCard_number()}">카드번호</td>
+					<td class="expire_date print" th:text="${db.getExpire_date()}">유효기간</td>
+					<td class="following_date print"
+						th:text="${db.getFollowing_date()}">구매접촉일</td>
+				</tr>
+			</tbody>
+		</table>
 
 <script type= "text/javascript">
 

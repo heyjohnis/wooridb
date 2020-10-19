@@ -24,7 +24,7 @@ public interface AdminService {
 
 	int deleteDb(DbVO vo);
 	
-	int loginCheck(UserVO vo);
+	UserVO loginCheck(UserVO vo);
 	
 	List<TeamVO> selectTeamDb(TeamVO vo);
 	

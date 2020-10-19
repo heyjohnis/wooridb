@@ -23,6 +23,22 @@
 		resultType="com.iiiset.fm.model.DbVO">
 		SELECT * FROM db_data
 		<where>
+			<if test = "adminYn == null">
+				<choose>
+					<when test="grade == '01'">
+						AND manager = #{manager}
+					</when>
+					<when test="grade == '05'">
+						AND team_cd = ${team_cd}
+					</when>
+					<when test="grade == '10' || grade == '99'">
+				
+					</when>
+					<otherwise>
+						AND manager = ''
+					</otherwise>
+				</choose>
+			</if>
 			<if test="srh_sta_date != null and srh_sta_date != '' ">
 				AND reg_date > STR_TO_DATE(#{srh_sta_date}, '%Y%m%d')
 			</if>
@@ -39,19 +55,43 @@
 				
 				)
 			</if>
+			<if test="adminYn == 1">
+				AND manager = #{manager} 
+			</if>
 		</where>
-		<if test="page_size > 0">
+		<if test="page_size > 0 and adminYn == null">
 		ORDER BY seq DESC
 		LIMIT ${page_size} OFFSET ${page_scope}
+		</if>
+		<if test="adminYn == 1">
+		ORDER BY seq DESC
+		LIMIT 5
 		</if>
 	</select>
 	
 
 	<select id="selectUserDb" parameterType="com.iiiset.fm.model.UserVO"
 		resultType="com.iiiset.fm.model.UserVO">
-		SELECT * FROM user
+		SELECT a.seq
+		, a.user_id AS user_id
+		, a.password AS password
+		, a.grade
+		, CASE
+			WHEN a.grade = '01' THEN '팀원'
+			WHEN a.grade = '05' THEN '팀장'
+			WHEN a.grade = '10' THEN '관리자'
+			WHEN a.grade = '11' THEN 'DB업체'
+			WHEN a.grade = '99' THEN '슈퍼바이저'
+		END AS grade_nm
+        ,b.team_nm AS team_nm
+        ,a.team_cd AS team_cd
+		, a.user_nm AS user_nm 
+		FROM user as a
+        LEFT JOIN team as b
+        ON a.team_cd = b.seq
 		ORDER BY seq DESC
 	</select>
+	
 	
 	<select id="selectTeamDb" parameterType="com.iiiset.fm.model.TeamVO"
 		resultType="com.iiiset.fm.model.TeamVO">
@@ -115,36 +155,33 @@
 		UPDATE
 		team SET
 		team_nm = #{team_nm},
-		team_cd = #{team_cd},
-		leader_nm = #{leader_nm}
+		team_cd = #{team_info}
 		WHERE seq = #{seq}
 	</update>
 	
 	<insert id="insertTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
 		INSERT INTO team
-		(team_nm, leader_nm, team_cd)
+		(team_nm, team_info)
 		VALUES
-		(#{team_nm},#{leader_nm}, #{team_cd})
+		(#{team_nm}, #{team_info})
 	</insert>
 	
 	<delete id="deleteTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
 		DELETE FROM team
 		WHERE team_nm = #{team_nm}
-		  AND leader_nm = #{leader_nm}
 	</delete>
 	
 	<update id="updateUserDb" parameterType="com.iiiset.fm.model.UserVO">
-		UPDATE
-		user SET
-		user_nm = #{user_nm},
-		grade = #{grade},
-		team_cd = #{team_cd},
-		password = #{password}
+		UPDATE user A 
+		SET	A.user_nm = #{user_nm},
+		A.grade = #{grade},
+		A.team_cd = #{team_cd},
+		A.password = #{password}
 		WHERE seq = #{seq}
 	</update>
 	
 	<insert id="insertUserDb" parameterType="com.iiiset.fm.model.UserVO">
-		INSERT INTO user
+		INSERT INTO user 
 		(user_nm, grade, team_cd, user_id, password)
 		VALUES
 		(#{user_nm},#{grade},#{team_cd},#{user_id}, #{password})
@@ -152,8 +189,8 @@
 	
 	<select id="loginCheck"
 		parameterType="com.iiiset.fm.model.UserVO"
-		resultType="java.lang.Integer">
-		SELECT IFNULL(SUM(grade), 0) FROM user WHERE user_id = #{user_id} AND
+		resultType="com.iiiset.fm.model.UserVO">
+		SELECT * FROM user WHERE user_id = #{user_id} AND
 		password = #{password}
 	</select>
 

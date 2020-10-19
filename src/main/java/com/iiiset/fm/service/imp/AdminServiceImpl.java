@@ -64,7 +64,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int loginCheck(UserVO vo) {
+	public UserVO loginCheck(UserVO vo) {
 		return dao.loginCheck(vo);
 	}
 

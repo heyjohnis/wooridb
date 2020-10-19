@@ -41,7 +41,6 @@ public class AdminController {
 		return mv;
 	}
 	
-	
 	@RequestMapping(value = "/admin/dbAdmin")
 	public @ResponseBody ModelAndView dbAdmin(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
 
@@ -52,6 +51,15 @@ public class AdminController {
 		if (session.getAttribute("USER") == null) {
 			mv.setViewName("admin/login");
 		} else {
+			UserVO userVO = (UserVO)session.getAttribute("USER");
+			String grade = userVO.getGrade();
+			String manager = userVO.getUser_id();
+			vo.setAdminYn(1);
+			vo.setManager(manager);
+			List<DbVO> list = service.selectDb(vo);
+			
+			mv.addObject("list", list);
+			mv.addObject("grade", grade);
 			mv.setViewName("admin/dbAdmin");
 		}
 		return mv;
@@ -61,15 +69,17 @@ public class AdminController {
 	public @ResponseBody ModelAndView user(HttpServletRequest request, @ModelAttribute UserVO vo) throws Exception {
 
 		ModelAndView mv = new ModelAndView();
-
+		
 		HttpSession session = request.getSession();
 
 		if (session.getAttribute("USER") == null) {
 			mv.setViewName("admin/login");
 		} else {
 			List<UserVO> list = service.selectUserDb(vo);
+			List<TeamVO> team_list = service.selectTeamDb(new TeamVO());
 
 			mv.addObject("list", list);
+			mv.addObject("team_list", team_list);
 			mv.addObject("search", vo);
 			mv.setViewName("admin/user");
 		}
@@ -88,7 +98,6 @@ public class AdminController {
 			mv.setViewName("admin/login");
 		} else {
 			List<TeamVO> list = service.selectTeamDb(vo);
-
 			mv.addObject("list", list);
 			mv.addObject("search", vo);
 			mv.setViewName("admin/team");
@@ -100,17 +109,15 @@ public class AdminController {
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int loginCheck(HttpServletRequest request, @ModelAttribute UserVO vo) throws Exception {
 
-		int result = 0;
-
-		int check = service.loginCheck(vo);
-
-		if (check > 0) {
+		int check = 0;
+		UserVO userInfo= service.loginCheck(vo);
+		if(userInfo != null) {
 			HttpSession session = request.getSession(true);
-			session.setAttribute("USER", vo);
-			result = 1;
+			session.setAttribute("USER", userInfo);
+			check = 1;
 		}
-
-		return result;
+		
+		return check;
 	}
 
 	@RequestMapping(value = "/admin/db-list")
@@ -123,19 +130,28 @@ public class AdminController {
 		if (session.getAttribute("USER") == null) {
 			mv.setViewName("admin/login");
 		} else {
-
+			
+			UserVO userVO = (UserVO)session.getAttribute("USER");
+			String user_id = userVO.getUser_id();
+			String grade = userVO.getGrade();
+			String team_cd = userVO.getTeam_cd();
 			int page = vo.getPage();
 			int page_size = 10;
 			int page_scope = (page - 1) * page_size;
-
+			vo.setManager(user_id);
+			vo.setGrade(grade);
+			vo.setTeam_cd(team_cd);
 			vo.setPage_size(page_size);
 			vo.setPage_scope(page_scope);
+			vo.setAdminYn(0);
+			List<UserVO> user_list = service.selectUserDb(new UserVO());
 			List<DbVO> list = service.selectDb(vo);
 
 			int total_cnt = service.countDb(vo);
 
 			double total_page_cnt = Math.ceil(total_cnt / (double) page_size);
 
+			mv.addObject("user_list", user_list);
 			mv.addObject("list", list);
 			mv.addObject("search", vo);
 			mv.addObject("total_pages", total_page_cnt);

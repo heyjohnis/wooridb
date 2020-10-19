@@ -35,7 +35,7 @@ public interface AdminDao {
 	
 	int updateUserDb(UserVO vo);
 	
-	int loginCheck(UserVO vo);
+	UserVO loginCheck(UserVO vo);
 
 
 }
