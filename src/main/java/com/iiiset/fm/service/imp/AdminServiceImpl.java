@@ -49,6 +49,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
+	public String selectTeam_cd(UserVO vo) {
+		return dao.selectTeam_cd(vo);
+	}
+	
+	@Override
 	public int countDb(DbVO vo) {
 		return dao.countDb(vo);
 	}

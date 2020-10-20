@@ -26,17 +26,24 @@
 
 <script th:inline="javascript">
     var user_list = [[${user_list}]];
+    var grade = [[${grade}]];
 </script>
 
-<script>
+<script th:inline="javascript">
 $(document).ready(function(){
-	createSelectOption(user_list, "modal_manager", "seq", "user_id");
+	createSelectOption(user_list, "modal_manager", "seq", "user_nm");
+	if(grade == "10" || grade == "99"){
+		$("#user").show();
+		$("#team").show();
+	}else{
+		$("#user").hide();
+		$("#team").hide();
+	}
+	$("#db-list").addClass('active');
+	$("#team").removeClass('active');
+	$("#user").removeClass('active');
+	$("#dbAdmin").removeClass('active');
 });
-
-
-
-
-
 
 </script>
 

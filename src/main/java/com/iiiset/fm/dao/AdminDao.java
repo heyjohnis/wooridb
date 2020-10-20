@@ -19,6 +19,8 @@ public interface AdminDao {
 	
 	int selectGrade(UserVO vo);
 	
+	String selectTeam_cd(UserVO vo);
+	
 	int countDb(DbVO vo);
 
 	int updateDb(DbVO vo);

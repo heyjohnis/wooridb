@@ -31,6 +31,10 @@
 $(document).ready(function(){
 	createSelectOption(TEAM_LIST, "modal_team_nm", "seq", "team_nm");
 	createSelectOption(GRADE, "modal_grade", "code", "code_nm");
+	$("#user").addClass('active');
+	$("#dbAdmin").removeClass('active');
+	$("#team").removeClass('active');
+	$("#db-list").removeClass('active');
 });
 
 
@@ -110,9 +114,9 @@ $(document).ready(function(){
 								</select>
 							</div>
 							<div class="col-4">
-								<label for="modal_team_cd">소속</label> 
+								<label for="modal_team_nm">소속</label> 
 								</br>
-								<select id="modal_team_nm" name="team_cd">
+								<select id="modal_team_nm" name="team_nm">
 								</select>
 							</div>
 							
@@ -151,21 +155,22 @@ $(document).ready(function(){
 			var user_nm = $(id_obj).find(".user_nm").text();
 			var user_id = $(id_obj).find(".user_id").text();
 			var grade = $(id_obj).find(".grade").val();
-			var team_cd = $(id_obj).find(".team_cd").text();
+			var team_nm = $(id_obj).find(".team_cd").val();
 			var password = $(id_obj).find(".password").text();
 			var tb_length = $("#userTb tr").length;
 			if(newYn == "1"){
 				seq = tb_length;
 			}
-			$("#modal_team_cd").val(team_cd);
+			$("#modal_team_nm").val(team_nm);
 			$("#modal_grade").val(grade);
 			$("#modal_seq").val(seq);
 			$("#modal_user_nm").val(user_nm);
 			$("#modal_user_id").val(user_id);
-			$("#modal_password").val("********");
-			
+			if(newYn == "1"){
+				$("#modal_password").val("");
+				
+			}else{$("#modal_password").val("********");}
 			$("#modal_user_nm").attr("readonly", false);
-
 			$("#modal_password").attr("readonly", false);
 			$("#modal_grade").attr("readonly", false);
 			$("#modal_team_nm").attr("readonly", false);
@@ -177,6 +182,7 @@ $(document).ready(function(){
 		function addNewYn(){
 			$("#newYn").val("1");
 			$("#modal_user_id").attr("readonly", false);
+			$("#modal_team_nm").val('');
 		}
 		
 		function addNewYn2(){
@@ -184,14 +190,11 @@ $(document).ready(function(){
 		}
 		
 		function saveDb() {
-			var pw = $("#modal_password").val();
+			if($("#modal_password").val() == "********"){
+				$("#modal_password").val('');
+			};
 			var dbObj = $("#request").serializeObject();
 			var newYn = $("#newYn").val();
-			debugger;
-			if(pw == "********"){
-				alert("비밀번호가 기존과 동일합니다");
-				return;
-			}
 			if(newYn == "0"){
 				$.post("/admin/updateUserDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {

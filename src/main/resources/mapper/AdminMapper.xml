@@ -23,13 +23,13 @@
 		resultType="com.iiiset.fm.model.DbVO">
 		SELECT * FROM db_data
 		<where>
-			<if test = "adminYn == null">
+			<if test = "adminYn == 0">
 				<choose>
 					<when test="grade == '01'">
 						AND manager = #{manager}
 					</when>
 					<when test="grade == '05'">
-						AND team_cd = ${team_cd}
+						AND manager IN (SELECT user_nm FROM user WHERE team_cd = ${team_cd})
 					</when>
 					<when test="grade == '10' || grade == '99'">
 				
@@ -56,10 +56,10 @@
 				)
 			</if>
 			<if test="adminYn == 1">
-				AND manager = #{manager} 
+				AND manager = #{manager}
 			</if>
 		</where>
-		<if test="page_size > 0 and adminYn == null">
+		<if test="page_size > 0 and adminYn == 0">
 		ORDER BY seq DESC
 		LIMIT ${page_size} OFFSET ${page_scope}
 		</if>
@@ -97,6 +97,12 @@
 		resultType="com.iiiset.fm.model.TeamVO">
 		SELECT * FROM team
 		ORDER BY seq DESC
+	</select>
+	
+	<select id="selectTeam_cd"
+		parameterType="com.iiiset.fm.model.UserVO"
+		resultType="java.lang.Integer">
+		SELECT seq FROM team WHERE seq = #{team_nm}
 	</select>
 	
 	<select id="selectGrade"
@@ -155,7 +161,7 @@
 		UPDATE
 		team SET
 		team_nm = #{team_nm},
-		team_cd = #{team_info}
+		team_info = #{team_info}
 		WHERE seq = #{seq}
 	</update>
 	
@@ -175,8 +181,10 @@
 		UPDATE user A 
 		SET	A.user_nm = #{user_nm},
 		A.grade = #{grade},
-		A.team_cd = #{team_cd},
+		A.team_cd = #{team_nm},
+		<if test= "#{password} != null ">
 		A.password = #{password}
+		</if>
 		WHERE seq = #{seq}
 	</update>
 	
@@ -184,7 +192,7 @@
 		INSERT INTO user 
 		(user_nm, grade, team_cd, user_id, password)
 		VALUES
-		(#{user_nm},#{grade},#{team_cd},#{user_id}, #{password})
+		(#{user_nm},#{grade},#{team_nm},#{user_id}, #{password})
 	</insert>
 	
 	<select id="loginCheck"

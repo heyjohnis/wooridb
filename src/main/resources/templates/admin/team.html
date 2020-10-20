@@ -19,8 +19,18 @@
 
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
+<script th:inline="javascript">
+$(document).ready(function(){
+	$("#team").addClass('active');
+	$("#dbAdmin").removeClass('active');
+	$("#user").removeClass('active');
+	$("#db-list").removeClass('active');
+});
 
+var list = [[${list}]];
 
+</script>
+</script>
 </head>
 
 <body>
@@ -64,7 +74,7 @@
 				<form name="request" id="request">
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-3">
+							<div class="col-3" id="modal_upperSeq">
 								<label for="modal_seq">등록번호</label> <input type="text"
 									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
@@ -107,11 +117,9 @@
 			var team_nm = $(id_obj).find(".team_nm").text();
 			var team_info = $(id_obj).find(".team_info").text();
 			var tb_length = $("#teamTb tr").length;
-			if(newYn == "1"){
-				seq = tb_length;
-				$("#delBtn").hide();
-			}
 			
+			$("#delBtn").show();
+			$("#modal_upperSeq").show();
 			$("#modal_seq").val(seq);
 			$("#modal_team_nm").val(team_nm);
 			$("#modal_team_info").val(team_info);
@@ -119,6 +127,12 @@
 			$("#modal_team_nm").attr("readonly", false);
 			$("#modal_team_info").attr("readonly", false);
 
+			if(newYn == "1"){
+				seq = tb_length;
+				$("#delBtn").hide();
+				$("#modal_upperSeq").hide();
+			}
+			
 		}); 
 		
 		function addNewYn(){

@@ -7,8 +7,7 @@ import lombok.Setter;
 @Setter
 public class TeamVO {
 	
-	int seq = 0;
-	String team_cd = "";
+	String seq = "";
 	String team_nm = "";
 	String team_info = "";
 	

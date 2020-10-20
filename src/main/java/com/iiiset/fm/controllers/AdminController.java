@@ -41,6 +41,7 @@ public class AdminController {
 		return mv;
 	}
 	
+	
 	@RequestMapping(value = "/admin/dbAdmin")
 	public @ResponseBody ModelAndView dbAdmin(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
 
@@ -53,7 +54,7 @@ public class AdminController {
 		} else {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
 			String grade = userVO.getGrade();
-			String manager = userVO.getUser_id();
+			String manager = userVO.getUser_nm();
 			vo.setAdminYn(1);
 			vo.setManager(manager);
 			List<DbVO> list = service.selectDb(vo);
@@ -132,25 +133,27 @@ public class AdminController {
 		} else {
 			
 			UserVO userVO = (UserVO)session.getAttribute("USER");
-			String user_id = userVO.getUser_id();
+			String user_nm = userVO.getUser_nm();
 			String grade = userVO.getGrade();
 			String team_cd = userVO.getTeam_cd();
 			int page = vo.getPage();
 			int page_size = 10;
 			int page_scope = (page - 1) * page_size;
-			vo.setManager(user_id);
+			vo.setAdminYn(0);
+			vo.setManager(user_nm);
 			vo.setGrade(grade);
 			vo.setTeam_cd(team_cd);
 			vo.setPage_size(page_size);
 			vo.setPage_scope(page_scope);
-			vo.setAdminYn(0);
 			List<UserVO> user_list = service.selectUserDb(new UserVO());
 			List<DbVO> list = service.selectDb(vo);
 
 			int total_cnt = service.countDb(vo);
 
 			double total_page_cnt = Math.ceil(total_cnt / (double) page_size);
-
+			
+			mv.addObject("grade", grade);
+			mv.addObject("team_cd", team_cd);
 			mv.addObject("user_list", user_list);
 			mv.addObject("list", list);
 			mv.addObject("search", vo);
