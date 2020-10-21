@@ -54,7 +54,7 @@ public class AdminController {
 		} else {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
 			String grade = userVO.getGrade();
-			String manager = userVO.getUser_nm();
+			String manager = userVO.getUser_id();
 			vo.setAdminYn(1);
 			vo.setManager(manager);
 			List<DbVO> list = service.selectDb(vo);
@@ -133,14 +133,14 @@ public class AdminController {
 		} else {
 			
 			UserVO userVO = (UserVO)session.getAttribute("USER");
-			String user_nm = userVO.getUser_nm();
+			String user_id = userVO.getUser_id();
 			String grade = userVO.getGrade();
 			String team_cd = userVO.getTeam_cd();
 			int page = vo.getPage();
 			int page_size = 10;
 			int page_scope = (page - 1) * page_size;
 			vo.setAdminYn(0);
-			vo.setManager(user_nm);
+			vo.setManager(user_id);
 			vo.setGrade(grade);
 			vo.setTeam_cd(team_cd);
 			vo.setPage_size(page_size);

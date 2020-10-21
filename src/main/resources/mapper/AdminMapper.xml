@@ -16,12 +16,30 @@
 	<delete id="deleteDb" parameterType="com.iiiset.fm.model.DbVO">
 		DELETE FROM db_data 
 		WHERE cust_nm = #{cust_nm}
-		  AND req_date = #{req_date}
+		  AND seq = #{seq}
 	</delete>
 	
 	<select id="selectDb" parameterType="com.iiiset.fm.model.DbVO"
 		resultType="com.iiiset.fm.model.DbVO">
-		SELECT * FROM db_data
+		SELECT seq
+		,seq AS rlseq
+		,cust_nm
+		,cust_tel
+		,comment
+		,gender
+		,age
+		,memo
+		,addr
+		,order_cnt
+		,order_amount
+		,order_date
+		,expire_date
+		,(SELECT user_nm FROM db_data A, user B WHERE A.manager = B.user_id AND A.seq = rlseq) AS manager
+		,following_date
+		,site
+		,reg_date
+		,mod_date
+		FROM db_data
 		<where>
 			<if test = "adminYn == 0">
 				<choose>
@@ -105,14 +123,6 @@
 		SELECT seq FROM team WHERE seq = #{team_nm}
 	</select>
 	
-	<select id="selectGrade"
-		parameterType="com.iiiset.fm.model.UserVO"
-		resultType="java.lang.Integer">
-		SELECT grade FROM user WHERE user_id = 'juni0227' AND
-		password = '1234'
-	</select>
-	
-	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
 		SELECT COUNT(seq) FROM db_data
@@ -139,21 +149,21 @@
 	<update id="updateDb" parameterType="com.iiiset.fm.model.DbVO">
 		UPDATE
 		db_data SET
-		cust_tel = #{cust_tel},
-		comment = #{comment},
-		gender = #{gender},
-		age = #{age},
-		memo = #{memo},
-		addr = #{addr},
-		order_cnt = #{order_cnt},
-		order_amount = #{order_amount},
-		order_date = #{order_date},
-		bank_account = #{bank_account},
-		card_number = #{card_number},
-		expire_date = #{expire_date},
-		manager = #{manager},
-		following_date = #{following_date},
-		mod_date = now()
+		cust_tel = #{cust_tel}
+		,comment = #{comment}
+		,gender = #{gender}
+		,age = #{age}
+		,memo = #{memo}
+		,addr = #{addr}
+		,order_cnt = #{order_cnt}
+		,order_amount = #{order_amount}
+		,order_date = #{order_date}
+		,bank_account = #{bank_account}
+		,card_number = #{card_number}
+		,expire_date = #{expire_date}
+		,manager = #{manager}
+		,following_date = #{following_date}
+		,mod_date = now()
 		WHERE seq = #{seq}
 	</update>
 	
@@ -179,11 +189,11 @@
 	
 	<update id="updateUserDb" parameterType="com.iiiset.fm.model.UserVO">
 		UPDATE user A 
-		SET	A.user_nm = #{user_nm},
-		A.grade = #{grade},
-		A.team_cd = #{team_nm},
-		<if test= "#{password} != null ">
-		A.password = #{password}
+		SET	A.user_nm = #{user_nm}
+		,A.grade = #{grade}
+		,A.team_cd = #{team_nm}
+		<if test= "password != null ">
+		,A.password = #{password}
 		</if>
 		WHERE seq = #{seq}
 	</update>

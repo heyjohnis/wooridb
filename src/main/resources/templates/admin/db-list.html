@@ -31,7 +31,7 @@
 
 <script th:inline="javascript">
 $(document).ready(function(){
-	createSelectOption(user_list, "modal_manager", "seq", "user_nm");
+	createSelectOption(user_list, "modal_manager", "user_id", "user_nm");
 	if(grade == "10" || grade == "99"){
 		$("#user").show();
 		$("#team").show();
@@ -112,7 +112,7 @@ $(document).ready(function(){
 					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
 					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
 					<td class="comment" th:text="${db.getComment()}">문의사항</td>
-					<td th:text="${db.getManager()}">담당자</td>
+					<td class="manager" th:text="${db.getManager()}">담당자</td>
 					<td class="gender print" th:text="${db.getGender()}">성별</td>
 					<td class="age print" th:text="${db.getAge()}">나이</td>
 					<td class="memo print" th:text="${db.getMemo()}">상담내용</td>
@@ -125,7 +125,6 @@ $(document).ready(function(){
 					<td class="expire_date print" th:text="${db.getExpire_date()}">유효기간</td>
 					<td class="following_date print"
 						th:text="${db.getFollowing_date()}">구매접촉일</td>
-					<input type="hidden"  th:value="${db.getManager()}" class="manager"/>
 				</tr>
 			</tbody>
 		</table>
@@ -312,12 +311,11 @@ $(document).ready(function(){
 			var bank_account = $(id_obj).find(".bank_account").text();
 			var card_number = $(id_obj).find(".card_number").text();
 			var comment = $(id_obj).find(".comment").text();
-			var manager = $(id_obj).find(".manager").val();
+			var manager = $(id_obj).find(".manager").text();
 			var order_cnt = $(id_obj).find(".order_cnt").text();
 			var order_amount = $(id_obj).find(".order_amount").text();
 			var expire_date = $(id_obj).find(".expire_date").text();
 			var site = $(id_obj).find(".site").text();
-
 			$("#modal_seq").val(seq);
 			$("#modal_reg_date").val(reg_date);
 			$("#modal_cust_nm").val(cust_nm);
@@ -338,7 +336,7 @@ $(document).ready(function(){
 
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
-
+			
 			$.post("/admin/updateDb", dbObj, function(data) {
 				if (data == "1" || data == 1) {
 					alert("저장되었습니다.");
@@ -362,6 +360,8 @@ $(document).ready(function(){
 			$.post("/admin/deleteDb", dbObj, function(data) {
 				if (data == "0" || data == null) {
 					alert("삭제되었습니다.");
+					$('#detailModal').hide();
+					location.reload();
 				}
 
 			}).done(function() {
