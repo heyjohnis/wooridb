@@ -20,11 +20,14 @@
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
 <script th:inline="javascript">
+var manager = [[${user_id}]];
 $(document).ready(function(){
 	$("#team").addClass('active');
 	$("#dbAdmin").removeClass('active');
 	$("#user").removeClass('active');
 	$("#db-list").removeClass('active');
+	$("#this_name").text(manager+"님");
+	
 });
 
 var list = [[${list}]];

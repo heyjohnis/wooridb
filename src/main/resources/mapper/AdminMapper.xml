@@ -75,6 +75,7 @@
 			</if>
 			<if test="adminYn == 1">
 				AND manager = #{manager}
+				
 			</if>
 		</where>
 		<if test="page_size > 0 and adminYn == 0">

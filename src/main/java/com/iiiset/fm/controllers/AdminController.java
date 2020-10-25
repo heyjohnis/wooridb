@@ -59,6 +59,7 @@ public class AdminController {
 			vo.setManager(manager);
 			List<DbVO> list = service.selectDb(vo);
 			
+			mv.addObject("user_id", manager);
 			mv.addObject("list", list);
 			mv.addObject("grade", grade);
 			mv.setViewName("admin/dbAdmin");
@@ -76,9 +77,12 @@ public class AdminController {
 		if (session.getAttribute("USER") == null) {
 			mv.setViewName("admin/login");
 		} else {
+			UserVO userVO = (UserVO)session.getAttribute("USER");
+			String this_manager = userVO.getUser_id();
 			List<UserVO> list = service.selectUserDb(vo);
 			List<TeamVO> team_list = service.selectTeamDb(new TeamVO());
 
+			mv.addObject("this_manager", this_manager);
 			mv.addObject("list", list);
 			mv.addObject("team_list", team_list);
 			mv.addObject("search", vo);
@@ -98,9 +102,12 @@ public class AdminController {
 		if (session.getAttribute("USER") == null) {
 			mv.setViewName("admin/login");
 		} else {
+			UserVO userVO = (UserVO)session.getAttribute("USER");
+			String manager = userVO.getUser_id();
 			List<TeamVO> list = service.selectTeamDb(vo);
 			mv.addObject("list", list);
 			mv.addObject("search", vo);
+			mv.addObject("user_id", manager);
 			mv.setViewName("admin/team");
 		}
 		return mv;

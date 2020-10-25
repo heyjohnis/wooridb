@@ -27,6 +27,7 @@
 <script th:inline="javascript">
     var user_list = [[${user_list}]];
     var grade = [[${grade}]];
+    var manager = [[${manager}]];
 </script>
 
 <script th:inline="javascript">
@@ -43,6 +44,7 @@ $(document).ready(function(){
 	$("#team").removeClass('active');
 	$("#user").removeClass('active');
 	$("#dbAdmin").removeClass('active');
+	$("#this_name").text(manager+"님");
 });
 
 </script>
@@ -296,7 +298,7 @@ $(document).ready(function(){
 					+ "&srh_end_date=" + srh_end_date
 					+ "&srh_key=" + srh_key;
 		}
-		/*]]*/
+		
 
 		$('#detailModal').on('shown.bs.modal', function(e) {
 			var id_obj = e.relatedTarget;

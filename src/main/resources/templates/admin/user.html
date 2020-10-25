@@ -25,6 +25,7 @@
 
 <script th:inline="javascript">
     var TEAM_LIST = [[${team_list}]];
+    var this_manager = [[${this_manager}]];
 </script>
 
 <script>
@@ -35,6 +36,7 @@ $(document).ready(function(){
 	$("#dbAdmin").removeClass('active');
 	$("#team").removeClass('active');
 	$("#db-list").removeClass('active');
+	$("#this_name").text(this_manager+"님");
 });
 
 
