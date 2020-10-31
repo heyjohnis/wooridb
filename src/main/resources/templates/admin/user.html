@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
+	<body th:replace="admin/header :: mainHead"> </body>
 <head>
 <title>user</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -47,7 +48,6 @@ $(document).ready(function(){
 </head>
 
 <body>
-<body th:replace="admin/header :: mainHead"> </body>
 <div class="container">
 		<table class="table table-hover" id="userTb">
 			<thead>
@@ -92,7 +92,7 @@ $(document).ready(function(){
 				<form name="request" id="request">
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-4">
+							<div class="col-3">
 								<label for="modal_seq">등록번호</label> <input type="text"
 									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
@@ -101,7 +101,7 @@ $(document).ready(function(){
 									id="modal_user_id" name="user_id"
 									class="form-control user_id" readonly />
 							</div>
-							<div class="col-4">
+							<div class="col-5">
 								<label for="modal_user_nm">이름</label> <input type="text"
 									id="modal_user_nm" name="user_nm"
 									class="form-control user_nm" readonly />
@@ -112,12 +112,14 @@ $(document).ready(function(){
 						<div class="row">
 							<div class="col-4">
 								<label for="modal_grade">등급</label> 
-								<select id="modal_grade" name="grade" class="form-control">
+								<select id="modal_grade" name="grade">
 								</select>
 							</div>
 							<div class="col-4">
 								<label for="modal_team_nm">소속</label> 
-								<select id="modal_team_nm" name="team_nm" class="form-control"></select>
+								</br>
+								<select id="modal_team_nm" name="team_nm">
+								</select>
 							</div>
 							
 							<div class="col-4">

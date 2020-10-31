@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
+	<body th:replace="admin/header :: mainHead"> </body>
 <head>
 <title>Consult</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -51,7 +52,6 @@ $(document).ready(function(){
 </head>
 
 <body>
-	<body th:replace="admin/header :: mainHead"> </body>
 
 	<div class="container">
 		<form id="search" name="search">
@@ -82,9 +82,6 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</form>
-		<div class="row"> 
-			<div class="col-12 mb-1" style="text-align:right;"><a id="excel_down" onclick="excelDown();"><button type="button" class="btn btn-secondary">엑셀다운로드</button></a></div>
-		</div>
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -202,7 +199,8 @@ $(document).ready(function(){
 						<div class="row">
 							<div class="col-6">
 								<label for="modal_manager">담당자</label> 
-								<select id="modal_manager" name="manager" class="form-control">
+								</br>
+								<select id="modal_manager" name="manager">
 								</select>
 							</div>
 							<div class="col-6">
@@ -253,10 +251,10 @@ $(document).ready(function(){
 					</div>
 				</form>
 				<div class="modal-footer">
-<!-- 					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">닫기</button> -->
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">닫기</button>
 					<button type="button" class="btn btn-primary" onclick="saveDb();">저장</button>
-					<button type="button" class="btn btn-danger" onclick="deleteDb();">삭제</button>
+					<button type="button" class="btn btn-primary" onclick="deleteDb();">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -362,14 +360,13 @@ $(document).ready(function(){
 			var dbObj = $("#request").serializeObject();
 
 			$.post("/admin/deleteDb", dbObj, function(data) {
+				if (data == "0" || data == null) {
+					alert("삭제되었습니다.");
+					$('#detailModal').hide();
+					location.reload();
+				}
 
 			}).done(function() {
-				
-				alert("삭제되었습니다.");
-				$('#detailModal').hide();
-				location.reload();
-				
-				
 				console.log("dbObj : ", dbObj);
 				var id = "#db_" + dbObj.seq;
 				$.each(dbObj, function(key, value) {
@@ -401,23 +398,6 @@ $(document).ready(function(){
 			$("#srh_end_date").val("");
 			$("#srh_key").val("");
 		}
-		
-		function excelDown(){
-			
-			var srh_sta_date = $("#srh_sta_date").val();
-			srh_sta_date = srh_sta_date.replace(/[\-\.]/g, "");
-			var srh_end_date = $("#srh_end_date").val();
-			srh_end_date = srh_end_date.replace(/[\-\.]/g, "");
-
-			var srh_key = $("#srh_key").val();
-			
-			var url = "/download/woori-db.xlsx?srh_sta_date="+srh_sta_date+"&srh_end_date="+srh_end_date+"&srh_key="+srh_key;
-			$("#excel_down").attr("href", url);
-			$("#excel_down").get(0).click();
-			
-			
-		}
-		
 	</script>
 </body>
 </html>

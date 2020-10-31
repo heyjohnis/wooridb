@@ -268,16 +268,5 @@ public class AdminController {
 		ByteArrayInputStream stream = service.excelDownLoad(vo);
 		IOUtils.copy(stream, response.getOutputStream());
 	}
-	
-	@RequestMapping(value = "/logout")
-	public @ResponseBody ModelAndView logout(HttpServletRequest request) throws Exception {
-
-		ModelAndView mv = new ModelAndView();
-		HttpSession session = request.getSession();
-		session.invalidate();		
-		mv.setViewName("admin/login");
-		return mv;
-	}
-	
 
 }
