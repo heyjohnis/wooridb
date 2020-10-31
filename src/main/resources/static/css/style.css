@@ -8,3 +8,4 @@ label{margin-bottom:0 !important;}
 .consult_form{position:relative;}
 .consult_form form{position:absolute;}
 
+.modal-dialog{max-width:800px !important}
