@@ -24,6 +24,7 @@ public class DbVO {
 	String card_number = "";
 	String expire_date = "";
 	String manager = "";
+	String manager_nm = "";
 	String following_date = "";
 	String reg_date = "";
 	String mod_date = "";

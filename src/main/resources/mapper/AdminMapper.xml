@@ -34,7 +34,8 @@
 		,order_amount
 		,order_date
 		,expire_date
-		,(SELECT user_nm FROM db_data A, user B WHERE A.manager = B.user_id AND A.seq = rlseq) AS manager
+		,manager
+		,(SELECT user_nm FROM db_data A, user B WHERE A.manager = B.user_id AND A.seq = rlseq) AS manager_nm
 		,following_date
 		,site
 		,reg_date

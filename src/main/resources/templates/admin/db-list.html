@@ -117,7 +117,9 @@ $(document).ready(function(){
 					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
 					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
 					<td class="comment" th:text="${db.getComment()}">문의사항</td>
-					<td class="manager" th:text="${db.getManager()}">담당자</td>
+					<td class="manager" style="display:none;" th:text="${db.getManager()}">담당자</td>
+					<td class="manager_nm" th:text="${db.getManager_nm()}">담당자</td>
+					
 					<td class="gender print" th:text="${db.getGender()}">성별</td>
 					<td class="age print" th:text="${db.getAge()}">나이</td>
 					<td class="memo print" th:text="${db.getMemo()}">상담내용</td>
@@ -202,8 +204,8 @@ $(document).ready(function(){
 						<div class="row">
 							<div class="col-6">
 								<label for="modal_manager">담당자</label> 
-								<select id="modal_manager" name="manager" class="form-control">
-								</select>
+								<select id="modal_manager" name="manager" class="form-control" onchange="setManagerName(this.value)"></select>
+								<input type="hidden" id="modal_manager_nm" name="manager_nm" class="manager_nm"/>
 							</div>
 							<div class="col-6">
 								<label for="modal_following_date">접촉일</label> <input type="text"
@@ -317,7 +319,10 @@ $(document).ready(function(){
 			var comment = $(id_obj).find(".comment").text();
 			var manager = $(id_obj).find(".manager").text();
 			var order_cnt = $(id_obj).find(".order_cnt").text();
+			var addr = $(id_obj).find(".addr").text();
+			var memo = $(id_obj).find(".memo").text();
 			var order_amount = $(id_obj).find(".order_amount").text();
+			var card_number = $(id_obj).find(".card_number").text();
 			var expire_date = $(id_obj).find(".expire_date").text();
 			var site = $(id_obj).find(".site").text();
 			$("#modal_seq").val(seq);
@@ -330,11 +335,17 @@ $(document).ready(function(){
 			$("#modal_bank_account").val(bank_account);
 			$("#modal_card_number").val(card_number);
 			$("#modal_comment").val(comment);
-			$("#modal_order_cnt").val(order_cnt);
-			$("#modal_order_amount").val(order_amount);
-			$("#modal_expire_date").val(expire_date);
-			$("#modal_site").val(site);
 			$("#modal_manager").val(manager);
+			$("#modal_order_cnt").val(order_cnt);
+			$("#modal_order_cnt").val(order_cnt);
+			$("#modal_addr").val(addr);
+			$("#modal_memo").val(memo);
+			$("#modal_addr").val(addr);
+			$("#modal_order_amount").val(order_amount);
+			$("#modal_card_number").val(card_number);
+			$("#modal_expire_date").val(expire_date);
+
+			$("#modal_site").val(site);
 
 		});
 
@@ -380,6 +391,20 @@ $(document).ready(function(){
 				alert("저장이 실패되었습니다.\n다시 시도하세요.");
 			});
 		}
+		
+	
+		function setManagerName(id){
+			console.log("id : ", id);
+			$.each(user_list, function(idx, item){
+	
+				console.log(" user_nm : ", item.user_nm);
+				if(item.user_id == id){
+					console.log(" id : ", id, item.user_nm);
+					$("#modal_manager_nm").val(item.user_nm);
+				}
+			});
+		}
+		
 		function excelDown(){
 						
 			var srh_sta_date = $("#srh_sta_date").val();
