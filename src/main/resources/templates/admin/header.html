@@ -25,77 +25,16 @@
 		<!-- Just an image -->
 	<nav class="navbar navbar-expand-sm navbar-right navbar-dark bg-primary">
 		<a class="navbar-brand" href="#" >우리무역</a>
-		
-		<ul class="nav navbar-nav"> 
+		<ul class="nav navbar-nav mr-auto"> 
 			<li class ="nav-item" id="dbAdmin"><a class="nav-link" href="/admin/dbAdmin">홈</a></li>
 			<li class="nav-item" id="user" ><a class="nav-link" href="/admin/user">사용자관리</a></li>
 			<li class="nav-item" id="team" ><a class="nav-link" href="/admin/team">조직관리</a></li>
 			<li class="nav-item" id="db-list" ><a class="nav-link" href="/admin/db-list">DB관리</a></li>
 		</ul>
 		
-		<a id="excel_down" onclick="excelDown();"><button type="button" class="btn btn-light">엑셀다운로드</button></a>
-		<span class="nav-link" style="margin-left:50%"><a class="text-light" id="this_name"></a></span>
-		<span class="nav-link" id="logout" ><button type="button" class="btn btn-light" href="/admin/logout">로그아웃</button></span>
-		</div>
+		
+		<span class="nav-link"><a class="text-light" id="this_name"></a></span>
+		<span class="nav-link" id="logout" ><a class="btn btn-primary" href="/logout">로그아웃</a></span>
 	</nav>
 	
-<script type="text/javascript">
-//window.onload = function() { 
-//	selectGrade();
-//};
-
-// function selectGrade() {
-//	var dbObj = $("#request").serializeObject();
-
-//	$.post("/selectGrade", dbObj, function(data) {
-//		if (data == "1" || data == 1) {
-//			alert("데이터가 성공적으로 들어왔습니다")
-//		}
-//
-//	}).done(function() {
-//		console.log("dbObj : ", dbObj);
-		//grade(1: 슈퍼관리자,전산담당자, 2: 관리자, 3: 팀장, 4: 팀원, 5: db업체)
-//		var thisGrade = dbObj.grade
-//		$("#thisGrade").val(thisGrade);
-//		
-//		if(thisGrade == 5){
-//			document.getElementById("user").style.display ='block';
-//			document.getElementById("team").style.display ='block';
-//			document.getElementById("db-list").style.display ='block';
-//		}
-//		
-//		if(thisGrade != 2){
-//			document.getElementById("team").style.display ='block';
-//		}
-//		
-//		if(thisGrade == 1 || thisGrade == 4 || thisGrade == 5){
-//			document.getElementById("user").style.display ='block';
-//		}
-//		var id = "#db_" + dbObj.seq;
-//		$.each(dbObj, function(key, value) {
-//			$(id + " ." + key).text(value);
-//		});
-
-//		console.log("dbObj : ", dbObj);
-//	}).fail(function() {
-//		alert("직원 정보를 가져오지 못했습니다");
-//	});
-//}
-
-function excelDown(){
-	
-	var srh_sta_date = $("#srh_sta_date").val();
-	srh_sta_date = srh_sta_date.replace(/[\-\.]/g, "");
-	var srh_end_date = $("#srh_end_date").val();
-	srh_end_date = srh_end_date.replace(/[\-\.]/g, "");
-
-	var srh_key = $("#srh_key").val();
-	
-	var url = "/download/woori-db.xlsx?srh_sta_date="+srh_sta_date+"&srh_end_date="+srh_end_date+"&srh_key="+srh_key;
-	$("#excel_down").attr("href", url);
-	$("#excel_down").get(0).click();
-	
-	
-}
-</script>
 </body>
