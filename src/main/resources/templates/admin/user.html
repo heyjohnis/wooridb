@@ -49,10 +49,13 @@ $(document).ready(function(){
 <body>
 <body th:replace="admin/header :: mainHead"> </body>
 <div class="container">
+	<div class="text-right mb-1 mt-3">
+		<button type="button" class="btn btn-primary pull-right" id="addBtn" data-toggle="modal" data-target="#detailModal" onclick="addNewYn()">사용자등록</button>		
+	</div>
 		<table class="table table-hover" id="userTb">
 			<thead>
 				<tr>
-					<th scope="col" >등록번호</th>
+					<th scope="col" class="text-center" >등록번호</th>
 					<th scope="col" >아이디</th>
 					<th scope="col" >이름</th>
 					<th scope="col" >등급</th>
@@ -63,7 +66,7 @@ $(document).ready(function(){
 			<tbody >
 				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
 				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
-					<td class="seq" th:text="${db.getSeq()}">등록번호</td>
+					<td class="seq text-center" th:text="${db.getSeq()}">등록번호</td>
 					<td class="user_id" th:text="${db.getUser_id()}">아이디</td>
 					<td class="user_nm" th:text="${db.getUser_nm()}">이름</td>
 					<td class="grade_nm"  th:text="${db.getGrade_nm()}">등급</td>
@@ -73,9 +76,7 @@ $(document).ready(function(){
 				</tr>
 			</tbody>
 		</table>
-		<div class="footer">
-			<button type="button" class="btn btn-primary pull-right" id="addBtn" data-toggle="modal" data-target="#detailModal" onclick="addNewYn()">사용자등록</button>	
-		</div>
+
 </div>
 <!-- Modal -->
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog"

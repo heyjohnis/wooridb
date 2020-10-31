@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
-	<body th:replace="admin/header :: mainHead"> </body>
 <head>
 <title>team</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -37,13 +36,19 @@ var list = [[${list}]];
 </head>
 
 <body>
+
+<body th:replace="admin/header :: mainHead"> </body>
+
 <div class="container">
+		<div class="mt-3 mb-1 text-right">
+			<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#detailModal" onclick="addNewYn()">팀등록</button>	
+		</div>
 		<table id="teamTb" class="table table-hover">
 			<thead>
 				<tr>
-					<th scope="col" >등록번호</th>
-					<th scope="col" >팀명</th>
-					<th scope="col" >팀소개</th>
+					<th scope="col" class="text-center" >등록번호</th>
+					<th scope="col" class="text-center">조직</th>
+					<th scope="col" class="text-center" >팀소개</th>
 					<input type="hidden" id="newYn"/>
 					
 				</tr>
@@ -51,15 +56,13 @@ var list = [[${list}]];
 			<tbody id="teamTb">
 				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
 				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
-					<td class="seq" th:text="${db.getSeq()}">등록번호</td>
-					<td class="team_nm" th:text="${db.getTeam_nm()}">팀명</td>
-					<td class="team_info" th:text="${db.getTeam_info()}">팀소개</td>
+					<td class="seq text-center" th:text="${db.getSeq()}">등록번호</td>
+					<td class="team_nm text-center" th:text="${db.getTeam_nm()}">조직명</td>
+					<td class="team_info" th:text="${db.getTeam_info()}">조직소개</td>
 				</tr>
 			</tbody>
 		</table>
-		<div class="footer">
-			<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#detailModal" onclick="addNewYn()">팀등록</button>	
-		</div>
+
 </div>
 
 <!-- Modal -->
