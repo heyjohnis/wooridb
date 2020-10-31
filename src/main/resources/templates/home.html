@@ -8,32 +8,67 @@
 	rel="stylesheet" />
 <link href="/jslib/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
 <script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
+<style>
+.form-consult{width:100%;}
+input[type=text]{width:100%; border:1px solid #db8da5 !important; border-radius:3px; padding: 3px 10px;}
+
+.btn_consult{padding:30px 0; border:1px solid #db8da5; border-radius:3px; background: #d10f4a; text-align:center; color:#fae20c; font-size:1.2em;}
+</style>
 </head>
 
 <body>
-
 	<div class="container" style="width:900px">
-		<div class="mb-3">
-			<img width="100%" src="http://kingforce.co.kr/web/upload/NNEditor/20190326/ED82B9ED8FACEC8AA4-EC8381EC84B8ED8E98EC9DB4ECA780_EC9CA0ED86B5EAB8B0ED959C.jpg" />
+		<div class="">
+			<img width="100%" src="/images/woori1.jpg" />			
 		</div>
 		<form>
-			<div class="form-group">
-				<label for="exampleFormControlInput1">성명</label> <input type="text"
-					class="form-control" id="cust_nm"
-					placeholder="성명을 입력해주세요">
+			<div class="req_consult">
+				<div class="input_request">
+					<div class="mb-3"><img width="100%" src="/images/txt.jpg" /></div>
+					<table class="form-consult">
+						<tr>
+						<td width="15%"><img src="/images/label1.jpg" /></td>
+						<td width="45%"><input type="text" class="input-text" id="cust_nm" placeholder="성명을 입력해주세요" /></td>
+						<td width="40%" rowspan="2"  style="padding:9px;">
+							<div class="btn_consult" id="send_db">
+								무료상담신청
+							</div>
+						</td>
+						</tr>
+						<tr>
+						<td><img src="/images/label2.jpg" /></td>
+						<td><input type="text" class="input-text" id="cust_tel" placeholder="연락처 입력해주세요" /></td>
+						</tr>					
+					</table>
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="exampleFormControlInput1">연락처</label> <input type="text"
-					class="form-control" id="cust_tel"
-					placeholder="연락처를 입력해주세요">
+		</form>
+		<div class="">
+			<img width="100%" src="/images/woori2.jpg" />
+		</div>	
+		<form>
+			<div class="req_consult">
+				<div class="input_request">
+					<div class="mb-3"><img width="100%" src="/images/txt.jpg" /></div>
+					<table class="form-consult">
+						<tr>
+						<td width="15%"><img src="/images/label1.jpg" /></td>
+						<td width="45%"><input type="text" class="input-text" id="cust_nm2" placeholder="성명을 입력해주세요" /></td>
+						<td width="40%" rowspan="2"  style="padding:9px;">
+							<div class="btn_consult" id="send_db2">
+								무료상담신청
+							</div>
+						</td>
+						</tr>
+						<tr>
+						<td><img src="/images/label2.jpg" /></td>
+						<td><input type="text" class="input-text" id="cust_tel2" placeholder="연락처 입력해주세요" /></td>
+						</tr>					
+					</table>
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="exampleFormControlTextarea1">문의사항</label>
-				<textarea class="form-control" id="comment"
-					rows="3" placeholder="궁금하신 사항을 입력해주세요"></textarea>
-			</div>
-			<button type="button" class="btn btn-secondary btn-lg btn-block" id="send_db">신청하기</button>
 		</form>
 	</div>
 </body>
@@ -42,6 +77,9 @@
 $(document).ready(function(){
 	$("#send_db").click(function(){
 		send();
+	});
+	$("#send_db2").click(function(){
+		send2();
 	});
 });
 
@@ -58,9 +96,30 @@ function send(){
 		alert("연락처를 입력해주세요");
 		return;
 	}
-	db.comment = $("#comment").val();
-	db.site = getParam('site');
 	
+	sendDb(db);
+}
+
+function send2(){
+	
+	var db = {};
+	if($("#cust_nm2").val() != "") db.cust_nm = $("#cust_nm2").val();
+	else {
+		alert("성명을 입력해주세요");
+		return;
+	}
+	if($("#cust_tel2").val() != "") db.cust_tel = $("#cust_tel2").val();
+	else {
+		alert("연락처를 입력해주세요");
+		return;
+	}
+	
+	sendDb(db);
+}
+
+function sendDb(db){
+	db.site = getParam('site');
+
 	$.post("/insertDb", db, function(data){
 		alert("신청이 완료되었습니다");
 		$("#cust_nm").val("");
@@ -69,8 +128,9 @@ function send(){
 
 	}).fail(function(){
 		alert("실패");
-	});	
+	});
 }
+
 
 function getParam(sname) {
     var params = location.search.substr(location.search.indexOf("?") + 1);

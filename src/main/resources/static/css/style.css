@@ -1,3 +1,10 @@
 .pagination{justify-content: center}
 td.print, th.print{display:none;}
 label{margin-bottom:0 !important;}
+
+.req_consult{background:#db8da5; padding:15px;}
+.input_request{padding:20px 40px; background:#fff;}
+
+.consult_form{position:relative;}
+.consult_form form{position:absolute;}
+
