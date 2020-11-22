@@ -104,6 +104,21 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
+	public int insertGoodsDb(GoodsVO vo) {
+		return dao.insertGoodsDb(vo);
+	}
+	
+	@Override
+	public int updateGoodsDb(GoodsVO vo) {
+		return dao.updateGoodsDb(vo);
+	}
+	
+	@Override
+	public int deleteGoodsDb(GoodsVO vo) {
+		return dao.deleteGoodsDb(vo);
+	}
+	
+	@Override
 	public int insertUserDb(UserVO vo) {
 		return dao.insertUserDb(vo);
 	}

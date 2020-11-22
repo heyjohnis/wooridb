@@ -19,15 +19,14 @@
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
 <script th:inline="javascript">
-var manager = [[${user_id}]];
+var user_id = [[${user_id}]];
 $(document).ready(function(){
 	$("#goods").addClass('active');
 	$("#dbAdmin").removeClass('active');
 	$("#user").removeClass('active');
 	$("#db-list").removeClass('active');
 	$("#team").removeClass('active');
-	$("#this_name").text(manager+"님");
-	
+	$("#this_name").text(user_id+"님");
 });
 
 var list = [[${list}]];
@@ -81,13 +80,11 @@ var list = [[${list}]];
 									id="modal_gdcd" name="gdcd" class="form-control gdcd"  />
 							</div>
 							<div class="col-5">
-								<label for="modal_cnt_sum">상품갯수</label> <input type="text"
-									id="modal_cnt_sum" name="cnt_sum"
-									class="form-control cnt_sum"  />
+								<label for="modal_inp_cnt">상품갯수</label> <input type="text"
+									id="modal_inp_cnt" name="inp_cnt"
+									class="form-control inp_cnt"  />
 							</div>
 						</div>
-
-
 					</div>
 				</form>
 				<div class="modal-footer">
@@ -112,10 +109,9 @@ var list = [[${list}]];
 		var id_obj = e.relatedTarget;
 		console.log("modal : ", id_obj);
 		var gdcd = $(id_obj).find(".gdcd").text();
-		var cnt_sum = $(id_obj).find(".cnt_sum").text();
 		
 		$("#modal_gdcd").val(gdcd);
-		$("#modal_cnt_sum").val(cnt_sum);
+
 
 	});
 		
@@ -131,24 +127,9 @@ var list = [[${list}]];
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
 			var newYn = $("#newYn").val();
-			if(newYn == "0"){
-				$.post("/admin/updateTeamDb", dbObj, function(data) {
-					if (data == "1" || data == 1) {
-						alert("저장되었습니다.");
-						location.reload();
-					}
-				}).done(function() {
-					console.log("dbObj : ", dbObj);
-					var id = "#db_" + dbObj.seq;
-					$.each(dbObj, function(key, value) {
-						$(id + " ." + key).text(value);
-					});
-				}).fail(function() {
-					alert("저장이 실패되었습니다.\n다시 시도하세요.");
-				});
-			}else if(newYn == "1"){
-				$.post("/admin/insertTeamDb", dbObj, function(data) {
-					if (data == "1" || data == 1) {
+			
+				$.post("/admin/insertGoodsDb", dbObj, function(data) {
+					if (data != null) {
 						alert("저장되었습니다.");
 						location.reload();
 					}
@@ -163,14 +144,13 @@ var list = [[${list}]];
 				});
 
 			}
-			
-		}
+
 		
 		
 		function deleteTeamDb(){
 			var dbObj = $("#request").serializeObject();
 
-			$.post("/admin/deleteTeamDb", dbObj, function(data) {
+			$.post("/admin/deleteGoodsDb", dbObj, function(data) {
 					alert("삭제되었습니다.");
 					location.reload();	
 			}).done(function() {

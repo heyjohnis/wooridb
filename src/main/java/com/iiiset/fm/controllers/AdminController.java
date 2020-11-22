@@ -278,6 +278,39 @@ public class AdminController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/admin/updateGoodsDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int updateGoodsDb(HttpServletRequest request, @ModelAttribute GoodsVO vo) throws Exception {
+		HttpSession session = request.getSession();
+		UserVO userVO = (UserVO)session.getAttribute("USER");
+		String mod_id = userVO.getUser_id();
+		vo.setMod_id(mod_id);
+		int result = service.updateGoodsDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/deleteGoodsDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int deleteGoodsDb(@ModelAttribute GoodsVO vo) throws Exception {
+
+		int result = service.deleteGoodsDb(vo);
+
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/insertGoodsDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int regGoodsDb(HttpServletRequest request, @ModelAttribute GoodsVO vo) throws Exception {
+		HttpSession session = request.getSession();
+		UserVO userVO = (UserVO)session.getAttribute("USER");
+		String reg_id = userVO.getUser_id();
+		vo.setReg_id(reg_id);
+		int result = service.insertGoodsDb(vo);
+
+		return result;
+	}
+	
 	@RequestMapping(value = "/admin/updateUserDb")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int updateUserDb(@ModelAttribute UserVO vo) throws Exception {
@@ -286,7 +319,6 @@ public class AdminController {
 
 		return result;
 	}
-	
 	
 	@GetMapping("/download/woori-db.xlsx")
 	public void downloadCsv(HttpServletResponse response, @RequestParam("srh_sta_date") String srh_sta_date,

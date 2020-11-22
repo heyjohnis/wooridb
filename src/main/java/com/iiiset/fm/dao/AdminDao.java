@@ -38,6 +38,12 @@ public interface AdminDao {
 	
 	int deleteTeamDb(TeamVO vo);
 	
+	int insertGoodsDb(GoodsVO vo);
+	
+	int updateGoodsDb(GoodsVO vo);
+	
+	int deleteGoodsDb(GoodsVO vo);
+	
 	int insertUserDb(UserVO vo);
 	
 	int updateUserDb(UserVO vo);

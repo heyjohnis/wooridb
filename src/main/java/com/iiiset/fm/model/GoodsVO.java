@@ -16,6 +16,6 @@ public class GoodsVO {
 	String mod_date = "";
 	String reg_id = "";
 	String mod_id = "";
-	
+	String user_id = "";
 }
 

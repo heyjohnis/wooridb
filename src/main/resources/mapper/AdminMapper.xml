@@ -208,23 +208,24 @@
 	</delete>
 	
 	<update id="updateGoodsDb" parameterType="com.iiiset.fm.model.GoodsVO">
-		UPDATE
-		team SET
-		team_nm = #{team_nm},
-		team_info = #{team_info}
-		WHERE seq = #{seq}
+		UPDATE goods 
+		SET
+				inp_cnt = select#{inp_cnt}
+		      , mod_date = now()
+		      , mod_id = #{mod_id}
+		WHERE   gdcd = #{gdcd}
 	</update>
 	
-	<insert id="insertTeamDb" parameterType="com.iiiset.fm.model.GoodsVO">
-		INSERT INTO team
-		(team_nm, team_info)
+	<insert id="insertGoodsDb" parameterType="com.iiiset.fm.model.GoodsVO">
+		INSERT INTO goods
+		(inp_cnt, gdcd, reg_date, reg_id)
 		VALUES
-		(#{team_nm}, #{team_info})
+		(#{inp_cnt}, #{gdcd}, now(), #{reg_id})
 	</insert>
 	
-	<delete id="deleteTeamDb" parameterType="com.iiiset.fm.model.GoodsVO">
-		DELETE FROM team
-		WHERE team_nm = #{team_nm}
+	<delete id="deleteGoodsDb" parameterType="com.iiiset.fm.model.GoodsVO">
+		DELETE FROM goods
+		WHERE gdcd = #{gdcd}
 	</delete>
 	
 	<update id="updateUserDb" parameterType="com.iiiset.fm.model.UserVO">
