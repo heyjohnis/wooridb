@@ -2,7 +2,10 @@ package com.iiiset.fm.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.iiiset.fm.model.DbVO;
+import com.iiiset.fm.model.GoodsVO;
 import com.iiiset.fm.model.TeamVO;
 import com.iiiset.fm.model.UserVO;
 import com.iiiset.fm.service.AdminService;
@@ -91,6 +95,13 @@ public class AdminController {
 		return mv;
 	}
 
+	@RequestMapping(value = "/admin/member")
+	public @ResponseBody List<UserVO> team_user(HttpServletRequest request, @ModelAttribute UserVO vo) throws Exception {
+
+		List<UserVO> list = service.selectMember(vo);
+
+		return list;
+	}
 	
 	@RequestMapping(value = "/admin/team")
 	public @ResponseBody ModelAndView team(HttpServletRequest request, @ModelAttribute TeamVO vo) throws Exception {
@@ -105,10 +116,33 @@ public class AdminController {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
 			String manager = userVO.getUser_id();
 			List<TeamVO> list = service.selectTeamDb(vo);
+			List<UserVO> member_list = service.selectUserDb(userVO);
 			mv.addObject("list", list);
+			mv.addObject("member_list", member_list);
 			mv.addObject("search", vo);
 			mv.addObject("user_id", manager);
 			mv.setViewName("admin/team");
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/goods")
+	public @ResponseBody ModelAndView goods(HttpServletRequest request, @ModelAttribute GoodsVO vo) throws Exception {
+
+		ModelAndView mv = new ModelAndView();
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("USER") == null) {
+			mv.setViewName("admin/login");
+		} else {
+			UserVO userVO = (UserVO)session.getAttribute("USER");
+			String manager = userVO.getUser_id();
+			List<GoodsVO> list = service.selectGoods(vo);
+			mv.addObject("list", list);
+			mv.addObject("search", vo);
+			mv.addObject("user_id", manager);
+			mv.setViewName("admin/goods");
 		}
 		return mv;
 	}
@@ -159,6 +193,7 @@ public class AdminController {
 
 			double total_page_cnt = Math.ceil(total_cnt / (double) page_size);
 			
+			mv.addObject("user_id", user_id);
 			mv.addObject("grade", grade);
 			mv.addObject("team_cd", team_cd);
 			mv.addObject("user_list", user_list);

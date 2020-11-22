@@ -17,4 +17,5 @@ public class UserVO {
     private String grade_nm;
     private String team_cd;
     private String team_nm;
+    private String user_tel;
 }

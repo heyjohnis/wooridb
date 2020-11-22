@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.iiiset.fm.dao.AdminDao;
 import com.iiiset.fm.model.DbVO;
+import com.iiiset.fm.model.GoodsVO;
 import com.iiiset.fm.model.UserVO;
 import com.iiiset.fm.model.TeamVO;
 import com.iiiset.fm.service.AdminService;
@@ -43,6 +44,15 @@ public class AdminServiceImpl implements AdminService {
 		return dao.selectUserDb(vo);
 	}
 	
+	@Override
+	public List<UserVO> selectMember(UserVO vo) {
+		return dao.selectMember(vo);
+	}
+	
+	@Override
+	public List<GoodsVO> selectGoods(GoodsVO vo){
+		return dao.selectGoods(vo);
+	}
 	@Override
 	public int selectGrade(UserVO vo) {
 		return dao.selectGrade(vo);

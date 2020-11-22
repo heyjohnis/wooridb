@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.iiiset.fm.model.DbVO;
+import com.iiiset.fm.model.GoodsVO;
 import com.iiiset.fm.model.UserVO;
 import com.iiiset.fm.model.TeamVO;
 
@@ -30,6 +31,8 @@ public interface AdminService {
 	
 	List<TeamVO> selectTeamDb(TeamVO vo);
 	
+	List<GoodsVO> selectGoods(GoodsVO vo);
+	
 	int insertTeamDb(TeamVO vo);
 	
 	int updateTeamDb(TeamVO vo);
@@ -41,5 +44,7 @@ public interface AdminService {
 	int updateUserDb(UserVO vo);
 	
 	ByteArrayInputStream excelDownLoad(DbVO vo) throws IOException;
+
+	List<UserVO> selectMember(UserVO vo);
 
 }

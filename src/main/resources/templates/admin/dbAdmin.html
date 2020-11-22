@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
@@ -27,9 +28,13 @@
     	if(grade == "10" || grade == "99"){
     		$("#user").show();
     		$("#team").show();
+    		$("#goods").show();
     	}else{
     		$("#user").hide();
     		$("#team").hide();
+    		$("#saveBtn").hide();
+    		$("#delBtn").hide();
+    		$("#goods").hide();
     	}
     	$("#dbAdmin").addClass('active');
     	$("#team").removeClass('active');
@@ -93,8 +98,175 @@
 				</tr>
 			</tbody>
 		</table>
-
+		<!-- Modal -->
+	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">제품문의 DB</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form name="request" id="request">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-3">
+								<label for="modal_seq">순번</label> <input type="text"
+									id="modal_seq" name="seq" class="form-control seq" readonly />
+							</div>
+							<div class="col-5">
+								<label for="modal_reg_date">신청일시</label> <input type="text"
+									id="modal_reg_date" name="reg_date"
+									class="form-control reg_date" readonly />
+							</div>
+							<div class="col-4">
+								<label for="modal_site">출처</label> <input type="text"
+									id="modal_site" name="site"
+									class="form-control site" readonly />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_cust_nm">고객명</label> <input type="text"
+									id="modal_cust_nm" name="cust_nm" class="form-control cust_nm"
+									readonly />
+							</div>
+							<div class="col-6">
+								<label for="modal_cust_nm">연락처</label> <input type="text"
+									id="modal_cust_tel" name="cust_tel"
+									class="form-control cust_tel" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_gender">성별</label> <input type="text"
+									id="modal_gender" name="gender" class="form-control gender" />
+							</div>
+							<div class="col-6">
+								<label for="modal_age">나이</label> <input type="text"
+									id="modal_age" name="age" class="form-control age" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_comment">문의내용</label>
+								<textarea id="modal_comment" name="comment"
+									class="form-control comment"></textarea>
+							</div>
+						</div>
+						</br>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_manager">담당자</label> 
+								<select id="modal_manager" name="manager" class="form-control" onchange="setManagerName(this.value)"></select>
+								<input type="hidden" id="modal_manager_nm" name="manager_nm" class="manager_nm"/>
+							</div>
+							<div class="col-6">
+								<label for="modal_following_date">접촉일</label> <input type="text"
+									id="modal_following_date" name="following_date"
+									class="form-control following_date" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<label for="modal_order_cnt">주문수량</label> <input type="text"
+									id="modal_order_cnt" name="order_cnt"
+									class="form-control order_cnt" />
+							</div>
+							<div class="col-6">
+								<label for="modal_order_amount">금액</label> <input type="text"
+									id="modal_order_amount" name="order_amount"
+									class="form-control order_amount" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_addr">주소</label> <input type="text"
+									id="modal_addr" name="addr" class="form-control addr" />
+							</div>
+							<div class="col-12">
+								<label for="modal_memo">상담메모</label>
+								<textarea id="modal_memo" name="memo" class="form-control memo"></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_bank_account">계좌번호</label> <input type="text"
+									id="modal_bank_account" name="bank_account"
+									class="form-control bank_account" />
+							</div>
+							<div class="col-8">
+								<label for="modal_card_number">카드번호</label> <input type="text"
+									id="modal_card_number" name="card_number"
+									class="form-control card_number" />
+							</div>
+							<div class="col-4">
+								<label for="modal_expire_date">유효기간</label> <input type="text"
+									id="modal_expire_date" name="expire_date"
+									class="form-control expire_date" />
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="modal-footer">
+<!-- 					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">닫기</button> -->
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="saveDb();">저장</button>
+					<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteDb();">삭제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
 <script type= "text/javascript">
+$('#detailModal').on('shown.bs.modal', function(e) {
+	var id_obj = e.relatedTarget;
+	console.log("modal : ", id_obj);
+	var seq = $(id_obj).find(".seq").text();
+	var reg_date = $(id_obj).find(".reg_date").text();
+	var cust_nm = $(id_obj).find(".cust_nm").text();
+	var cust_tel = $(id_obj).find(".cust_tel").text();
+	var gender = $(id_obj).find(".gender").text();
+	var age = $(id_obj).find(".age").text();
+	var following_date = $(id_obj).find(".following_date").text();
+	var bank_account = $(id_obj).find(".bank_account").text();
+	var card_number = $(id_obj).find(".card_number").text();
+	var comment = $(id_obj).find(".comment").text();
+	var manager = $(id_obj).find(".manager").text();
+	var order_cnt = $(id_obj).find(".order_cnt").text();
+	var addr = $(id_obj).find(".addr").text();
+	var memo = $(id_obj).find(".memo").text();
+	var order_amount = $(id_obj).find(".order_amount").text();
+	var card_number = $(id_obj).find(".card_number").text();
+	var expire_date = $(id_obj).find(".expire_date").text();
+	var site = $(id_obj).find(".site").text();
+	$("#modal_seq").val(seq);
+	$("#modal_reg_date").val(reg_date);
+	$("#modal_cust_nm").val(cust_nm);
+	$("#modal_cust_tel").val(cust_tel);
+	$("#modal_gender").val(gender);
+	$("#modal_age").val(age);
+	$("#modal_following_date").val(following_date);
+	$("#modal_bank_account").val(bank_account);
+	$("#modal_card_number").val(card_number);
+	$("#modal_comment").val(comment);
+	$("#modal_manager").val(manager);
+	$("#modal_order_cnt").val(order_cnt);
+	$("#modal_order_cnt").val(order_cnt);
+	$("#modal_addr").val(addr);
+	$("#modal_memo").val(memo);
+	$("#modal_addr").val(addr);
+	$("#modal_order_amount").val(order_amount);
+	$("#modal_card_number").val(card_number);
+	$("#modal_expire_date").val(expire_date);
+
+	$("#modal_site").val(site);
+
+});
 
 </script>
 </body>

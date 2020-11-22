@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>goods</title>
+<link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+<link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+<script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+	integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+	crossorigin="anonymous"></script>
+
+<script type="text/javascript"
+	src="/jslib/jquery/jquery.twbsPagination.js"></script>
+
+<script type="text/javascript"
+	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
+<script th:inline="javascript">
+var manager = [[${user_id}]];
+$(document).ready(function(){
+	$("#goods").addClass('active');
+	$("#dbAdmin").removeClass('active');
+	$("#user").removeClass('active');
+	$("#db-list").removeClass('active');
+	$("#team").removeClass('active');
+	$("#this_name").text(manager+"님");
+	
+});
+
+var list = [[${list}]];
+
+</script>
+
+</head>
+
+<body>
+
+<body th:replace="admin/header :: mainHead"> </body>
+
+<div class="container">
+		<div class="mt-3 mb-1 text-right">
+			<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#detailModal" onclick="addNewYn()">상품추가</button>	
+		</div>
+		<table id="teamTb" class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col" class="text-center" >상품명</th>
+					<th scope="col" class="text-center">누적재고량</th>
+					<input type="hidden" id="newYn"/>
+				</tr>
+			</thead>
+			<tbody id="goodsTb">
+				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
+				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
+					<td class="gdcd text-center" th:text="${db.getGdcd()}">상품명</td>
+					<td class="cnt_sum text-center" th:text="${db.getInp_cnt()} - ${db.getCnt_sum()}">누적재고량</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<!-- Modal -->
+	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">제품문의 DB</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form name="request" id="request">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-3">
+								<label for="modal_gdcd">상품명</label> <input type="text"
+									id="modal_gdcd" name="gdcd" class="form-control gdcd"  />
+							</div>
+							<div class="col-5">
+								<label for="modal_cnt_sum">상품갯수</label> <input type="text"
+									id="modal_cnt_sum" name="cnt_sum"
+									class="form-control cnt_sum"  />
+							</div>
+						</div>
+
+
+					</div>
+				</form>
+				<div class="modal-footer">
+<!-- 					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">닫기</button> -->
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="saveDb();">저장</button>
+					<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteDb();">삭제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+	<script type="text/javascript">
+	$(function() {
+
+	});
+	$('#detailModal').on('shown.bs.modal', function(e) {
+		var id_obj = e.relatedTarget;
+		console.log("modal : ", id_obj);
+		var gdcd = $(id_obj).find(".gdcd").text();
+		var cnt_sum = $(id_obj).find(".cnt_sum").text();
+		
+		$("#modal_gdcd").val(gdcd);
+		$("#modal_cnt_sum").val(cnt_sum);
+
+	});
+		
+		function addNewYn(){
+			$("#newYn").val("1");
+			document.getElementById("delBtn").style.display ='block';	
+		}
+		
+		function addNewYn2(){
+			$("#newYn").val("0");
+		}
+		
+		function saveDb() {
+			var dbObj = $("#request").serializeObject();
+			var newYn = $("#newYn").val();
+			if(newYn == "0"){
+				$.post("/admin/updateTeamDb", dbObj, function(data) {
+					if (data == "1" || data == 1) {
+						alert("저장되었습니다.");
+						location.reload();
+					}
+				}).done(function() {
+					console.log("dbObj : ", dbObj);
+					var id = "#db_" + dbObj.seq;
+					$.each(dbObj, function(key, value) {
+						$(id + " ." + key).text(value);
+					});
+				}).fail(function() {
+					alert("저장이 실패되었습니다.\n다시 시도하세요.");
+				});
+			}else if(newYn == "1"){
+				$.post("/admin/insertTeamDb", dbObj, function(data) {
+					if (data == "1" || data == 1) {
+						alert("저장되었습니다.");
+						location.reload();
+					}
+				}).done(function() {
+					console.log("dbObj : ", dbObj);
+					var id = "#db_" + dbObj.seq;
+					$.each(dbObj, function(key, value) {
+						$(id + " ." + key).text(value);
+					});
+				}).fail(function() {
+					alert("저장이 실패되었습니다.\n다시 시도하세요.");
+				});
+
+			}
+			
+		}
+		
+		
+		function deleteTeamDb(){
+			var dbObj = $("#request").serializeObject();
+
+			$.post("/admin/deleteTeamDb", dbObj, function(data) {
+					alert("삭제되었습니다.");
+					location.reload();	
+			}).done(function() {
+				console.log("dbObj : ", dbObj);
+				var id = "#db_" + dbObj.seq;
+				$.each(dbObj, function(key, value) {
+					$(id + " ." + key).text(value);
+				});
+
+			}).fail(function() {
+				alert("삭제가 실패되었습니다.\n다시 시도하세요.");
+			});
+		}
+		
+	</script>
+
+
+</body>

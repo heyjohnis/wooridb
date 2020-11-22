@@ -102,9 +102,10 @@
 			WHEN a.grade = '10' THEN '관리자'
 			WHEN a.grade = '11' THEN 'DB업체'
 			WHEN a.grade = '99' THEN '슈퍼바이저'
-		END AS grade_nm
+		  END AS grade_nm
         ,b.team_nm AS team_nm
         ,a.team_cd AS team_cd
+        , a.user_tel
 		, a.user_nm AS user_nm 
 		FROM user as a
         LEFT JOIN team as b
@@ -117,6 +118,23 @@
 		resultType="com.iiiset.fm.model.TeamVO">
 		SELECT * FROM team
 		ORDER BY seq DESC
+	</select>
+	
+	<select id="selectMember" parameterType="com.iiiset.fm.model.UserVO"
+		resultType="com.iiiset.fm.model.UserVO">
+		SELECT * FROM user
+		WHERE team_cd = #{team_cd}
+		ORDER BY seq DESC
+	</select>
+	
+	<select id="selectGoods" parameterType="com.iiiset.fm.model.GoodsVO"
+		resultType="com.iiiset.fm.model.GoodsVO">
+		SELECT    '탑스핏' AS gdcd
+				, (SELECT sum(nvl(order_amount,'0')) from db_data where gd_cd ='001') AS cnt_sum
+			    , inp_cnt
+		FROM	  goods
+	    WHERE     gdcd = '001'
+		ORDER BY  seq DESC;
 	</select>
 	
 	<select id="selectTeam_cd"
@@ -185,6 +203,26 @@
 	</insert>
 	
 	<delete id="deleteTeamDb" parameterType="com.iiiset.fm.model.TeamVO">
+		DELETE FROM team
+		WHERE team_nm = #{team_nm}
+	</delete>
+	
+	<update id="updateGoodsDb" parameterType="com.iiiset.fm.model.GoodsVO">
+		UPDATE
+		team SET
+		team_nm = #{team_nm},
+		team_info = #{team_info}
+		WHERE seq = #{seq}
+	</update>
+	
+	<insert id="insertTeamDb" parameterType="com.iiiset.fm.model.GoodsVO">
+		INSERT INTO team
+		(team_nm, team_info)
+		VALUES
+		(#{team_nm}, #{team_info})
+	</insert>
+	
+	<delete id="deleteTeamDb" parameterType="com.iiiset.fm.model.GoodsVO">
 		DELETE FROM team
 		WHERE team_nm = #{team_nm}
 	</delete>

@@ -2,6 +2,7 @@ package com.iiiset.fm.dao;
 import java.util.List;
 
 import com.iiiset.fm.model.DbVO;
+import com.iiiset.fm.model.GoodsVO;
 import com.iiiset.fm.model.UserVO;
 import com.iiiset.fm.model.TeamVO;
 
@@ -16,6 +17,10 @@ public interface AdminDao {
 	List<TeamVO> selectTeamDb(TeamVO vo);
 	
 	List<UserVO>selectTeamCd(UserVO vo);
+	
+	List<UserVO>selectMember(UserVO vo);
+	
+	List<GoodsVO>selectGoods(GoodsVO vo);
 	
 	int selectGrade(UserVO vo);
 	

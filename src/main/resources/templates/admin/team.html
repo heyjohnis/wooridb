@@ -19,19 +19,45 @@
 <script type="text/javascript"
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
 <script th:inline="javascript">
+var thisData;
 var manager = [[${user_id}]];
+var member_list = [[${member_list}]];
+var list = [[${list}]];
+var team = new Array();
+function addNewYn(){
+	$("#newYn").val("1");
+	document.getElementById("delBtn").style.display ='block';	
+}
+
+function addNewYn2(obj){
+	$("#newYn").val("0");
+	var seq = obj.id.substring(3,6);
+	$("#thisSeq").val(seq);
+	
+	
+}
+
 $(document).ready(function(){
 	$("#team").addClass('active');
 	$("#dbAdmin").removeClass('active');
 	$("#user").removeClass('active');
 	$("#db-list").removeClass('active');
 	$("#this_name").text(manager+"님");
-	
+	for(var i=0; i<member_list.length; i++){
+		for(var j=0; j<list.length; j++){
+			if(team[j] == null || team[j] == ""){
+				team[j] = new Array();
+			};
+			var thisseq = list[j].seq;
+			if(member_list[i].team_cd == thisseq){
+				team[j].push(member_list[i]);
+			}
+		}
+	}
 });
 
 var list = [[${list}]];
 
-</script>
 </script>
 </head>
 
@@ -50,15 +76,18 @@ var list = [[${list}]];
 					<th scope="col" class="text-center">조직</th>
 					<th scope="col" class="text-center" >팀소개</th>
 					<input type="hidden" id="newYn"/>
-					
+					<input type="hidden" id="thisSeq"/>
 				</tr>
 			</thead>
 			<tbody id="teamTb">
 				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
-				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
+				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2(this)">
 					<td class="seq text-center" th:text="${db.getSeq()}">등록번호</td>
 					<td class="team_nm text-center" th:text="${db.getTeam_nm()}">조직명</td>
 					<td class="team_info" th:text="${db.getTeam_info()}">조직소개</td>
+					<input type="hidden" class="team_cd" th:val="${db.getSeq()}"/>
+					
+					<input type="hidden" id="member_+${db.seq}">
 				</tr>
 			</tbody>
 		</table>
@@ -96,6 +125,27 @@ var list = [[${list}]];
 									id="modal_team_info" name="team_info"
 									class="form-control team_info" readonly />
 							</div>
+							
+						</div>
+						</br>
+						<div class="row">
+							<div class="col">
+							<label for="">팀원목록</label>
+							<table id="member_tb" class="table table-hover">
+								<thead>
+									<tr>
+										<th scope="col" class="text-center" >직급</th>
+										<th scope="col" class="text-center">이름</th>
+										<th scope="col" class="text-center" >연락처</th>
+
+					
+									</tr>
+								</thead>
+								<tbody id="memberTb">
+
+								</tbody>
+							</table>
+							</div>
 						</div>
 					</div>
 				</form>
@@ -114,11 +164,47 @@ var list = [[${list}]];
 	$(function() {
 
 	});
+	
+	function memberSet(){
+		var dbObj = e.relatedTarget;
+		$.post("/admin/member", dbObj, function(data) {
+			thisData = data;
+			if (data == "1" || data == 1) {
+				
+			}
+		}).done(function() {
+
+		}).fail(function() {
+			alert("오류발생. 조회실패");
+		});
+	}
+	
 		$('#detailModal').on('shown.bs.modal', function(e) {
+			var id_obj = e.relatedTarget;
+			var team_cd = $(id_obj).find(".seq").text();
+			console.log("e : ", id_obj);
+			var list;
+			$.post("/admin/member", {"team_cd": team_cd}, function(data) {
+				console.log(data);
+				list = data;
+			}).done(function() {
+				
+				var size = list.length;
+				var strHtml = "";
+				for(var i=0; i<size; i++){
+					strHtml += "<tr>";
+					strHtml += "<td class='text-center'>"+list[i].grade+"</td>";
+					strHtml += "<td class='text-center'>"+list[i].user_nm+"</td>";
+					strHtml += "<td class='text-center'>"+list[i].user_tel+"</td>";
+					strHtml += "</tr>";
+				}
+				$("#memberTb").html(strHtml);
+			}).fail(function() {
+				alert("오류발생. 조회실패");
+			});
 			
 			var newYn = $("#newYn").val();
-			var id_obj = e.relatedTarget;
-			console.log("modal : ", id_obj);
+			
 			var seq = $(id_obj).find(".seq").text();
 			var team_nm = $(id_obj).find(".team_nm").text();
 			var team_info = $(id_obj).find(".team_info").text();
@@ -141,14 +227,7 @@ var list = [[${list}]];
 			
 		}); 
 		
-		function addNewYn(){
-			$("#newYn").val("1");
-			document.getElementById("delBtn").style.display ='block';	
-		}
 		
-		function addNewYn2(){
-			$("#newYn").val("0");
-		}
 		
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();

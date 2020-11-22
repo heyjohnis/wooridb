@@ -26,7 +26,8 @@
 <script th:inline="javascript">
     var user_list = [[${user_list}]];
     var grade = [[${grade}]];
-    var manager = [[${manager}]];
+    var manager = [[${user_id}]];
+    var user_id = [[${user_id}]];
 </script>
 
 <script th:inline="javascript">
@@ -35,15 +36,20 @@ $(document).ready(function(){
 	if(grade == "10" || grade == "99"){
 		$("#user").show();
 		$("#team").show();
+		$("#goods").show();
 	}else{
 		$("#user").hide();
 		$("#team").hide();
+		$("#excel_down").hide();
+		$("#saveBtn").hide();
+		$("#delBtn").hide();
+		$("#goods").hide();
 	}
 	$("#db-list").addClass('active');
 	$("#team").removeClass('active');
 	$("#user").removeClass('active');
 	$("#dbAdmin").removeClass('active');
-	$("#this_name").text(manager+"님");
+	$("#this_name").text(user_id+"님");
 });
 
 </script>
@@ -257,8 +263,8 @@ $(document).ready(function(){
 				<div class="modal-footer">
 <!-- 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">닫기</button> -->
-					<button type="button" class="btn btn-primary" onclick="saveDb();">저장</button>
-					<button type="button" class="btn btn-danger" onclick="deleteDb();">삭제</button>
+					<button type="button" class="btn btn-primary" id="saveBtn" onclick="saveDb();">저장</button>
+					<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteDb();">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -425,22 +431,6 @@ $(document).ready(function(){
 			$("#srh_sta_date").val("");
 			$("#srh_end_date").val("");
 			$("#srh_key").val("");
-		}
-		
-		function excelDown(){
-			
-			var srh_sta_date = $("#srh_sta_date").val();
-			srh_sta_date = srh_sta_date.replace(/[\-\.]/g, "");
-			var srh_end_date = $("#srh_end_date").val();
-			srh_end_date = srh_end_date.replace(/[\-\.]/g, "");
-
-			var srh_key = $("#srh_key").val();
-			
-			var url = "/download/woori-db.xlsx?srh_sta_date="+srh_sta_date+"&srh_end_date="+srh_end_date+"&srh_key="+srh_key;
-			$("#excel_down").attr("href", url);
-			$("#excel_down").get(0).click();
-			
-			
 		}
 		
 	</script>
