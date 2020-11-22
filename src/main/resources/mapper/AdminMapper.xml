@@ -40,6 +40,10 @@
 		,site
 		,reg_date
 		,mod_date
+		,nvl(gd_cd,"")AS gd_cd
+		,nvl(gd_buyType,"") AS gd_buyType
+		,(SELECT nvl(inp_cnt,"0") from goods where gdcd='탑스핏') AS inp_cnt
+		,nvl(call_succRate,"0") AS call_succRate
 		FROM db_data
 		<where>
 			<if test = "adminYn == 0">

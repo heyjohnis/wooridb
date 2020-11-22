@@ -41,6 +41,10 @@ public class DbVO {
 	String srh_end_date = "";
 	String srh_key = "";
 	int excel_down = 0;
-	
+	String gd_cd = "";
+	String gd_buyType="";
+	int cnt_sum=0;
+	int inp_cnt=0;
+	String call_succRate ="";
 }
 
