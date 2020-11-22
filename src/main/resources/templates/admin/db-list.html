@@ -51,7 +51,9 @@ $(document).ready(function(){
 	$("#dbAdmin").removeClass('active');
 	$("#this_name").text(user_id+"님");
 });
-
+$("#cnt_sum").change(function(){
+	
+})
 </script>
 
 </head>
@@ -111,7 +113,10 @@ $(document).ready(function(){
 					<th scope="col" class="print">계좌번호</th>
 					<th scope="col" class="print">카드번호</th>
 					<th scope="col" class="print">유효기간</th>
-					<th scope="col" class="print">구매접촉일</th>
+					<th scope="col" >제품명</th>
+					<th scope="col" >재고</th>
+					<th scope="col" >구매이력</th>
+					<th scope="col" >콜성공률</th>
 				</tr>
 			</thead>
 			<tbody class="">
@@ -138,6 +143,10 @@ $(document).ready(function(){
 					<td class="expire_date print" th:text="${db.getExpire_date()}">유효기간</td>
 					<td class="following_date print"
 						th:text="${db.getFollowing_date()}">구매접촉일</td>
+					<td class="gd_cd " th:text="${db.getGd_cd()}">제품명</td>
+					<td class="cnt_sum " th:text="${db.getCnt_sum()}">재고</td>
+					<td class="gd_buyType " th:text="${db.getGd_buyType()}">구매이력</td>
+					<td class="call_succRate " th:text="${db.getCall_succRate()}">콜성공률</td>
 				</tr>
 			</tbody>
 		</table>
@@ -258,6 +267,30 @@ $(document).ready(function(){
 									class="form-control expire_date" />
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_gd_cd">제품명</label> <input type="text"
+									id="modal_gd_cd" name="gd_cd"
+									class="form-control gd_cd" />
+							</div>
+							<div class="col-8">
+								<label for="modal_gd_cd">재고</label> <input type="text"
+									id="modal_cnt_sum" name="cnt_sum"
+									class="form-control cnt_sum" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="modal_gd_buyType">구매이력</label> <input type="text"
+									id="modal_gd_buyType" name="gd_buyType"
+									class="form-control gd_buyType" />
+							</div>
+							<div class="col-8">
+								<label for="modal_call_succRate">콜성공률</label> <input type="text"
+									id="modal_call_succRate" name="call_succRate"
+									class="form-control call_succRate" />
+							</div>
+						</div>
 					</div>
 				</form>
 				<div class="modal-footer">
@@ -331,6 +364,10 @@ $(document).ready(function(){
 			var card_number = $(id_obj).find(".card_number").text();
 			var expire_date = $(id_obj).find(".expire_date").text();
 			var site = $(id_obj).find(".site").text();
+			var gd_cd = $(id_obj).find(".gdcd").text();
+			var gd_buyType = $(id_obj).find(".gd_buyType").text();
+			var cnt_sum = $(id_obj).find(".cnt_sum").text();
+			var call_succRate = $(id_obj).find(".call_succRate").text();
 			$("#modal_seq").val(seq);
 			$("#modal_reg_date").val(reg_date);
 			$("#modal_cust_nm").val(cust_nm);
@@ -350,7 +387,11 @@ $(document).ready(function(){
 			$("#modal_order_amount").val(order_amount);
 			$("#modal_card_number").val(card_number);
 			$("#modal_expire_date").val(expire_date);
-
+			$("#modal_gd_cd").val(gd_cd);
+			$("#modal_gd_buyType").val(gd_buyType);
+			$("#modal_cnt_sum").val(cnt_sum);
+			$("#modal_call_succRate").val(call_succRate);
+			
 			$("#modal_site").val(site);
 
 		});
