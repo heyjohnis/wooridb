@@ -49,6 +49,8 @@ public interface AdminService {
 	
 	int updateUserDb(UserVO vo);
 	
+	int selectCnt(DbVO vo);
+	
 	ByteArrayInputStream excelDownLoad(DbVO vo) throws IOException;
 
 	List<UserVO> selectMember(UserVO vo);

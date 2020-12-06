@@ -232,7 +232,7 @@ $("#cnt_sum").change(function(){
 							<div class="col-6">
 								<label for="modal_order_cnt">주문수량</label> <input type="text"
 									id="modal_order_cnt" name="order_cnt"
-									class="form-control order_cnt" />
+									class="form-control order_cnt" onblur="setCnt(this)"/>
 							</div>
 							<div class="col-6">
 								<label for="modal_order_amount">금액</label> <input type="text"
@@ -274,9 +274,9 @@ $("#cnt_sum").change(function(){
 									class="form-control gd_cd" />
 							</div>
 							<div class="col-8">
-								<label for="modal_gd_cd">재고</label> <input type="text"
+								<label for="modal_cnt_sum">재고</label> <input type="text"
 									id="modal_cnt_sum" name="cnt_sum"
-									class="form-control cnt_sum" />
+									class="form-control cnt_sum"  readonly/>
 							</div>
 						</div>
 						<div class="row">
@@ -474,6 +474,20 @@ $("#cnt_sum").change(function(){
 			$("#srh_key").val("");
 		}
 		
+		function setCnt(e){
+			var id_obj = e.relatedTarget;
+			var order_cnt = $(id_obj).find(".order_cnt").text();
+			console.log("e : ", id_obj);
+			var cnt;
+			$.post("/admin/selectCnt", {"order_cnt": order_cnt}, function(data) {
+				console.log(data);
+				cnt = data;
+			}).done(function() {
+				$(".cnt_sum").val(cnt);
+			}).fail(function() {
+				alert("오류발생. 조회실패");
+			});
+		}
 	</script>
 </body>
 </html>

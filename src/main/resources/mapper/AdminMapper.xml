@@ -134,7 +134,7 @@
 	<select id="selectGoods" parameterType="com.iiiset.fm.model.GoodsVO"
 		resultType="com.iiiset.fm.model.GoodsVO">
 		SELECT    '탑스핏' AS gdcd
-				, (SELECT sum(nvl(order_amount,'0')) from db_data where gd_cd ='001') AS cnt_sum
+				, (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '03') AS cnt_sum
 			    , inp_cnt
 		FROM	  goods
 	    WHERE     gdcd = '001'
@@ -145,6 +145,12 @@
 		parameterType="com.iiiset.fm.model.UserVO"
 		resultType="java.lang.Integer">
 		SELECT seq FROM team WHERE seq = #{team_nm}
+	</select>
+	
+	<select id="selectCnt"
+		parameterType="com.iiiset.fm.model.DbVO"
+		resultType="java.lang.Integer">
+		SELECT ((SELECT inp_cnt FROM goods WHERE gdcd = '001') - #{order_cnt}) AS cnt_sum
 	</select>
 	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"

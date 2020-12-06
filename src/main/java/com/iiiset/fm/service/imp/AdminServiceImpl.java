@@ -64,6 +64,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
+	public int selectCnt(DbVO vo) {
+		return dao.selectCnt(vo);
+	}
+	
+	@Override
 	public int countDb(DbVO vo) {
 		return dao.countDb(vo);
 	}

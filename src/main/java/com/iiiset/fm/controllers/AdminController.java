@@ -59,13 +59,33 @@ public class AdminController {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
 			String grade = userVO.getGrade();
 			String manager = userVO.getUser_id();
-			vo.setAdminYn(1);
 			vo.setManager(manager);
+			vo.setAdminYn(1);
 			List<DbVO> list = service.selectDb(vo);
 			
 			mv.addObject("user_id", manager);
 			mv.addObject("list", list);
 			mv.addObject("grade", grade);
+			mv.setViewName("admin/dbAdmin");
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/selectCntDt")
+	public @ResponseBody ModelAndView selectCntDt(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
+
+		ModelAndView mv = new ModelAndView();
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("USER") == null) {
+			mv.setViewName("admin/login");
+		} else {
+
+			vo.setAdminYn(1);
+			List<DbVO> thisList = service.selectDb(vo);
+			
+			mv.addObject("thisList", thisList);
 			mv.setViewName("admin/dbAdmin");
 		}
 		return mv;
@@ -212,6 +232,15 @@ public class AdminController {
 
 		int result = service.selectGrade(vo);
 
+		return result;
+	}
+	
+	@RequestMapping(value = "/admin/selectCnt")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int selectCnt(@ModelAttribute DbVO vo) throws Exception {
+
+		int result = service.selectCnt(vo);
+		
 		return result;
 	}
 	
