@@ -62,30 +62,9 @@ public class AdminController {
 			vo.setManager(manager);
 			vo.setAdminYn(1);
 			List<DbVO> list = service.selectDb(vo);
-			
 			mv.addObject("user_id", manager);
 			mv.addObject("list", list);
 			mv.addObject("grade", grade);
-			mv.setViewName("admin/dbAdmin");
-		}
-		return mv;
-	}
-	
-	@RequestMapping(value = "/admin/selectCntDt")
-	public @ResponseBody ModelAndView selectCntDt(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
-
-		ModelAndView mv = new ModelAndView();
-
-		HttpSession session = request.getSession();
-
-		if (session.getAttribute("USER") == null) {
-			mv.setViewName("admin/login");
-		} else {
-
-			vo.setAdminYn(1);
-			List<DbVO> thisList = service.selectDb(vo);
-			
-			mv.addObject("thisList", thisList);
 			mv.setViewName("admin/dbAdmin");
 		}
 		return mv;
