@@ -53,6 +53,12 @@ public class AdminServiceImpl implements AdminService {
 	public List<GoodsVO> selectGoods(GoodsVO vo){
 		return dao.selectGoods(vo);
 	}
+	
+	@Override
+	public List<GoodsVO> selectGoodsDt(GoodsVO vo){
+		return dao.selectGoodsDt(vo);
+	}
+	
 	@Override
 	public int selectGrade(UserVO vo) {
 		return dao.selectGrade(vo);

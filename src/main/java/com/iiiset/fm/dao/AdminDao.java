@@ -22,6 +22,8 @@ public interface AdminDao {
 	
 	List<GoodsVO>selectGoods(GoodsVO vo);
 	
+	List<GoodsVO>selectGoodsDt(GoodsVO vo);
+	
 	int selectGrade(UserVO vo);
 	
 	String selectTeam_cd(UserVO vo);

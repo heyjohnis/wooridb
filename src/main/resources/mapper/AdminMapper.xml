@@ -42,7 +42,7 @@
 		,mod_date
 		,nvl(gd_cd,"")AS gd_cd
 		,nvl(gd_buyType,"") AS gd_buyType
-		,(SELECT nvl(inp_cnt,"0") from goods where gdcd='탑스핏') AS inp_cnt
+		,((SELECT nvl(inp_cnt,"0") from goods_Dt where gdcd='001') - (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '03')) AS inp_cnt
 		,nvl(call_succRate,"0") AS call_succRate
 		FROM db_data
 		<where>
@@ -133,12 +133,23 @@
 	
 	<select id="selectGoods" parameterType="com.iiiset.fm.model.GoodsVO"
 		resultType="com.iiiset.fm.model.GoodsVO">
-		SELECT    '탑스핏' AS gdcd
-				, (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '03') AS cnt_sum
-			    , inp_cnt
+		SELECT    gdcd
+				, (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '03' OR gd_buyType = '04' OR gd_buyType='05') AS cnt_sum
+			    , (SELECT sum(nvl(inp_cnt,'0')) FROM goods_Dt) AS inp_cnt
+			    , (SELECT gd_memo FROM goods_Dt) AS gd_memo
+			    , gdnm 
 		FROM	  goods
-	    WHERE     gdcd = '001'
-		ORDER BY  seq DESC;
+		ORDER BY  gdcd DESC
+	</select>
+	
+	<select id="selectGoodsDt" parameterType="com.iiiset.fm.model.GoodsVO"
+		resultType="com.iiiset.fm.model.GoodsVO">
+		SELECT    reg_date
+				, inp_cnt
+				, gd_memo
+		FROM	  goods_Dt
+		WHERE 	  gdcd = #{gdcd}
+		ORDER BY  gdcd DESC
 	</select>
 	
 	<select id="selectTeam_cd"
@@ -150,7 +161,7 @@
 	<select id="selectCnt"
 		parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
-		SELECT ((SELECT inp_cnt FROM goods WHERE gdcd = '001') - #{order_cnt}) AS cnt_sum
+		SELECT ((SELECT inp_cnt FROM goods_Dt WHERE gdcd = '001' AND gd_buyType = '03' OR gd_buyType = '04' OR gd_buyType='05') - #{order_cnt}) AS cnt_sum
 	</select>
 	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"

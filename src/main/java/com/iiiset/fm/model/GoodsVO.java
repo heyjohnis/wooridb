@@ -17,5 +17,7 @@ public class GoodsVO {
 	String reg_id = "";
 	String mod_id = "";
 	String user_id = "";
+	String gd_memo = "";
+	String gdnm = "";
 }
 

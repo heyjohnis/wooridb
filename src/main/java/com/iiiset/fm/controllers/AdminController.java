@@ -138,9 +138,27 @@ public class AdminController {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
 			String manager = userVO.getUser_id();
 			List<GoodsVO> list = service.selectGoods(vo);
-			mv.addObject("list", list);
-			mv.addObject("search", vo);
 			mv.addObject("user_id", manager);
+			mv.addObject("list", list);
+			mv.setViewName("admin/goods");
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/admin/goodsDt")
+	public @ResponseBody ModelAndView goods_Dt(HttpServletRequest request, @ModelAttribute GoodsVO vo) throws Exception {
+
+		ModelAndView mv = new ModelAndView();
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("USER") == null) {
+			mv.setViewName("admin/login");
+		} else {
+			UserVO userVO = (UserVO)session.getAttribute("USER");
+			String manager = userVO.getUser_id();
+			List<GoodsVO> goodsDtList = service.selectGoodsDt(vo);
+			mv.addObject("goodsDtList", goodsDtList);
 			mv.setViewName("admin/goods");
 		}
 		return mv;
@@ -210,14 +228,16 @@ public class AdminController {
 	public @ResponseBody int selectGrade(@ModelAttribute UserVO vo) throws Exception {
 
 		int result = service.selectGrade(vo);
-
+		
 		return result;
 	}
 	
 	@RequestMapping(value = "/admin/selectCnt")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
-	public @ResponseBody int selectCnt(@ModelAttribute DbVO vo) throws Exception {
-
+	public @ResponseBody int selectCnt(@ModelAttribute("order_cnt") String order_cnt) throws Exception {
+		
+		DbVO vo = new DbVO();
+		vo.setOrder_cnt(order_cnt);
 		int result = service.selectCnt(vo);
 		
 		return result;

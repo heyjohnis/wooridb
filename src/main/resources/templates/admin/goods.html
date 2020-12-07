@@ -28,7 +28,6 @@ $(document).ready(function(){
 	$("#team").removeClass('active');
 	$("#this_name").text(user_id+"님");
 });
-
 var list = [[${list}]];
 
 </script>
@@ -40,26 +39,50 @@ var list = [[${list}]];
 <body th:replace="admin/header :: mainHead"> </body>
 
 <div class="container">
-		<div class="mt-3 mb-1 text-right">
-			<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#detailModal" onclick="addNewYn()">상품추가</button>	
-		</div>
-		<table id="teamTb" class="table table-hover">
-			<thead>
-				<tr>
-					<th scope="col" class="text-center" >상품명</th>
-					<th scope="col" class="text-center">누적재고량</th>
-					<input type="hidden" id="newYn"/>
-				</tr>
-			</thead>
-			<tbody id="goodsTb">
-				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
-				data-toggle="modal" data-target="#detailModal" onclick="addNewYn2()">
-					<td class="gdcd text-center" th:text="${db.getGdcd()}">상품명</td>
-					<td class="cnt_sum text-center" th:text="${db.getInp_cnt()} - ${db.getCnt_sum()}">누적재고량</td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="row">
+		<div class="col-6">
+			<table id="teamTb" class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col" class="text-center" >상품코드</th>
+						<th scope="col" class="text-center">상품명</th>
+						<th scope="col" class="text-center">누적재고량</th>
+					</tr>
+				</thead>
+				<tbody id="goodsTb">
+					<tr th:id="db_+${db.gdcd}" th:each="db, stat: ${list}"
+					data-toggle="modal" onclick="showGoodsDt()">
+						<td id="thisGdcd" class="gdcd text-center" th:text="${db.getGdcd()}">상품코드</td>
+						<td class="gdcd text-center" th:text="${db.getGdnm()}">상품명</td>
+						<td class="cnt_sum text-center" th:text="${db.getInp_cnt()} - ${db.getCnt_sum()}">누적재고량</td>
+					</tr>
+				</tbody>
+			</table>	
 		
+		
+		</div>
+		<div class="col-6">
+			<div class="mt-3 mb-1 text-right">
+				<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#detailModal">입고</button>	
+			</div>
+			<table id="teamTb" class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col" class="text-center" >입고일</th>
+						<th scope="col" class="text-center">입고량</th>
+						<th scope="col" class="text-center">메모</th>
+						<input type="hidden" id="newYn"/>
+					</tr>
+				</thead>
+				<tbody id="goodsDtTb">
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	
+	
 		<!-- Modal -->
 	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -75,14 +98,19 @@ var list = [[${list}]];
 				<form name="request" id="request">
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-3">
+							<div class="col-3" style="display:block">
 								<label for="modal_gdcd">상품명</label> <input type="text"
 									id="modal_gdcd" name="gdcd" class="form-control gdcd"  />
 							</div>
 							<div class="col-5">
-								<label for="modal_inp_cnt">상품갯수</label> <input type="text"
+								<label for="modal_inp_cnt">입고일</label> <input type="text"
 									id="modal_inp_cnt" name="inp_cnt"
 									class="form-control inp_cnt"  />
+							</div>
+							<div class="col-5">
+								<label for="modal_inp_cnt">상품갯수</label> <input type="text"
+									id="modal_inp_cnt" name="inp_cnt"
+									class="form-control inp_cnt" />
 							</div>
 						</div>
 					</div>
@@ -114,14 +142,22 @@ var list = [[${list}]];
 
 
 	});
-		
-		function addNewYn(){
-			$("#newYn").val("1");
-			document.getElementById("delBtn").style.display ='block';	
-		}
-		
-		function addNewYn2(){
-			$("#newYn").val("0");
+		function showGoodsDt(e){
+			var gdcd = $("#thisGdcd").text(); 
+			var thisData;
+			$.post("/admin/goodsDt", {"gdcd" : gdcd}, function(data) {
+				thisData = data
+			}).done(function() {
+				var strhtml = "<tr th:id='db_"+${db.gdcd}+"' th:each='db, stat:"+ ${goodsDtList}+"'data-toggle='modal' onclick=''>;
+				strhtml +=	"<td class='reg_date text-center' th:text='"+${db.getReg_date()+"}'>입고일</td>;
+				strhtml +=  "<td class='inp_cnt text-center' th:text='"+${db.getInp_cnt()}+"'>입고량</td>";
+				strhtml +=	"<td class='gd_memo text-center' th:text='"+${db.getGd_memo()}+"'>메모</td>";
+				strhtml +=  "</tr>";
+				$("#goodsDtTb").html(strhtml);
+			}).fail(function() {
+				alert("조회가 실패되었습니다.\n다시 시도하세요.");
+			});
+
 		}
 		
 		function saveDb() {
