@@ -28,13 +28,13 @@ public class MainController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/topsfit")
+	@RequestMapping(value = "/gd001")
 	public @ResponseBody ModelAndView topsfit()  throws Exception{
 		
 		ModelAndView mv = new ModelAndView();
 
-		mv.setViewName("topsfit");
-		mv.addObject("gdcd", "001");
+		mv.setViewName("gd001");
+		mv.addObject("gd_cd", "001");
 		return mv;
 	}
 	

@@ -4,7 +4,7 @@
 <head>
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 
-<title>Consult</title>
+<title>탑스핏:::TOPSFIT</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/css/style.css" rel="stylesheet" />
 <script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
@@ -58,6 +58,9 @@ body{font-size:12px;}
 	transform: scale(1);
 }
 
+.btn_consult{z-index:1000;}
+label{z-index:1004;}
+.check_privacy_policy{z-index:1005;}
 
 @media screen and (min-width: 1100px) {
    
@@ -90,19 +93,19 @@ body{font-size:12px;}
 @media (max-width:400px)  {
 	body{font-size:6px;}
 	.check_privacy_policy{
-		right:26.4%; top:79%;
+		right:26.2%; top:78%;
 		-ms-transform: scale(0.8); /* IE */
 		-moz-transform: scale(0.8); /* FF */
 		-webkit-transform: scale(0.8); /* Safari and Chrome */
 		-o-transform: scale(0.8); /* Opera */
 		transform: scale(0.8);
 	}
-	.wform1 label{right:5%; }
+	.wform1 label{right:5%; font-size:1.5em }
 	
 }
 @media (max-width:350px)  {
 	body{font-size:5px;}
-	.wform1 label{right:3%; }
+	.wform1 label{right:5%; }
 	
 }
 
@@ -238,7 +241,8 @@ body{font-size:12px;}
 </body>
 
 
-<script type="text/javascript">
+<script th:inline="javascript">
+
 $(document).ready(function(){
 	$("#send_db").click(function(){
 		send("1");
@@ -278,6 +282,8 @@ function send(th){
 
 function sendDb(db){
 	db.site = getParam('site');
+	db.gd_cd = [[${gd_cd}]];
+
 
 	$.post("/insertDb", db, function(data){
 		alert("신청이 완료되었습니다");

@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.iiiset.fm</groupId>
-	<artifactId>financeMonitor</artifactId>
+	<artifactId>wooridb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>financeMonitor</name>
-	<description>Finance Monitor</description>
+	<name>wooridb</name>
+	<description>wooridb</description>
 
     <properties>
         <java.version>1.8</java.version>

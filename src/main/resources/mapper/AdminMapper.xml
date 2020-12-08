@@ -8,9 +8,9 @@
 
 	<insert id="insertDb" parameterType="com.iiiset.fm.model.DbVO">
 		INSERT INTO db_data
-		(cust_nm,cust_tel,comment,site,reg_date,mod_date)
+		(cust_nm,cust_tel,comment,site,gd_cd, reg_date,mod_date)
 		VALUES
-		(#{cust_nm},#{cust_tel},#{comment},#{site},now(),now())
+		(#{cust_nm},#{cust_tel},#{comment},#{site},#{gd_cd},now(),now())
 	</insert>
 
 	<delete id="deleteDb" parameterType="com.iiiset.fm.model.DbVO">
