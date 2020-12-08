@@ -43,8 +43,8 @@ public class DbVO {
 	int excel_down = 0;
 	String gd_nm = "";
 	String gd_cd = "";				//상품코드
-	String gd_buyType="";			//판매유형 01.신청확인 02.교환/환불 03.결제완료 04.배송중 05.구매확정
-	int cnt_sum=0;					//총주문수량
+	String gd_buyType="";			//판매유형 01.상담신청 02.구매결정 03.구매취소 04.결제완료 05.반품 06.기타
+	String cnt_sum = "";					//총주문수량
 	int inp_cnt=0;					//재고수량
 	String call_succRate ="";		//콜백성공률
 }

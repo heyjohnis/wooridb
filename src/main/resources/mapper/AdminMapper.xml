@@ -40,8 +40,19 @@
 		,site
 		,reg_date
 		,mod_date
-		,nvl(gd_cd,"")AS gd_cd
-		,nvl(gd_buyType,"") AS gd_buyType
+		,CASE
+				WHEN gd_cd = '001' THEN '탑스핏'
+				ELSE ""
+		 END 	AS gd_cd
+		,CASE 
+				WHEN gd_buyType = '01' THEN '상담신청' 
+				WHEN gd_buyType = '02' THEN '구매결정'
+				WHEN gd_buyType = '03' THEN '구매취소'
+				WHEN gd_buyType = '04' THEN '결제완료'
+				WHEN gd_buyType = '05' THEN '반품'
+				WHEN gd_buyType = '06' THEN '기타'
+				ELSE ''
+		 END	AS gd_buyType
 		,((SELECT nvl(inp_cnt,"0") from goods_Dt where gdcd='001') - (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '03')) AS inp_cnt
 		,nvl(call_succRate,"0") AS call_succRate
 		FROM db_data
@@ -134,7 +145,7 @@
 	<select id="selectGoods" parameterType="com.iiiset.fm.model.GoodsVO"
 		resultType="com.iiiset.fm.model.GoodsVO">
 		SELECT    gdcd
-				, (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '03' OR gd_buyType = '04' OR gd_buyType='05') AS cnt_sum
+				, (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '04') AS cnt_sum
 			    , (SELECT sum(nvl(inp_cnt,'0')) FROM goods_Dt) AS inp_cnt
 			    , (SELECT gd_memo FROM goods_Dt) AS gd_memo
 			    , gdnm 
@@ -161,7 +172,7 @@
 	<select id="selectCnt"
 		parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
-		SELECT ((SELECT inp_cnt FROM goods_Dt WHERE gdcd = '001' AND gd_buyType = '03' OR gd_buyType = '04' OR gd_buyType='05') - #{order_cnt}) AS cnt_sum
+		SELECT ((SELECT inp_cnt FROM goods WHERE gdcd = '001') - #{order_cnt}) AS cnt_sum
 	</select>
 	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
@@ -188,23 +199,24 @@
 	</select>
 
 	<update id="updateDb" parameterType="com.iiiset.fm.model.DbVO">
-		UPDATE
-		db_data SET
-		cust_tel = #{cust_tel}
-		,comment = #{comment}
-		,gender = #{gender}
-		,age = #{age}
-		,memo = #{memo}
-		,addr = #{addr}
-		,order_cnt = #{order_cnt}
-		,order_amount = #{order_amount}
-		,order_date = #{order_date}
-		,bank_account = #{bank_account}
-		,card_number = #{card_number}
-		,expire_date = #{expire_date}
-		,manager = #{manager}
-		,following_date = #{following_date}
-		,mod_date = now()
+		UPDATE db_data 
+		SET
+			  cust_tel = #{cust_tel}
+			 ,comment = #{comment}
+			 ,gender = #{gender}
+			 ,age = #{age}
+			 ,memo = #{memo}
+			 ,addr = #{addr}
+			 ,order_cnt = #{order_cnt}
+			 ,order_amount = #{order_amount}
+			 ,order_date = #{order_date}
+			 ,bank_account = #{bank_account}
+			 ,card_number = #{card_number}
+			 ,expire_date = #{expire_date}
+			 ,manager = #{manager}
+			 ,following_date = #{following_date}
+			 <!-- ,gd_cd = CASE #{gd_cd} = '탑스핏' THEN '001' ELSE gd_cd END -->
+			 ,mod_date = now()
 		WHERE seq = #{seq}
 	</update>
 	

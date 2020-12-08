@@ -101,14 +101,12 @@ $("#cnt_sum").change(function(){
 					<th scope="col">출처</th>
 					<th scope="col">고객명</th>
 					<th scope="col">연락처</th>
-					<th scope="col">문의사항</th>
 					<th scope="col">담당자</th>
 					<th scope="col" class="print">성별</th>
 					<th scope="col" class="print">나이</th>
 					<th scope="col" class="print">상담내용</th>
 					<th scope="col" class="print">주소</th>
 					<th scope="col" class="print">주문일</th>
-					<th scope="col" >재고</th>
 					<th scope="col">주문수량</th>
 					<th scope="col">금액</th>
 					<th scope="col" class="print">계좌번호</th>
@@ -127,7 +125,6 @@ $("#cnt_sum").change(function(){
 					<td class="site" th:text="${db.getSite()}">출처</td>
 					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
 					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
-					<td class="comment" th:text="${db.getComment()}">문의사항</td>
 					<td class="manager" style="display:none;" th:text="${db.getManager()}">담당자</td>
 					<td class="manager_nm" th:text="${db.getManager_nm()}">담당자</td>
 					<td class="gender print" th:text="${db.getGender()}">성별</td>
@@ -135,7 +132,6 @@ $("#cnt_sum").change(function(){
 					<td class="memo print" th:text="${db.getMemo()}">상담내용</td>
 					<td class="addr print" th:text="${db.getAddr()}">주소</td>
 					<td class="order_date print" th:text="${db.getOrder_date()}">주문일</td>
-					<td class="cnt_sum " th:text="${db.getInp_cnt()}">재고</td>
 					<td class="order_cnt" th:text="${db.getOrder_cnt()}">수량</td>
 					<td class="order_amount" th:text="${db.getOrder_amount()}">금액</td>
 					<td class="bank_account print" th:text="${db.getBank_account()}">계좌번호</td>

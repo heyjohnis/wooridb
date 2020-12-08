@@ -51,7 +51,7 @@ var list = [[${list}]];
 				</thead>
 				<tbody id="goodsTb">
 					<tr th:id="db_+${db.gdcd}" th:each="db, stat: ${list}"
-					data-toggle="modal" onclick="showGoodsDt()">
+					data-toggle="modal" onclick="showGoodsDt(this)">
 						<td id="thisGdcd" class="gdcd text-center" th:text="${db.getGdcd()}">상품코드</td>
 						<td class="gdcd text-center" th:text="${db.getGdnm()}">상품명</td>
 						<td class="cnt_sum text-center" th:text="${db.getInp_cnt()} - ${db.getCnt_sum()}">누적재고량</td>
@@ -146,9 +146,9 @@ var list = [[${list}]];
 			var gdcd = $("#thisGdcd").text(); 
 			var thisData;
 			$.post("/admin/goodsDt", {"gdcd" : gdcd}, function(data) {
-				thisData = data
+
 			}).done(function() {
-				var strhtml = "<tr th:id='db_"+${db.gdcd}+"' th:each='db, stat:"+ ${goodsDtList}+"'data-toggle='modal' onclick=''>;
+				var strhtml = ${db.gdcd}+"' th:each='db, stat:"+ ${goodsDtList}+"'data-toggle='modal' onclick=''>;
 				strhtml +=	"<td class='reg_date text-center' th:text='"+${db.getReg_date()+"}'>입고일</td>;
 				strhtml +=  "<td class='inp_cnt text-center' th:text='"+${db.getInp_cnt()}+"'>입고량</td>";
 				strhtml +=	"<td class='gd_memo text-center' th:text='"+${db.getGd_memo()}+"'>메모</td>";
