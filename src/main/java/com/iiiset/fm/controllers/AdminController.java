@@ -62,9 +62,11 @@ public class AdminController {
 			vo.setManager(manager);
 			vo.setAdminYn(1);
 			List<DbVO> list = service.selectDb(vo);
+			List<DbVO> cnt_list = service.selectOrderCnt(vo);
 			mv.addObject("user_id", manager);
 			mv.addObject("list", list);
 			mv.addObject("grade", grade);
+			mv.addObject("cnt_list", cnt_list);
 			mv.setViewName("admin/dbAdmin");
 		}
 		return mv;
@@ -146,22 +148,17 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/admin/goodsDt")
-	public @ResponseBody ModelAndView goods_Dt(HttpServletRequest request, @ModelAttribute GoodsVO vo) throws Exception {
-
-		ModelAndView mv = new ModelAndView();
+	public @ResponseBody List<GoodsVO> goods_Dt(HttpServletRequest request, @ModelAttribute GoodsVO vo) throws Exception {
 
 		HttpSession session = request.getSession();
 
+		List<GoodsVO> goodsDtList = null;
 		if (session.getAttribute("USER") == null) {
-			mv.setViewName("admin/login");
+			return null;
 		} else {
-			UserVO userVO = (UserVO)session.getAttribute("USER");
-			String manager = userVO.getUser_id();
-			List<GoodsVO> goodsDtList = service.selectGoodsDt(vo);
-			mv.addObject("goodsDtList", goodsDtList);
-			mv.setViewName("admin/goods");
+			goodsDtList = service.selectGoodsDt(vo);
 		}
-		return mv;
+		return goodsDtList;
 	}
 	
 	@RequestMapping(value = "/admin/loginCheck")
@@ -222,7 +219,21 @@ public class AdminController {
 		}
 		return mv;
 	}
-
+	@RequestMapping(value = "/admin/selectOrderCnt")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody List<DbVO> selectOrderCnt(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
+		HttpSession session = request.getSession();
+		UserVO userVO = (UserVO)session.getAttribute("USER");
+		String user_id = userVO.getUser_id();
+		String grade = userVO.getGrade();
+		String team_cd = userVO.getTeam_cd();
+		vo.setManager(user_id);
+		vo.setGrade(grade);
+		vo.setTeam_cd(team_cd);
+		List<DbVO> cnt_list = service.selectOrderCnt(vo);
+		return cnt_list;
+	}
+	
 	@RequestMapping(value = "/selectGrade")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int selectGrade(@ModelAttribute UserVO vo) throws Exception {
@@ -349,13 +360,22 @@ public class AdminController {
 	}
 	
 	@GetMapping("/download/woori-db.xlsx")
-	public void downloadCsv(HttpServletResponse response, @RequestParam("srh_sta_date") String srh_sta_date,
+	public void downloadCsv(HttpServletRequest request, HttpServletResponse response, @RequestParam("srh_sta_date") String srh_sta_date,
 			@RequestParam("srh_end_date") String srh_end_date, @RequestParam("srh_key") String srh_key)
 			throws IOException {
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment; filename=woori_db.xlsx");
-
+		HttpSession session = request.getSession();
+		UserVO userVO = (UserVO)session.getAttribute("USER");
+		String user_id = userVO.getUser_id();
+		String grade = userVO.getGrade();
+		String team_cd = userVO.getTeam_cd();
+		
 		DbVO vo = new DbVO();
+		vo.setManager(user_id);
+		vo.setAdminYn(0);
+		vo.setGrade(grade);
+		vo.setTeam_cd(team_cd);
 		vo.setSrh_sta_date(srh_sta_date);
 		vo.setSrh_end_date(srh_end_date);
 		vo.setSrh_key(srh_key);

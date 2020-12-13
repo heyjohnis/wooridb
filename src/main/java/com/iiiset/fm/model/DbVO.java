@@ -47,5 +47,7 @@ public class DbVO {
 	String cnt_sum = "";					//총주문수량
 	int inp_cnt=0;					//재고수량
 	String call_succRate ="";		//콜백성공률
+	String term = "";
+	String termParam = "";
 }
 

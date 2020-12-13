@@ -20,15 +20,21 @@
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
 <script th:inline="javascript">
 var user_id = [[${user_id}]];
+var list = [[${list}]];
+var gd_list = new Array();
+for(var i=0; i<list.length; i++){
+	gd_list.push(list[i].gdnm);
+}
 $(document).ready(function(){
+	
 	$("#goods").addClass('active');
 	$("#dbAdmin").removeClass('active');
 	$("#user").removeClass('active');
 	$("#db-list").removeClass('active');
 	$("#team").removeClass('active');
 	$("#this_name").text(user_id+"님");
+	$("#newYn").val("");
 });
-var list = [[${list}]];
 
 </script>
 
@@ -51,10 +57,10 @@ var list = [[${list}]];
 				</thead>
 				<tbody id="goodsTb">
 					<tr th:id="db_+${db.gdcd}" th:each="db, stat: ${list}"
-					data-toggle="modal" onclick="showGoodsDt(this)">
+					data-toggle="modal" onclick="showGoodsDt()">
 						<td id="thisGdcd" class="gdcd text-center" th:text="${db.getGdcd()}">상품코드</td>
-						<td class="gdcd text-center" th:text="${db.getGdnm()}">상품명</td>
-						<td class="cnt_sum text-center" th:text="${db.getInp_cnt()} - ${db.getCnt_sum()}">누적재고량</td>
+						<td class="gdnm text-center" th:text="${db.getGdnm()}">상품명</td>
+						<td class="cnt_sum text-center" th:text="${db.getCnt_sum()}">누적재고량</td>
 					</tr>
 				</tbody>
 			</table>	
@@ -63,14 +69,15 @@ var list = [[${list}]];
 		</div>
 		<div class="col-6">
 			<div class="mt-3 mb-1 text-right">
-				<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#detailModal">입고</button>	
+				<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#detailModal" onclick="newYn()">입고</button>	
 			</div>
 			<table id="teamTb" class="table table-hover">
 				<thead>
 					<tr>
 						<th scope="col" class="text-center" >입고일</th>
-						<th scope="col" class="text-center">입고량</th>
+						<th scope="col" class="text-center" >입고량</th>
 						<th scope="col" class="text-center">메모</th>
+						<th scope="col" class="text-center print">순번</th>
 						<input type="hidden" id="newYn"/>
 					</tr>
 				</thead>
@@ -89,7 +96,7 @@ var list = [[${list}]];
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">제품문의 DB</h5>
+					<h5 class="modal-title" id="exampleModalLabel">입고 DB</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -99,19 +106,29 @@ var list = [[${list}]];
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-3" style="display:block">
-								<label for="modal_gdcd">상품명</label> <input type="text"
-									id="modal_gdcd" name="gdcd" class="form-control gdcd"  />
+								<label for="modal_gdcd">상품명</label> 
+								<select id="modal_gdnm" name="gdnm" class="form-control gdnm" onchange="setGdnm()">
+									<option value="탑스핏">탑스핏</option>
+								</select>
 							</div>
-							<div class="col-5">
-								<label for="modal_inp_cnt">입고일</label> <input type="text"
-									id="modal_inp_cnt" name="inp_cnt"
-									class="form-control inp_cnt"  />
-							</div>
+							<!-- div class="col-5">
+								<label for="modal_req_date">입고일</label> <input type="text"
+									id="modal_req_date" name="req_date"
+									class="form-control req_date"  />
+							</div> -->
 							<div class="col-5">
 								<label for="modal_inp_cnt">상품갯수</label> <input type="text"
 									id="modal_inp_cnt" name="inp_cnt"
 									class="form-control inp_cnt" />
 							</div>
+							<div class="col-5">
+								<label for="modal_gd_memo">메모</label> <input type="text"
+									id="modal_gd_memo" name="gd_memo"
+									class="form-control gd_memo" />
+							</div>
+							<input type="hidden" id="modal_gdcd" name="gdcd" class="form-control gdcd" />
+							<input type="hidden" id="modal_seq" name="seq" class="form-control seq" readonly/>
+							<input type="hidden" id="modal_id" name="mod_id" class="form-control mod_id" />
 						</div>
 					</div>
 				</form>
@@ -136,35 +153,48 @@ var list = [[${list}]];
 	$('#detailModal').on('shown.bs.modal', function(e) {
 		var id_obj = e.relatedTarget;
 		console.log("modal : ", id_obj);
-		var gdcd = $(id_obj).find(".gdcd").text();
-		
-		$("#modal_gdcd").val(gdcd);
-
-
-	});
-		function showGoodsDt(e){
-			var gdcd = $("#thisGdcd").text(); 
-			var thisData;
-			$.post("/admin/goodsDt", {"gdcd" : gdcd}, function(data) {
-
-			}).done(function() {
-				var strhtml = ${db.gdcd}+"' th:each='db, stat:"+ ${goodsDtList}+"'data-toggle='modal' onclick=''>;
-				strhtml +=	"<td class='reg_date text-center' th:text='"+${db.getReg_date()+"}'>입고일</td>;
-				strhtml +=  "<td class='inp_cnt text-center' th:text='"+${db.getInp_cnt()}+"'>입고량</td>";
-				strhtml +=	"<td class='gd_memo text-center' th:text='"+${db.getGd_memo()}+"'>메모</td>";
-				strhtml +=  "</tr>";
-				$("#goodsDtTb").html(strhtml);
-			}).fail(function() {
-				alert("조회가 실패되었습니다.\n다시 시도하세요.");
-			});
-
+		var gdnm = "탑스핏";
+		var reg_date = $(id_obj).find("#reg_date").text();
+		var inp_cnt = $(id_obj).find("#inp_cnt").text();
+		var seq = $(id_obj).find("#seq").text();
+		var gd_memo = $(id_obj).find("#gd_memo").text();
+		console.log("reg_date : ", reg_date);
+		console.log("inp_cnt : ", inp_cnt);
+		$("#modal_gdcd").val(gdnm);
+		$("#modal_req_date").val(reg_date);
+		$("#modal_inp_cnt").val(inp_cnt);
+		$("#modal_gdcd").val("001");
+		$("#modal_seq").val(seq);
+		$("#modal_id").val(user_id);
+		$("#modal_gd_memo").val(gd_memo);
+		if($("#newYn").val() == "1"){
+			$("#modal_seq").val(0);
+			$("#modal_seq").text(0);
 		}
+	});
+	$('#detailModal').on('hidden.bs.modal', function () {
+		  $("#newYn").val("");
+	})
+		function newYn(){
+			$("#newYn").val("1");	
+		};
 		
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
+			console.log("dbObj :", dbObj)
 			var newYn = $("#newYn").val();
-			
+			if(newYn == "1"){
 				$.post("/admin/insertGoodsDb", dbObj, function(data) {
+
+				}) .done(function() {
+					console.log("dbObj : ", dbObj);
+					alert("저장이 완료되었습니다")
+					location.reload();
+				}).fail(function() {
+					alert("저장이 실패되었습니다.\n다시 시도하세요.");
+				});
+			}else {
+				$.post("/admin/updateGoodsDb", dbObj, function(data) {
 					if (data != null) {
 						alert("저장되었습니다.");
 						location.reload();
@@ -178,12 +208,12 @@ var list = [[${list}]];
 				}).fail(function() {
 					alert("저장이 실패되었습니다.\n다시 시도하세요.");
 				});
-
 			}
+		}
 
 		
 		
-		function deleteTeamDb(){
+		function deleteDb(){
 			var dbObj = $("#request").serializeObject();
 
 			$.post("/admin/deleteGoodsDb", dbObj, function(data) {
@@ -201,6 +231,39 @@ var list = [[${list}]];
 			});
 		}
 		
+		function showGoodsDt(){
+			var gdcd = $("#thisGdcd").text();
+			var list;
+			$.post("/admin/goodsDt", {"gdcd" : gdcd}, function(data) {
+				list = data;
+			}).done(function() {
+				var strhtml = null;
+				for(var i=0; i<list.length; i++){
+					strhtml += "<tr id='db_"+i+"' data-toggle='modal' data-target='#detailModal' onclick=''>";
+					strhtml +=	"<td class='reg_date text-center' id='reg_date'>"+list[i].reg_date+"</td>";
+					strhtml +=  "<td class='inp_cnt text-center' id='inp_cnt'>"+list[i].inp_cnt+"</td>";
+					strhtml +=	"<td class='gd_memo text-center' id='gd_memo'>"+list[i].gd_memo+"</td>";
+					strhtml += "<td class='seq text-center print' id='seq'>"+list[i].seq+"</td>";
+					strhtml +=  "</tr>";
+				}
+				$("#goodsDtTb").html(strhtml);
+			}).fail(function() {
+				alert("조회가 실패되었습니다.\n다시 시도하세요.");
+			});
+
+		}
+		
+		function setGdnm(id){
+			console.log("id : ", id);
+			$.each(gd_list, function(idx, item){
+	
+				console.log(" gdnm : ", item.gdnm);
+				if(item.user_id == id){
+					console.log(" id : ", id, item.gdnm);
+					$("#modal_gdnm").val(item.gdnm);
+				}
+			});
+		}
 	</script>
 
 

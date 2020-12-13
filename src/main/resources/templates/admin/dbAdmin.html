@@ -20,62 +20,35 @@
 	src="/jslib/jquery/jquery.serializeObject.min.js"></script>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
-
-function drawChart(){
-	//data 입력
-	var data = google.visualization.arrayToDataTable([
-        ['Year', 'Sales'],
-        ['2004',  1000],
-        ['2005',  1170],
-        ['2006',  660],
-        ['2007',  1030]
-		
-	]);
-	
-	//속성 입력
-	var options = {
-		title : '',
-		curveType : 'function',
-		legend : {position : 'bottom'}
-	};
-	
-	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-	chart.draw(data, options);
-	
-}
-</script>
-
-<script>
-
-</script>
 
 <script th:inline="javascript">
 	var manager = [[${user_id}]];
     var grade = [[${grade}]];
+    var cnt_list = [[${cnt_list}]];
+    var list = [[${list}]];
 </script>
+
 <script type="text/javascript">
-    $(document).ready(function(){
-    	if(grade == "10" || grade == "99"){
-    		$("#user").show();
-    		$("#team").show();
-    		$("#goods").show();
-    	}else{
-    		$("#user").hide();
-    		$("#team").hide();
-    		$("#saveBtn").hide();
-    		$("#delBtn").hide();
-    		$("#goods").hide();
-    	}
-    	$("#dbAdmin").addClass('active');
-    	$("#team").removeClass('active');
-    	$("#user").removeClass('active');
-    	$("#db-list").removeClass('active');
-    	$("#this_name").text(manager+"님");
-    	drawChart();
-    });
+
+
+$(document).ready(function(){
+	if(grade == "10" || grade == "99"){
+		$("#user").show();
+		$("#team").show();
+		$("#goods").show();
+	}else{
+		$("#user").hide();
+		$("#team").hide();
+		$("#saveBtn").hide();
+		$("#delBtn").hide();
+		$("#goods").hide();
+	}
+	$("#dbAdmin").addClass('active');
+	$("#team").removeClass('active');
+	$("#user").removeClass('active');
+	$("#db-list").removeClass('active');
+	$("#this_name").text(manager+"님");
+});
 </script>
 
 </head>
@@ -133,16 +106,24 @@ function drawChart(){
 				</tr>
 			</tbody>
 		</table>
-		
+		<!-- 라디오 연, 월, 일 ,사용자지정 / 각각에 맞는 셀렉트 박스 / 
+		사용자 선택 / 전체 , 조직원..... 
+		 -->
 		<div style="margin-left:10%">
 			<h2 style="display:inline-block">최근 주문이력조회</h2>
 			<div style="display:inline-block;align:right">
-				<select name="기간">
-  					<option value="1주일">1주일</option>
+				<select name="기간" id="firstSelect" onchange="optSelect(this)">
   					<option value="1개월">1개월</option>
   					<option value="1년">1년</option>
+  					<option value="사용자지정">사용자설정</option>
   					<option value="전체" selected="selected">전체</option>
-</select>
+				</select>
+			</div>
+			<div style="display:inline-block;align:right">
+				<input type="text" name="사용자설정" placeholder="ex)yyyy-mm-dd" id="ctm_date"/>
+				<select name="자세한기간" id="secondSelect" onchange="categoryChange(this)">
+					<option selected="selected">세부기간선택</option>
+				</select>
 			</div>
 		</div>
 		<div id="chart_div" style="margin-left:0"></div>
@@ -317,5 +298,100 @@ $('#detailModal').on('shown.bs.modal', function(e) {
 
 });
 
+function optSelect(e){
+	var month = ["1월", "2월", "3월", "4월" , "5월" , "6월" , "7월" , "8월" , "9월" , "10월" , "11월" , "12월"];
+	var year = ["2020년", "2021년"];
+	var target = document.getElementById("secondSelect");
+
+	if(e.value == "1개월"){
+		$("#secondSelect").show();
+		$("#ctm_date").hide();
+		var d = month;
+	}else if(e.value == "1년"){
+		$("#secondSelect").show();
+		$("#ctm_date").hide();
+		var d = year;
+	}else if(e.value == "사용자지정"){ 
+		$("#secondSelect").hide();
+		$("#ctm_date").show();
+	}else if(e.value == "전체"){
+		$("#secondSelect").hide();
+		$("#ctm_date").hide();
+		drawChart();
+	}
+	target.options.length = 0;
+
+	for (x in d) {
+		var opt = document.createElement("option");
+		opt.value = d[x];
+		opt.innerHTML = d[x];
+		target.appendChild(opt);
+	}	
+}
+
+function categoryChange(e) {
+	cnt_list = null;
+	var thisVal = e.value;
+	var termParam;
+	var month = ["1월", "2월", "3월", "4월" , "5월" , "6월" , "7월" , "8월" , "9월" , "10월" , "11월" , "12월"];
+	var year = ["2020년", "2021년"];
+	if(thisVal = "1월") termParam = "01"
+	else if(thisVal = "2월") termParam = "02"
+	else if(thisVal = "3월") termParam = "03"
+	else if(thisVal = "4월") termParam = "04"
+	else if(thisVal = "5월") termParam = "05"
+	else if(thisVal = "6월") termParam = "06"
+	else if(thisVal = "7월") termParam = "07"
+	else if(thisVal = "8월") termParam = "08"
+	else if(thisVal = "9월") termParam = "09"
+	else if(thisVal = "10월") termParam = "10"
+	else if(thisVal = "11월") termParam = "11"
+	else if(thisVal = "12월") termParam = "12"
+	else if(thisVal = "2020년") termParam = "13"					
+	else if(thisVal = "2021년") termParam = "14"
+	
+	$.post("selectOrderCnt", {"termParam" : termParam}, function(data) {
+
+	}).done(function() {
+		cnt_list=[[${cnt_list}]];
+		drawChart();
+	}).fail(function() {
+		alert("조회를 실패했습니다.\n다시 시도하세요.");
+	});
+	
+}
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart(){
+	$("#chart_div").empty();
+	var dbObj = [{"user_id" : manager}, {"grade" : grade}];
+	//data 입력
+	var dataArray = new Array();
+	dataArray.push(['날짜','건수']);
+	for(var i=0; i<cnt_list.length; i++){
+		dataArray.push([cnt_list[i].term,parseInt(cnt_list[i].cnt_sum)]);
+	}
+		
+	var data = new google.visualization.arrayToDataTable(dataArray);
+		
+	//속성 입력
+	var options = {
+		title : '',
+		curveType : 'function',
+		legend : {position : 'bottom'},
+		vAxis: {
+            viewWindow: {
+                min: 0
+            }
+        }
+	};
+		
+	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+	chart.draw(data, options);	
+	
+	$("#ctm_date").hide();
+}
 </script>
 </body>

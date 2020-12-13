@@ -60,6 +60,12 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
+	public List<DbVO> selectOrderCnt(DbVO vo){
+		return dao.selectOrderCnt(vo);
+	}
+	
+	
+	@Override
 	public int selectGrade(UserVO vo) {
 		return dao.selectGrade(vo);
 	}
@@ -138,6 +144,7 @@ public class AdminServiceImpl implements AdminService {
 	public int updateUserDb(UserVO vo) {
 		return dao.updateUserDb(vo);
 	}
+	
 	
 	@Override
 	public ByteArrayInputStream excelDownLoad(DbVO vo) throws IOException {

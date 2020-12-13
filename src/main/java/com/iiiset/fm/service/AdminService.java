@@ -35,6 +35,8 @@ public interface AdminService {
 	
 	List<GoodsVO> selectGoodsDt(GoodsVO vo);
 	
+	List<DbVO> selectOrderCnt(DbVO vo);
+	
 	int insertTeamDb(TeamVO vo);
 	
 	int updateTeamDb(TeamVO vo);

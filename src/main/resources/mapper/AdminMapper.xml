@@ -42,7 +42,7 @@
 		,mod_date
 		,CASE
 				WHEN gd_cd = '001' THEN '탑스핏'
-				ELSE ""
+				ELSE ''
 		 END 	AS gd_cd
 		,CASE 
 				WHEN gd_buyType = '01' THEN '상담신청' 
@@ -53,7 +53,8 @@
 				WHEN gd_buyType = '06' THEN '기타'
 				ELSE ''
 		 END	AS gd_buyType
-		,((SELECT nvl(inp_cnt,"0") from goods_Dt where gdcd='001') - (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '03')) AS inp_cnt
+		,(SELECT ((SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04')) AS '재고'
+		  FROM dual) AS cnt_sum
 		,nvl(call_succRate,"0") AS call_succRate
 		FROM db_data
 		<where>
@@ -128,6 +129,14 @@
 		ORDER BY seq DESC
 	</select>
 	
+	<select id="selectOrderCnt" parameterType="com.iiiset.fm.model.DbVO"
+		resultType="com.iiiset.fm.model.DbVO">
+		SELECT    DATE_FORMAT(reg_date,'%Y-%m-%d') term
+				, sum(order_cnt) AS cnt_sum 
+		FROM 	  db_data
+		GROUP BY  term
+	</select>
+	
 	
 	<select id="selectTeamDb" parameterType="com.iiiset.fm.model.TeamVO"
 		resultType="com.iiiset.fm.model.TeamVO">
@@ -145,9 +154,7 @@
 	<select id="selectGoods" parameterType="com.iiiset.fm.model.GoodsVO"
 		resultType="com.iiiset.fm.model.GoodsVO">
 		SELECT    gdcd
-				, (SELECT sum(nvl(order_cnt,'0')) FROM db_data WHERE gd_cd ='001' AND gd_buyType = '04') AS cnt_sum
-			    , (SELECT sum(nvl(inp_cnt,'0')) FROM goods_Dt) AS inp_cnt
-			    , (SELECT gd_memo FROM goods_Dt) AS gd_memo
+			    , ((SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04'))  AS cnt_sum
 			    , gdnm 
 		FROM	  goods
 		ORDER BY  gdcd DESC
@@ -158,9 +165,10 @@
 		SELECT    reg_date
 				, inp_cnt
 				, gd_memo
+				, seq
 		FROM	  goods_Dt
 		WHERE 	  gdcd = #{gdcd}
-		ORDER BY  gdcd DESC
+		ORDER BY  seq DESC
 	</select>
 	
 	<select id="selectTeam_cd"
@@ -172,7 +180,10 @@
 	<select id="selectCnt"
 		parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
-		SELECT ((SELECT inp_cnt FROM goods WHERE gdcd = '001') - #{order_cnt}) AS cnt_sum
+		SELECT ((SELECT (
+							(SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04'))
+				 FROM DUAL) - #{order_cnt}) AS cnt_sum
+		FROM   DUAL
 	</select>
 	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
@@ -241,24 +252,25 @@
 	</delete>
 	
 	<update id="updateGoodsDb" parameterType="com.iiiset.fm.model.GoodsVO">
-		UPDATE goods 
+		UPDATE goods_dt 
 		SET
-				inp_cnt = select#{inp_cnt}
+				inp_cnt = #{inp_cnt}
 		      , mod_date = now()
 		      , mod_id = #{mod_id}
-		WHERE   gdcd = #{gdcd}
+		      , gd_memo = #{gd_memo}
+		WHERE   seq = #{seq}
 	</update>
 	
 	<insert id="insertGoodsDb" parameterType="com.iiiset.fm.model.GoodsVO">
-		INSERT INTO goods
-		(inp_cnt, gdcd, reg_date, reg_id)
+		INSERT INTO goods_dt
+		(inp_cnt, gdcd, reg_date, reg_id, gd_memo)
 		VALUES
-		(#{inp_cnt}, #{gdcd}, now(), #{reg_id})
+		(#{inp_cnt}, #{gdcd}, now(), #{mod_id}, #{gd_memo})
 	</insert>
 	
 	<delete id="deleteGoodsDb" parameterType="com.iiiset.fm.model.GoodsVO">
-		DELETE FROM goods
-		WHERE gdcd = #{gdcd}
+		DELETE FROM goods_dt
+		WHERE seq = #{seq}
 	</delete>
 	
 	<update id="updateUserDb" parameterType="com.iiiset.fm.model.UserVO">
