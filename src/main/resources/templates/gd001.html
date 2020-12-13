@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+
+<title>탑스핏:::TOPSFIT</title>
+<link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+<script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
+
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+	integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+	crossorigin="anonymous"></script>
+
+<link href="/jslib/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" />
+<link rel="stylesheet" href="/css/style.css" />
+<script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
+<style>
+body{font-size:12px;}
+.container{width:100%; padding:0; max-width:800px;}
+.input_request{padding:10px;}
+.form-consult{width:100%;}
+
+.btn_consult{padding:30px 0; border:1px solid #db8da5; border-radius:3px; background: #d10f4a; text-align:center; color:#fae20c; font-size:1em;}
+.bg_part1{background:#cdb8ea;}
+.bg_part2{background:#5376bc;}
+.bg_part3{background:#e5cdae;}
+
+.wform .input-text, .wform .btn_consult, .wform .check_privacy_policy, .wform label {position:absolute;}
+.input-text{left:20%; width:32% !important; padding:0 !important; font-size:1.8em; border:0px !important;}
+.input-text:focus {outline:none;}
+
+.cust_nm{top:40.3%;}
+.cust_tel{top:62.8%;}
+.check_privacy_policy{right:26.7%; top:80.5%;   -ms-transform: scale(1.3); /* IE */
+  -moz-transform: scale(1.3); /* FF */
+  -webkit-transform: scale(1.3); /* Safari and Chrome */
+  -o-transform: scale(1.3); /* Opera */
+  transform: scale(1.3);
+ }
+.wform1 label{right:12%; top:79.0%; font-size:1.3em; opacity:0;}
+.btn_consult{left:57%; padding:0; top:39%; width:31%; height:36%; border:1px solid #f00; opacity:0;}
+.air_con_wrap{position:fixed; top:0; width:100%; margin:0 auto;}
+.con_pos{position:relative; width:800px; margin:0 auto;}
+.air_form{position:absolute; right:-151px;}
+.air_form .cust_nm{top:40.6%; width:60% !important; font-size:1.3em;}
+.air_form .cust_tel{top:51%; width:60% !important; font-size:1.3em;}
+.air_form .btn_consult{left:10%; top:63%; width:80%; height:14%;}
+.air_form label{right:-29%; top:56%; font-size:1.3em; opacity:0;}
+.air_form .check_privacy_policy{right:55%; top:57%;
+	-ms-transform: scale(1); /* IE */
+	-moz-transform: scale(1); /* FF */
+	-webkit-transform: scale(1); /* Safari and Chrome */
+	-o-transform: scale(1); /* Opera */
+	transform: scale(1);
+}
+
+.btn_consult{z-index:1000;}
+label{z-index:1004;}
+.check_privacy_policy{z-index:1005;}
+
+@media screen and (min-width: 1100px) {
+   
+}
+
+@media (max-width:1100px)  {
+	.air_con_wrap{display:none;}
+}
+
+@media (max-width:700px)  {
+	body{font-size:10px;}
+}
+
+@media (max-width:600px)  {
+	body{font-size:9px;}
+	.check_privacy_policy{
+		right:26.4%; top:79%;
+		-ms-transform: scale(0.9); /* IE */
+		-moz-transform: scale(0.9); /* FF */
+		-webkit-transform: scale(0.9); /* Safari and Chrome */
+		-o-transform: scale(0.9); /* Opera */
+		transform: scale(0.9);
+	}
+}
+
+@media (max-width:550px)  {
+	body{font-size:7px;}
+	.wform1 label{right:8%; }
+}
+@media (max-width:400px)  {
+	body{font-size:6px;}
+	.check_privacy_policy{
+		right:26.2%; top:78%;
+		-ms-transform: scale(0.8); /* IE */
+		-moz-transform: scale(0.8); /* FF */
+		-webkit-transform: scale(0.8); /* Safari and Chrome */
+		-o-transform: scale(0.8); /* Opera */
+		transform: scale(0.8);
+	}
+	.wform1 label{right:5%; font-size:1.5em }
+	
+}
+@media (max-width:350px)  {
+	body{font-size:5px;}
+	.wform1 label{right:5%; }
+	
+}
+
+
+</style>
+</head>
+
+<body>
+<div class="air_con_wrap">
+	<div class="con_pos">
+		<div class="air_form">
+			<form>
+				<div class="wform wform2" style="position:relative;">
+					<input type="text" class="input-text cust_nm" id="cust_nm1" placeholder="성명을 입력해주세요" />
+					<input type="text" class="input-text cust_tel" id="cust_tel1" placeholder="연락처 입력해주세요" />
+					<div class="btn_consult" id="send_db"></div>			
+					<input type="checkbox" name="check_privacy_policy" class="check_privacy_policy" id="check_privacy_policy1" />
+					<label data-toggle="modal" data-target="#detailModal">개인정보활용동의</label>
+					<img width="100%" src="/images/topsfit/air_con.png" />
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="bg_part1">
+	<div class="container part1">
+		<div class="">
+			<img width="100%" src="/images/topsfit/con1.jpg" />			
+		</div>
+		<form>
+			<div class="wform wform1" style="position:relative;">
+				<input type="text" class="input-text cust_nm" id="cust_nm2" placeholder="성명을 입력해주세요" />
+				<input type="text" class="input-text cust_tel" id="cust_tel2" placeholder="연락처 입력해주세요" />
+				<div class="btn_consult" id="send_db2"></div>			
+				<input type="checkbox" name="check_privacy_policy" class="check_privacy_policy" id="check_privacy_policy2" />
+				<label data-toggle="modal" data-target="#detailModal">개인정보활용동의</label>
+				<img width="100%" src="/images/topsfit/form.jpg" />
+			</div>
+		</form>
+		<div>
+			<img width="100%" src="/images/topsfit/con2.jpg" />
+		</div>
+	</div>
+</div>
+<div class="bg_part2">
+	<div class="container">
+		<div class="">
+			<img width="100%" src="/images/topsfit/con3.jpg" />
+		</div>
+	</div>
+</div>
+<div class="bg_part3">
+	<div class="container">
+		<div class="">
+			<img width="100%" src="/images/topsfit/con4.jpg" />
+		</div>
+		<form>
+			<div class="wform wform1" style="position:relative;">
+				<input type="text" class="input-text cust_nm" id="cust_nm3" placeholder="성명을 입력해주세요" />
+				<input type="text" class="input-text cust_tel" id="cust_tel3" placeholder="연락처 입력해주세요" />
+				<div class="btn_consult" id="send_db3"></div>			
+				<input type="checkbox" name="check_privacy_policy" class="check_privacy_policy" id="check_privacy_policy3" />
+				<label data-toggle="modal" data-target="#detailModal">개인정보활용동의</label>
+				<img width="100%" src="/images/topsfit/form.jpg" />
+			</div>
+		</form>
+	</div>
+</div>	
+	
+	
+<!-- Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">개인정보활용동의</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="height:60vh; overflow:auto;">
+		<div style="height:100%">
+
+<p>
+<b>개인정보의 수집방법 및 항목</b><br/><br/>
+회사는 원활한 상담, 각종 서비스의 제공 등을 위해 아래와 같은 최소한의 개인정보를 수집하고 있습니다.<br/>
+1) 상담 시점에서 수집하는 항목<br/>
+ - 이름, 휴대폰 번호, 나이<br/>
+2) 서비스 이용과정에서 수집될 수 있는 개인정보의 범위<br/>
+ - 서비스 이용기록, 접속기록, IP주소, 기기식별번호, 기기의 휴대번호<br/>
+3) 개인정보의 수집방법<br/>
+ - 모바일웹페이지, 서면양식, 팩스, 고객센터를 통한 전화와 온라인 상담, 이벤트 응모<br/>
+<br/>
+<b>개인정보의 수집 및 이용목적</b><br/><br/>
+1) 서비스의 원활한 제공 및 운영<br/>
+2) 회원관리<br/>
+회원제 서비스 이용, 개인식별, 불량회원의 부정 이용방지와 비인가 사용방지, 가입의사 확인, 가입 및 가입횟수 제한, 분쟁 조정을 위한 기록보존, 불만처리 등 민원처리, 고지사항 전달
+3) 마케팅 및 광고에의 활용<br/>
+고객별 맞춤 서비스 제공, 통계학적 특성에 따른 서비스 제공 및 광고 게재, 정기 간행물 발송, 서비스의 유효성 확인, 이벤트 및 광고성 정보 제공 및 참여기회 제공, 접속빈도 파악, 회원의 서비스 이용에 대한 통계
+개인정보 수집, 이용, 제공에 대한 동의<br/>
+<br/>
+회사는 이용자가 최초 회원가입 시 또는 서비스 이용과 관련해 개인정보를 입력할 시 개인정보처리방침 및 이용약관 등의 내용에 대해 동의 여부를 체크할 수 있는 절차를 마련하여, 이를 체크하면 개인정보수집에 대해 동의한 것으로 취급합니다.<br/>
+<br/>
+<b>개인정보의 보유기간 및 파기</b><br/><br/>
+1) 회사가 회원의 개인정보를 수집하는 경우 그 보유기간은 원칙적으로 회원가입 후 약관 제10조에 의한 ‘계약기간 및 이용계약의 종료시’까지며, 이용계약 종료의 경우 회사는 회원의 개인정보를 즉시 파기하며 제3자에게 기 제공된 정보에 대해서도 지체 없이 파기하도록 조치합니다. (단, 재가입유예기간 동안의 재가입 방지 등을 위해 이용계약이 종료한 날로부터 2개월 경과 후에 파기하도록 합니다.)<br/>
+또한, 다음의 경우 각각 명시한 기간 동안 개인정보를 보유합니다.<br/>
+① 상법 등 법령의 규정에 의하여 보존할 필요성이 있는 경우 법령에서 규정한 보존기간 동안 거래내역과 최소한의 기본정보를 보유<br/>
+② 보유기간을 미리 공지하고 그 보유기간이 경과하지 아니한 경우와 개별적으로 회원의 동의를 받을 경우에는 약정한 기간 동안 보유<br/>
+③ 다음의 경우 명시한 기간 동안 개인정보를 보유<br/>
+ - 계약또는 청약철회 등에 관한 기록: 5년<br/>
+ - 소비자의 불만 또는 분쟁처리에 관한 기록: 3년<br/>
+ - 부정이용 등에 관한 기록: 5년<br/>
+2) 회사는 고객의 개인정보를 보호하여 개인정보 유출로 인한 피해가 발생하지 않도록 하기 위하여 다음과 같은 방법을 통하여 개인정보를 파기합니다.<br/>
+ - 종이에 출력된 개인정보는 분쇄기로 분쇄하거나 소각을 통하여 파기합니다.<br/>
+ - 전자적 파일 형태로 저장된 개인정보는 기록을 재생할 수 없는 기술적 방법을 사용하여 삭제합니다.<br/>
+3) 회원의 동의를 받아 보유하고 있는 개인정보에 대한 당해 회원의 열람요구가 있을 경우 회사는 지체 없이 이를 열람, 확인할 수 있도록 조치합니다.<br/>
+4) 정보통신망법에 의한 개인정보 보유<br/>
+회원이 1년간 서비스 이용기록이 없는 경우, [정보통신망 이용촉진 및 정보보호 등에 관한 법률] 제 29조에 근거하여 회원에게 사전 통지하고 별도로 분리하여 저장합니다. 단, 관계 법령의 규정에 의한 보존이 필요한 경우 관계 법령에서 규정한 기간 동안 보관합니다.<br/>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+					data-dismiss="modal">닫기</button> 
+			</div>
+		</div>
+	</div>
+</div>
+
+	
+</body>
+
+
+<script th:inline="javascript">
+
+$(document).ready(function(){
+	$("#send_db").click(function(){
+		send("1");
+	});
+	$("#send_db2").click(function(){
+		send("2");
+	});
+	$("#send_db3").click(function(){
+		send("3");
+	});
+});
+
+function send(th){
+	
+	var db = {};
+	if($("#cust_nm"+th).val() != "") db.cust_nm = $("#cust_nm"+th).val();
+	else {
+		alert("성명을 입력해주세요");
+		return;
+	}
+	if($("#cust_tel"+th).val() != "") db.cust_tel = $("#cust_tel"+th).val();
+	else {
+		alert("연락처를 입력해주세요");
+		return;
+	}
+	
+	if(!$("#check_privacy_policy"+th).is(":checked")){
+		alert("개인정보활용동의를 체크해주세요");
+		return;
+	} 
+	
+	
+	
+	sendDb(db);
+}
+
+
+function sendDb(db){
+	db.site = getParam('site');
+	db.gd_cd = [[${gd_cd}]];
+
+
+	$.post("/insertDb", db, function(data){
+		alert("신청이 완료되었습니다");
+		$("#cust_nm").val("");
+		$("#cust_tel").val("");
+		$("#comment").val("");
+
+	}).fail(function(){
+		alert("실패");
+	});
+}
+
+
+function getParam(sname) {
+    var params = location.search.substr(location.search.indexOf("?") + 1);
+    var sval = "";
+    params = params.split("&");
+    for (var i = 0; i < params.length; i++) {
+        temp = params[i].split("=");
+        if ([temp[0]] == sname) { sval = temp[1]; }
+    }
+    return sval;
+
+}
+</script>
+
+
+
+</html>
