@@ -19,8 +19,8 @@
 <link rel="stylesheet" href="/css/style.css" />
 <script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
 <style>
-body{font-size:12px;}
-.container{width:100%; padding:0; max-width:800px;}
+body{font-size:16px;}
+.container{width:100%; padding:0; max-width:1200px;}
 .input_request{padding:10px;}
 .form-consult{width:100%;}
 
@@ -33,41 +33,57 @@ body{font-size:12px;}
 .input-text{left:20%; width:32% !important; padding:0 !important; font-size:1.8em; border:0px !important;}
 .input-text:focus {outline:none;}
 
-.cust_nm{top:40.3%;}
-.cust_tel{top:62.8%;}
-.check_privacy_policy{right:26.7%; top:80.5%;   -ms-transform: scale(1.3); /* IE */
-  -moz-transform: scale(1.3); /* FF */
-  -webkit-transform: scale(1.3); /* Safari and Chrome */
-  -o-transform: scale(1.3); /* Opera */
-  transform: scale(1.3);
+.cust_nm{top:37.5%;}
+.cust_tel{top:58.8%;}
+.check_privacy_policy{right:30.5%; top:79.9%;   -ms-transform: scale(2.4); /* IE */
+  -moz-transform: scale(2.4); /* FF */
+  -webkit-transform: scale(2.4); /* Safari and Chrome */
+  -o-transform: scale(2.4); /* Opera */
+  transform: scale(2.4);
  }
 .wform1 label{right:12%; top:79.0%; font-size:1.3em; opacity:0;}
 .btn_consult{left:57%; padding:0; top:39%; width:31%; height:36%; border:1px solid #f00; opacity:0;}
 .air_con_wrap{position:fixed; top:0; width:100%; margin:0 auto;}
-.con_pos{position:relative; width:800px; margin:0 auto;}
-.air_form{position:absolute; right:-151px;}
-.air_form .cust_nm{top:40.6%; width:60% !important; font-size:1.3em;}
-.air_form .cust_tel{top:51%; width:60% !important; font-size:1.3em;}
-.air_form .btn_consult{left:10%; top:63%; width:80%; height:14%;}
-.air_form label{right:-29%; top:56%; font-size:1.3em; opacity:0;}
-.air_form .check_privacy_policy{right:55%; top:57%;
-	-ms-transform: scale(1); /* IE */
-	-moz-transform: scale(1); /* FF */
-	-webkit-transform: scale(1); /* Safari and Chrome */
-	-o-transform: scale(1); /* Opera */
-	transform: scale(1);
+.con_pos{position:relative; width:1200px; margin:0 auto;}
+.air_form{position:absolute; right:-230px; width:230px;}
+.air_form .cust_nm{top:51.2%; width:60% !important; font-size:1.3em;}
+.air_form .cust_tel{top:64.5%; width:60% !important; font-size:1.3em;}
+.air_form .btn_consult{left:10%; top:81%; width:80%; height:14%;}
+.air_form label{right:-23%; top:70.7%; font-size:1.3em; opacity:0;}
+.air_form .check_privacy_policy{right:55.5%; top:72.4%;
+	-ms-transform: scale(1.2); /* IE */
+	-moz-transform: scale(1.2); /* FF */
+	-webkit-transform: scale(1.2); /* Safari and Chrome */
+	-o-transform: scale(1.2); /* Opera */
+	transform: scale(1.2);
 }
 
 .btn_consult{z-index:1000;}
 label{z-index:1004;}
 .check_privacy_policy{z-index:1005;}
 
-@media screen and (min-width: 1100px) {
-   
+@media screen and (min-width: 1650px) {
 }
 
-@media (max-width:1100px)  {
+@media (max-width:1650px)  {
 	.air_con_wrap{display:none;}
+}
+
+@media (max-width:1000px)  {
+	body{font-size:14px;}
+}
+@media (max-width:900px)  {
+	body{font-size:13px;}
+}
+@media (max-width:800px)  {
+	body{font-size:12px;}
+	.check_privacy_policy{right:30.2%; top:79.4%;   -ms-transform: scale(1.4); /* IE */
+	  -moz-transform: scale(1.4); /* FF */
+	  -webkit-transform: scale(1.4); /* Safari and Chrome */
+	  -o-transform: scale(1.4); /* Opera */
+	  transform: scale(1.4);
+ }
+	
 }
 
 @media (max-width:700px)  {
@@ -77,12 +93,13 @@ label{z-index:1004;}
 @media (max-width:600px)  {
 	body{font-size:9px;}
 	.check_privacy_policy{
-		right:26.4%; top:79%;
-		-ms-transform: scale(0.9); /* IE */
-		-moz-transform: scale(0.9); /* FF */
-		-webkit-transform: scale(0.9); /* Safari and Chrome */
-		-o-transform: scale(0.9); /* Opera */
-		transform: scale(0.9);
+		right:30.0%;
+		top:79.0%;
+		-ms-transform: scale(1.1); /* IE */
+		-moz-transform: scale(1.1); /* FF */
+		-webkit-transform: scale(1.1); /* Safari and Chrome */
+		-o-transform: scale(1.1); /* Opera */
+		transform: scale(1.1);
 	}
 }
 
@@ -93,7 +110,8 @@ label{z-index:1004;}
 @media (max-width:400px)  {
 	body{font-size:6px;}
 	.check_privacy_policy{
-		right:26.2%; top:78%;
+		right:29.5%;
+		top:76.5%;
 		-ms-transform: scale(0.8); /* IE */
 		-moz-transform: scale(0.8); /* FF */
 		-webkit-transform: scale(0.8); /* Safari and Chrome */
@@ -124,7 +142,10 @@ label{z-index:1004;}
 					<div class="btn_consult" id="send_db"></div>			
 					<input type="checkbox" name="check_privacy_policy" class="check_privacy_policy" id="check_privacy_policy1" />
 					<label data-toggle="modal" data-target="#detailModal">개인정보활용동의</label>
-					<img width="100%" src="/images/topsfit/air_con.png" />
+					<img width="100%" src="/images/topsfit/air_con1.jpg" />
+				</div>
+				<div style="margin-top:20px;">
+					<img width="100%" src="/images/topsfit/air_con2.png" />
 				</div>
 			</form>
 		</div>
