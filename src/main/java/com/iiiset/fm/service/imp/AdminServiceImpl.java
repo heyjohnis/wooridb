@@ -64,6 +64,20 @@ public class AdminServiceImpl implements AdminService {
 		return dao.selectOrderCnt(vo);
 	}
 	
+	@Override
+	public List<DbVO> selectCntRank(DbVO vo){
+		return dao.selectCntRank(vo);
+	}
+	
+	@Override
+	public List<DbVO> selectAmtRank(DbVO vo){
+		return dao.selectAmtRank(vo);
+	}
+	
+	@Override
+	public List<DbVO> selectCallRank(DbVO vo){
+		return dao.selectCallRank(vo);
+	}
 	
 	@Override
 	public int selectGrade(UserVO vo) {

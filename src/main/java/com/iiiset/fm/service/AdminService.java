@@ -37,6 +37,12 @@ public interface AdminService {
 	
 	List<DbVO> selectOrderCnt(DbVO vo);
 	
+	List<DbVO> selectCntRank(DbVO vo);
+	
+	List<DbVO> selectAmtRank(DbVO vo);
+	
+	List<DbVO> selectCallRank(DbVO vo);
+	
 	int insertTeamDb(TeamVO vo);
 	
 	int updateTeamDb(TeamVO vo);

@@ -26,6 +26,12 @@ public interface AdminDao {
 	
 	List<DbVO>selectOrderCnt(DbVO vo);
 	
+	List<DbVO>selectCntRank(DbVO vo);
+	
+	List<DbVO>selectAmtRank(DbVO vo);
+	
+	List<DbVO>selectCallRank(DbVO vo);
+	
 	int selectGrade(UserVO vo);
 	
 	String selectTeam_cd(UserVO vo);

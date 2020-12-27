@@ -55,8 +55,66 @@ $(document).ready(function(){
 
 <body>
 	<body th:replace="admin/header :: mainHead"> </body>
-
-<div style="margin-left:10%"><br/><h3>최근 계약 내역(5건)</h2></div>
+	<div style="margin-left:10%"><br/><h3>업적순위</h3></div>
+	<div style="margin-left:10%">
+		<div id="chart_Cnt_div" style="width:30%"></div>
+		<div id="chart_Amount_div" style="width:30%"></div>
+		<div id="chart_Call_div" style="width:30%"></div>
+	</div>
+	<br/>
+	<table class="table table-hover table-condensed "  style="width:30%; margin-left:auto; margin-right:auto">
+		<thead class="thead-light">
+			<tr>
+				<th scope="col">순위</th>
+				<th scope="col">사원명</th>
+				<th scope="col">판매건수</th>
+			</tr>
+		</thead>
+		<tbody class="">
+			<tr th:id="db_+${db.cnt_rank}" th:each="db, stat: ${cnt_list}"
+				data-toggle="modal" data-target="#detailModal">
+				<td class="cnt_rank " th:text="${db.getCnt_rank()}">순위</td>
+				<td class="manager" th:text="${db.getManager()}">사원명</td>
+				<td class="order_cnt" th:text="${db.getOrder_cnt()}">판매건수</td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table table-hover table-condensed "  style="width:30%; margin-left:auto; margin-right:auto">
+		<thead class="thead-light">
+			<tr>
+				<th scope="col">순위</th>
+				<th scope="col">사원명</th>
+				<th scope="col">판매금액</th>
+			</tr>
+		</thead>
+		<tbody class="">
+			<tr th:id="db_+${db.amt_rank}" th:each="db, stat: ${amt_list}"
+				data-toggle="modal" data-target="#detailModal">
+				<td class="cnt_rank" th:text="${db.getAmt_rank()}">순위</td>
+				<td class="manager" th:text="${db.getManager()}">사원명</td>
+				<td class="order_cnt" th:text="${db.getOrder_amount()}">판매금액</td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table table-hover table-condensed "  style="width:30%; margin-left:auto; margin-right:auto">
+		<thead class="thead-light">
+			<tr>
+				<th scope="col">순위</th>
+				<th scope="col">사원명</th>
+				<th scope="col">콜건수</th>
+			</tr>
+		</thead>
+		<tbody class="">
+			<tr th:id="db_+${db.call_rank}" th:each="db, stat: ${call_list}"
+				data-toggle="modal" data-target="#detailModal">
+				<td class="cnt_rank " th:text="${db.getCall_rank()}">순위</td>
+				<td class="manager" th:text="${db.getManager()}">사원명</td>
+				<td class="call_cnt" th:text="${db.getCall_cnt()}">콜건수</td>
+			</tr>
+		</tbody>
+	</table>
+<br/>
+<div style="margin-left:10%"><br/><h3>최근 계약 내역(5건)</h3></div>
 	<br/>
 		<table class="table table-hover table-condensed "  style="width:80%; margin-left:auto; margin-right:auto">
 			<thead class="thead-light">

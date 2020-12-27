@@ -62,11 +62,15 @@ public class AdminController {
 			vo.setManager(manager);
 			vo.setAdminYn(1);
 			List<DbVO> list = service.selectDb(vo);
-			List<DbVO> cnt_list = service.selectOrderCnt(vo);
+			List<DbVO> cnt_list = service.selectCntRank(vo);
+			List<DbVO> amt_list = service.selectAmtRank(vo);
+			List<DbVO> call_list = service.selectCallRank(vo);
 			mv.addObject("user_id", manager);
 			mv.addObject("list", list);
 			mv.addObject("grade", grade);
 			mv.addObject("cnt_list", cnt_list);
+			mv.addObject("amt_list", amt_list);
+			mv.addObject("call_list", call_list);
 			mv.setViewName("admin/dbAdmin");
 		}
 		return mv;

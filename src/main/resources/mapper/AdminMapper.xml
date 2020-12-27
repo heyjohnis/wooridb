@@ -186,6 +186,71 @@
 		FROM   DUAL
 	</select>
 	
+	<select id="selectCntRank"
+		parameterType="com.iiiset.fm.model.DbVO"
+		resultType="java.lang.Integer">
+	SELECT 
+    		RANK() OVER (ORDER BY (SELECT 
+    										SUM(order_cnt) AS order_cnt 
+    							   FROM 	db_data b
+    							   WHERE 	b.manager = a.manager
+    							   AND 	    b.manager IS NOT NULL
+    							   AND 		b.gd_buyType IN ("04","05")  ) desc) AS cnt_rank 
+		  , nvl(a.manager,'') 													 AS manager
+		  , (SELECT SUM(order_cnt) AS order_cnt 
+    		 FROM   db_data b
+    		 WHERE  b.manager = a.manager
+    		 AND    b.manager IS NOT NULL
+    		 AND 	b.gd_buyType IN ("04","05")) 						 		 AS order_cnt
+	FROM    db_data a 
+ 	WHERE   a.manager IS NOT NULL
+	GROUP BY a.manager
+	ORDER BY cnt_rank ASC
+	</select>
+	
+	<select id="selectAmtRank"
+		parameterType="com.iiiset.fm.model.DbVO"
+		resultType="java.lang.Integer">
+	SELECT 
+    		RANK() OVER (ORDER BY (SELECT 
+    										SUM(order_amount) AS order_amount 
+    							   FROM 	db_data b
+    							   WHERE 	b.manager = a.manager
+    							   AND 	    b.manager IS NOT NULL
+    							   AND 		b.gd_buyType IN ("04","05")) desc) AS amt_rank 
+		  , a.manager 													 	   AS manager
+		  , (SELECT SUM(order_amount) AS order_amount
+    		 FROM   db_data b
+    		 WHERE  b.manager = a.manager
+    		 AND    b.manager IS NOT NULL
+    		 AND 	b.gd_buyType IN ("04","05")) 						   	   AS order_amount
+	FROM    db_data a 
+ 	WHERE   a.manager IS NOT NULL
+	GROUP BY a.manager
+	ORDER BY amt_rank ASC
+	
+	</select>
+	
+	<select id="selectCallRank"
+		parameterType="com.iiiset.fm.model.DbVO"
+		resultType="java.lang.Integer">
+	SELECT 
+    		RANK() OVER (ORDER BY (SELECT 
+    										SUM(call_cnt) AS call_cnt 
+    							   FROM 	db_data b
+    							   WHERE 	b.manager = a.manager
+    							   AND 	    b.manager IS NOT NULL) desc) AS call_rank 
+		  , a.manager 													 AS manager
+		  , (SELECT SUM(call_cnt) AS call_cnt 
+    		 FROM   db_data b
+    		 WHERE  b.manager = a.manager
+    		 AND    b.manager IS NOT NULL) 								 AS call_cnt
+	FROM    db_data a 
+ 	WHERE   a.manager IS NOT NULL
+	GROUP BY a.manager
+	ORDER BY call_rank ASC
+	</select>
+	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
 		SELECT COUNT(seq) FROM db_data
