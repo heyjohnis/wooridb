@@ -101,11 +101,18 @@ label{z-index:1004;}
 		-o-transform: scale(1.1); /* Opera */
 		transform: scale(1.1);
 	}
+	
+	#form1{position:fixed; bottom:0;}
+	#form2{display:none;}
+	.bg_part3{padding-bottom:150px}
+	
 }
 
 @media (max-width:550px)  {
 	body{font-size:7px;}
 	.wform1 label{right:8%; }
+	.bg_part3{padding-bottom:140px}
+	
 }
 
 @media (max-width:430px)  {
@@ -120,14 +127,18 @@ label{z-index:1004;}
 		transform: scale(0.8);
 	}
 	.wform1 label{right:5%; font-size:1.5em }
+	.bg_part3{padding-bottom:125px}
+	
 	
 }
 @media (max-width:360px)  {
 	body{font-size:5px;}
 	.wform1 label{right:5%; }
-	
+	.bg_part3{padding-bottom:120px}
 }
-
+@media (max-width:320px)  {
+	.bg_part3{padding-bottom:100px}
+}
 
 </style>
 </head>
@@ -157,7 +168,7 @@ label{z-index:1004;}
 		<div class="">
 			<img width="100%" src="/images/topsfit/con1.jpg" />			
 		</div>
-		<form>
+		<form id="form1">
 			<div class="wform wform1" style="position:relative;">
 				<input type="text" class="input-text cust_nm" id="cust_nm2" placeholder="성명을 입력해주세요" />
 				<input type="number" class="input-text cust_tel" id="cust_tel2" placeholder="연락처 입력해주세요" pattern="\d*" />
@@ -184,7 +195,7 @@ label{z-index:1004;}
 		<div class="">
 			<img width="100%" src="/images/topsfit/con4.jpg" />
 		</div>
-		<form>
+		<form id="form2">
 			<div class="wform wform1" style="position:relative;">
 				<input type="text" class="input-text cust_nm" id="cust_nm3" placeholder="성명을 입력해주세요" />
 				<input type="text" class="input-text cust_tel" id="cust_tel3" placeholder="연락처 입력해주세요" pattern="\d*" />
