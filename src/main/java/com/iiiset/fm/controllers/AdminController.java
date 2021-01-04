@@ -60,13 +60,10 @@ public class AdminController {
 			String grade = userVO.getGrade();
 			String manager = userVO.getUser_id();
 			vo.setManager(manager);
-			vo.setAdminYn(1);
-			List<DbVO> list = service.selectDb(vo);
 			List<DbVO> cnt_list = service.selectCntRank(vo);
 			List<DbVO> amt_list = service.selectAmtRank(vo);
 			List<DbVO> call_list = service.selectCallRank(vo);
 			mv.addObject("user_id", manager);
-			mv.addObject("list", list);
 			mv.addObject("grade", grade);
 			mv.addObject("cnt_list", cnt_list);
 			mv.addObject("amt_list", amt_list);
@@ -223,6 +220,20 @@ public class AdminController {
 		}
 		return mv;
 	}
+	
+	@RequestMapping(value = "/admin/selectRankList")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody Map selectRankList(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
+		Map map = new HashMap();
+		List<DbVO> cnt_list = service.selectCntRank(vo);
+		List<DbVO> amt_list = service.selectAmtRank(vo);
+		List<DbVO> call_list = service.selectCallRank(vo);
+		map.put("cnt_list", cnt_list);
+		map.put("amt_list", amt_list);
+		map.put("call_list", call_list);
+		return map;
+	}
+	
 	@RequestMapping(value = "/admin/selectOrderCnt")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody List<DbVO> selectOrderCnt(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {

@@ -53,5 +53,7 @@ public class DbVO {
 	int call_rank = 0;				//콜순위
 	int cnt_rank = 0;				//수량순위
 	int call_cnt = 0;				//콜건수
+	String first_value = "";
+	String second_value ="";
 }
 
