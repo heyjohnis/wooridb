@@ -1,7 +1,7 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8" />
 <head>
 <title>dbAdmin</title>
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -22,15 +22,122 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script th:inline="javascript">
+	
 	var manager = [[${user_id}]];
     var grade = [[${grade}]];
     var cnt_list = [[${cnt_list}]];
-    var list = [[${list}]];
+    var amt_list = [[${amt_list}]];
+    var call_list = [[${call_list}]];
+
+  
 </script>
 
 <script type="text/javascript">
 
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawCntChart);
+google.charts.setOnLoadCallback(drawAmtChart);
+google.charts.setOnLoadCallback(drawCallChart);
 
+//종합판매건수 순위차트 그리기
+function drawCntChart(first_value, start_value, end_value) {
+	$("#chart_Cnt_div").empty();
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'name');
+	data.addColumn('number', 'count');
+	var cnt_manager = new Array();
+	var arr = new Array();
+	for(var i=0; i<5; i++){
+		arr.push([cnt_list[i].manager,parseInt(cnt_list[i].order_cnt)])
+	}
+	data.addRows(arr);
+
+	var options = {
+		title: '판매건수실적',
+		width: '100%',
+		height: '100%',
+		hAxis: {title: '사원명'
+				},
+		vAxis: {title: '계약건수',
+				viewWindow: {
+                				min: 0
+            				},
+            	textStyle: {
+            					fontSize: 10,
+                                bold: true,
+                                italic : false
+                              }
+				},
+        legend: {position: 'none'}
+	}
+	var chart = new google.visualization.ColumnChart(document.getElementById('chart_Cnt_div'));
+	chart.draw(data, options);
+};
+
+//종합판매금액 순위 차트그리기
+function drawAmtChart(){
+	$("#chart_Amount_div").empty();			
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'name');
+	data.addColumn('number', 'amount');
+	var arr = new Array();
+	for(var i=0; i<5; i++){
+		arr.push([amt_list[i].manager,parseInt(amt_list[i].order_amount)])
+	}
+	data.addRows(arr);
+
+	var options = {
+				title: '판매금액실적',
+				width: '100%',
+				height: '100%',
+				padding : {
+			        left : 0,
+			        right : 0	
+			        //bottom : 50
+			    },
+				hAxis: {title: '사원명'
+						},
+				vAxis: {title: '판매액',
+						textRotate : 0,
+						viewWindow: {
+		                				min: 0
+		            				}
+						},
+		        legend: {position: 'none'}
+	}
+	var chart = new google.visualization.ColumnChart(document.getElementById('chart_Amount_div'));
+	chart.draw(data, options);
+}
+
+//종합콜건수 순위 차트그리기
+function drawCallChart(){
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'name');
+	data.addColumn('number', 'call_cnt');
+	var arr = new Array();
+	for(var i=0; i<5; i++){
+		arr.push([call_list[i].manager,parseInt(call_list[i].call_cnt)])
+	}
+	data.addRows(arr);
+
+	var options = {
+				title: '콜건수실적',
+				width: '100%',
+				height: '100%',
+				hAxis: {title: '사원명'
+						},
+				vAxis: {title: '콜건수',
+						viewWindow: {
+		                				min: 0
+		            				}
+						},
+		        legend: {position: 'none'}
+	}
+	var chart = new google.visualization.ColumnChart(document.getElementById('chart_Call_div'));
+	chart.draw(data, options);
+};
+	
+var this_data = null;
 $(document).ready(function(){
 	if(grade == "10" || grade == "99"){
 		$("#user").show();
@@ -48,6 +155,8 @@ $(document).ready(function(){
 	$("#user").removeClass('active');
 	$("#db-list").removeClass('active');
 	$("#this_name").text(manager+"님");
+	$("#detail_date").hide();
+	createTb();
 });
 </script>
 
@@ -55,118 +164,90 @@ $(document).ready(function(){
 
 <body>
 	<body th:replace="admin/header :: mainHead"> </body>
-	<div style="margin-left:10%"><br/><h3>업적순위</h3></div>
-	<div style="margin-left:10%">
-		<div id="chart_Cnt_div" style="width:30%"></div>
-		<div id="chart_Amount_div" style="width:30%"></div>
-		<div id="chart_Call_div" style="width:30%"></div>
+	<div style="margin-left:5%"><br/><h3>업적순위</h3></div>
+		<div style="margin-left:5%">
+			<span style="align:right">
+				<select name="기간" id="firstSelect" onchange="optSelect(this)">
+					<option value="전체" selected="selected">전체</option>
+  					<option value="이번달" >이번달</option>
+  					<option value="올해" >올해</option>
+  					<option value="직접입력">직접입력</option>
+				</select>
+			</span>
+			<span class="row mt-3 mb-3" id="detail_date" style="margin-right:0px" >
+					<div class="col-3 input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="inputGroup-sizing-sm">시작일</span>
+						</div>
+						<input type="date" id="srh_sta_date" class="form-control srh_sta_date"  placeholder="YYYYMMDD">
+					</div>
+					<div class="col-3 input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="inputGroup-sizing-sm">종료일</span>
+						</div>
+						<input type="date" id="srh_end_date" class="form-control srh_end_date" placeholder="YYYYMMDD">
+					</div>
+			</span>
+			<span class="col-3 text-right" style="margin-left:0px;">
+					<div class="btn-group mw-100" role="group" aria-label="Basic example">
+						<button type="button" class="btn btn-primary pr-4 pl-4" onclick="change_Date()">조회</button>
+					</div>
+			</span>
+		</div>
+	<br/>
+	<div style="margin-left:5%; width:90%">
+		<div id="chart_Cnt_div" style="display:inline-block;width:33%"></div>
+		<div id="chart_Amount_div" style="display:inline-block;width:33%"></div>
+		<div id="chart_Call_div" style="display:inline-block;width:33%"></div>
 	</div>
 	<br/>
-	<table class="table table-hover table-condensed "  style="width:30%; margin-left:auto; margin-right:auto">
-		<thead class="thead-light">
-			<tr>
-				<th scope="col">순위</th>
-				<th scope="col">사원명</th>
-				<th scope="col">판매건수</th>
-			</tr>
-		</thead>
-		<tbody class="">
-			<tr th:id="db_+${db.cnt_rank}" th:each="db, stat: ${cnt_list}"
-				data-toggle="modal" data-target="#detailModal">
-				<td class="cnt_rank " th:text="${db.getCnt_rank()}">순위</td>
-				<td class="manager" th:text="${db.getManager()}">사원명</td>
-				<td class="order_cnt" th:text="${db.getOrder_cnt()}">판매건수</td>
-			</tr>
-		</tbody>
-	</table>
-	<table class="table table-hover table-condensed "  style="width:30%; margin-left:auto; margin-right:auto">
-		<thead class="thead-light">
-			<tr>
-				<th scope="col">순위</th>
-				<th scope="col">사원명</th>
-				<th scope="col">판매금액</th>
-			</tr>
-		</thead>
-		<tbody class="">
-			<tr th:id="db_+${db.amt_rank}" th:each="db, stat: ${amt_list}"
-				data-toggle="modal" data-target="#detailModal">
-				<td class="cnt_rank" th:text="${db.getAmt_rank()}">순위</td>
-				<td class="manager" th:text="${db.getManager()}">사원명</td>
-				<td class="order_cnt" th:text="${db.getOrder_amount()}">판매금액</td>
-			</tr>
-		</tbody>
-	</table>
-	<table class="table table-hover table-condensed "  style="width:30%; margin-left:auto; margin-right:auto">
-		<thead class="thead-light">
-			<tr>
-				<th scope="col">순위</th>
-				<th scope="col">사원명</th>
-				<th scope="col">콜건수</th>
-			</tr>
-		</thead>
-		<tbody class="">
-			<tr th:id="db_+${db.call_rank}" th:each="db, stat: ${call_list}"
-				data-toggle="modal" data-target="#detailModal">
-				<td class="cnt_rank " th:text="${db.getCall_rank()}">순위</td>
-				<td class="manager" th:text="${db.getManager()}">사원명</td>
-				<td class="call_cnt" th:text="${db.getCall_cnt()}">콜건수</td>
-			</tr>
-		</tbody>
-	</table>
+	<div style="margin-left:5%; width:90%;">
+		<span style="width:33%; display:inline-block; ">
+			<span class="center">판매건수순위</span>
+			<table class="table table-hover table-condensed "  style="margin-left:auto; margin-right:auto">
+				<thead class="thead-light">
+					<tr>
+						<th scope="col">순위</th>
+						<th scope="col">사원명</th>
+						<th scope="col">판매건수</th>
+					</tr>
+				</thead>
+				<tbody id="cnt_table">
+				</tbody>
+			</table>
+		</span>
+		<span style="width:33%; display:inline-block">
+			<span class="center">판매금액순위</span>
+			<table class="table table-hover table-condensed "  style="margin-left:auto; margin-right:auto">
+				<thead class="thead-light">
+					<tr>
+						<th scope="col">순위</th>
+						<th scope="col">사원명</th>
+						<th scope="col">판매금액(원)</th>
+					</tr>
+				</thead>
+				<tbody id="amt_table">
+				</tbody>
+			</table>
+		</span>
+		<span style="width:33%; display:inline-block">
+			<span class="center">콜성공순위</span>
+			<table class="table table-hover table-condensed "  style="margin-left:auto; margin-right:auto">
+				<thead class="thead-light">
+					<tr>
+						<th scope="col">순위</th>
+						<th scope="col">사원명</th>
+						<th scope="col">콜건수</th>
+					</tr>
+				</thead>
+				<tbody id="call_table">
+				</tbody>
+			</table>
+		</span>
+	</div>
 <br/>
-<div style="margin-left:10%"><br/><h3>최근 계약 내역(5건)</h3></div>
-	<br/>
-		<table class="table table-hover table-condensed "  style="width:80%; margin-left:auto; margin-right:auto">
-			<thead class="thead-light">
-				<tr>
-					<th scope="col" class="print">등록번호</th>
-					<th scope="col">접수일자</th>
-					<th scope="col">출처</th>
-					<th scope="col">고객명</th>
-					<th scope="col">연락처</th>
-					<th scope="col">문의사항</th>
-					<th scope="col">담당자</th>
-					<th scope="col" class="print">성별</th>
-					<th scope="col" class="print">나이</th>
-					<th scope="col" class="print">상담내용</th>
-					<th scope="col" class="print">주소</th>
-					<th scope="col" class="print">주문일</th>
-					<th scope="col">수량</th>
-					<th scope="col">금액</th>
-					<th scope="col" class="print">계좌번호</th>
-					<th scope="col" class="print">카드번호</th>
-					<th scope="col" class="print">유효기간</th>
-					<th scope="col" class="print">구매접촉일</th>
-				</tr>
-			</thead>
-			<tbody class="">
-				<tr th:id="db_+${db.seq}" th:each="db, stat: ${list}"
-					data-toggle="modal" data-target="#detailModal">
-					<td class="seq print" th:text="${db.getSeq()}">등록번호</td>
-					<td class="reg_date" th:text="${#strings.substring(db.getReg_date(), 0, 16)}">신청일</td>
-					<td class="site" th:text="${db.getSite()}">출처</td>
-					<td class="cust_nm" th:text="${db.getCust_nm()}">고객명</td>
-					<td class="cust_tel" th:text="${db.getCust_tel()}">연락처</td>
-					<td class="comment" th:text="${db.getComment()}">문의사항</td>
-					<td class="manager" th:text="${db.getManager()}">담당자</td>
-					<td class="gender print" th:text="${db.getGender()}">성별</td>
-					<td class="age print" th:text="${db.getAge()}">나이</td>
-					<td class="memo print" th:text="${db.getMemo()}">상담내용</td>
-					<td class="addr print" th:text="${db.getAddr()}">주소</td>
-					<td class="order_date print" th:text="${db.getOrder_date()}">주문일</td>
-					<td class="order_cnt" th:text="${db.getOrder_cnt()}">수량</td>
-					<td class="order_amount" th:text="${db.getOrder_amount()}">금액</td>
-					<td class="bank_account print" th:text="${db.getBank_account()}">계좌번호</td>
-					<td class="card_number print" th:text="${db.getCard_number()}">카드번호</td>
-					<td class="expire_date print" th:text="${db.getExpire_date()}">유효기간</td>
-					<td class="following_date print"
-						th:text="${db.getFollowing_date()}">구매접촉일</td>
-				</tr>
-			</tbody>
-		</table>
-		<!-- 라디오 연, 월, 일 ,사용자지정 / 각각에 맞는 셀렉트 박스 / 
-		사용자 선택 / 전체 , 조직원..... 
-		 -->
+
+<!-- 라디오 연, 월, 일 ,사용자지정 / 각각에 맞는 셀렉트 박스 / 사용자 선택 / 전체 , 조직원..... 
 		<div style="margin-left:10%">
 			<h2 style="display:inline-block">최근 주문이력조회</h2>
 			<div style="display:inline-block;align:right">
@@ -177,7 +258,7 @@ $(document).ready(function(){
   					<option value="전체" selected="selected">전체</option>
 				</select>
 			</div>
-			<div style="display:inline-block;align:right">
+			<div style="display:inline-block;align:right" >
 				<input type="text" name="사용자설정" placeholder="ex)yyyy-mm-dd" id="ctm_date"/>
 				<select name="자세한기간" id="secondSelect" onchange="categoryChange(this)">
 					<option selected="selected">세부기간선택</option>
@@ -185,271 +266,104 @@ $(document).ready(function(){
 			</div>
 		</div>
 		<div id="chart_div" style="margin-left:0"></div>
-		
-	<!-- Modal -->
-	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">제품문의 DB</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<form name="request" id="request">
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-3">
-								<label for="modal_seq">순번</label> <input type="text"
-									id="modal_seq" name="seq" class="form-control seq" readonly />
-							</div>
-							<div class="col-5">
-								<label for="modal_reg_date">신청일시</label> <input type="text"
-									id="modal_reg_date" name="reg_date"
-									class="form-control reg_date" readonly />
-							</div>
-							<div class="col-4">
-								<label for="modal_site">출처</label> <input type="text"
-									id="modal_site" name="site"
-									class="form-control site" readonly />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-6">
-								<label for="modal_cust_nm">고객명</label> <input type="text"
-									id="modal_cust_nm" name="cust_nm" class="form-control cust_nm"
-									readonly />
-							</div>
-							<div class="col-6">
-								<label for="modal_cust_nm">연락처</label> <input type="text"
-									id="modal_cust_tel" name="cust_tel"
-									class="form-control cust_tel" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-6">
-								<label for="modal_gender">성별</label> <input type="text"
-									id="modal_gender" name="gender" class="form-control gender" />
-							</div>
-							<div class="col-6">
-								<label for="modal_age">나이</label> <input type="text"
-									id="modal_age" name="age" class="form-control age" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<label for="modal_comment">문의내용</label>
-								<textarea id="modal_comment" name="comment"
-									class="form-control comment"></textarea>
-							</div>
-						</div>
-						<br/>
-						<div class="row">
-							<div class="col-6">
-								<label for="modal_manager">담당자</label> 
-								<select id="modal_manager" name="manager" class="form-control" onchange="setManagerName(this.value)"></select>
-								<input type="hidden" id="modal_manager_nm" name="manager_nm" class="manager_nm"/>
-							</div>
-							<div class="col-6">
-								<label for="modal_following_date">접촉일</label> <input type="text"
-									id="modal_following_date" name="following_date"
-									class="form-control following_date" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-6">
-								<label for="modal_order_cnt">주문수량</label> <input type="text"
-									id="modal_order_cnt" name="order_cnt"
-									class="form-control order_cnt" />
-							</div>
-							<div class="col-6">
-								<label for="modal_order_amount">금액</label> <input type="text"
-									id="modal_order_amount" name="order_amount"
-									class="form-control order_amount" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<label for="modal_addr">주소</label> <input type="text"
-									id="modal_addr" name="addr" class="form-control addr" />
-							</div>
-							<div class="col-12">
-								<label for="modal_memo">상담메모</label>
-								<textarea id="modal_memo" name="memo" class="form-control memo"></textarea>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<label for="modal_bank_account">계좌번호</label> <input type="text"
-									id="modal_bank_account" name="bank_account"
-									class="form-control bank_account" />
-							</div>
-							<div class="col-8">
-								<label for="modal_card_number">카드번호</label> <input type="text"
-									id="modal_card_number" name="card_number"
-									class="form-control card_number" />
-							</div>
-							<div class="col-4">
-								<label for="modal_expire_date">유효기간</label> <input type="text"
-									id="modal_expire_date" name="expire_date"
-									class="form-control expire_date" />
-							</div>
-						</div>
-					</div>
-				</form>
-				<div class="modal-footer">
-<!-- 					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">닫기</button> -->
-					<button type="button" class="btn btn-primary" id="saveBtn" onclick="saveDb();">저장</button>
-					<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteDb();">삭제</button>
-				</div>
-			</div>
-		</div>
-	</div>
+-->
 	
 	
 <script type= "text/javascript">
-$('#detailModal').on('shown.bs.modal', function(e) {
-	var id_obj = e.relatedTarget;
-	console.log("modal : ", id_obj);
-	var seq = $(id_obj).find(".seq").text();
-	var reg_date = $(id_obj).find(".reg_date").text();
-	var cust_nm = $(id_obj).find(".cust_nm").text();
-	var cust_tel = $(id_obj).find(".cust_tel").text();
-	var gender = $(id_obj).find(".gender").text();
-	var age = $(id_obj).find(".age").text();
-	var following_date = $(id_obj).find(".following_date").text();
-	var bank_account = $(id_obj).find(".bank_account").text();
-	var card_number = $(id_obj).find(".card_number").text();
-	var comment = $(id_obj).find(".comment").text();
-	var manager = $(id_obj).find(".manager").text();
-	var order_cnt = $(id_obj).find(".order_cnt").text();
-	var addr = $(id_obj).find(".addr").text();
-	var memo = $(id_obj).find(".memo").text();
-	var order_amount = $(id_obj).find(".order_amount").text();
-	var card_number = $(id_obj).find(".card_number").text();
-	var expire_date = $(id_obj).find(".expire_date").text();
-	var site = $(id_obj).find(".site").text();
-	$("#modal_seq").val(seq);
-	$("#modal_reg_date").val(reg_date);
-	$("#modal_cust_nm").val(cust_nm);
-	$("#modal_cust_tel").val(cust_tel);
-	$("#modal_gender").val(gender);
-	$("#modal_age").val(age);
-	$("#modal_following_date").val(following_date);
-	$("#modal_bank_account").val(bank_account);
-	$("#modal_card_number").val(card_number);
-	$("#modal_comment").val(comment);
-	$("#modal_manager").val(manager);
-	$("#modal_order_cnt").val(order_cnt);
-	$("#modal_order_cnt").val(order_cnt);
-	$("#modal_addr").val(addr);
-	$("#modal_memo").val(memo);
-	$("#modal_addr").val(addr);
-	$("#modal_order_amount").val(order_amount);
-	$("#modal_card_number").val(card_number);
-	$("#modal_expire_date").val(expire_date);
-
-	$("#modal_site").val(site);
-
-});
 
 function optSelect(e){
-	var month = ["1월", "2월", "3월", "4월" , "5월" , "6월" , "7월" , "8월" , "9월" , "10월" , "11월" , "12월"];
-	var year = ["2020년", "2021년"];
+
 	var target = document.getElementById("secondSelect");
 
-	if(e.value == "1개월"){
-		$("#secondSelect").show();
-		$("#ctm_date").hide();
-		var d = month;
-	}else if(e.value == "1년"){
-		$("#secondSelect").show();
-		$("#ctm_date").hide();
-		var d = year;
-	}else if(e.value == "사용자지정"){ 
-		$("#secondSelect").hide();
-		$("#ctm_date").show();
+	if(e.value == "이번달"){
+		$("#detail_date").hide();
+	}else if(e.value == "올해"){
+		$("#detail_date").hide();
+	}else if(e.value == "직접입력"){ 
+		$("#detail_date").show();
 	}else if(e.value == "전체"){
-		$("#secondSelect").hide();
-		$("#ctm_date").hide();
-		drawChart();
+		$("#detail_date").hide();
 	}
-	target.options.length = 0;
 
-	for (x in d) {
-		var opt = document.createElement("option");
-		opt.value = d[x];
-		opt.innerHTML = d[x];
-		target.appendChild(opt);
-	}	
 }
 
-function categoryChange(e) {
+function change_Date(){
+	this_data = null;
+	var first_value = $("#firstSelect").val();
+	var srh_sta_date = $("#srh_sta_date").val();
+	var srh_end_date = $("#srh_end_date").val();
 	cnt_list = null;
-	var thisVal = e.value;
-	var termParam;
-	var month = ["1월", "2월", "3월", "4월" , "5월" , "6월" , "7월" , "8월" , "9월" , "10월" , "11월" , "12월"];
-	var year = ["2020년", "2021년"];
-	if(thisVal = "1월") termParam = "01"
-	else if(thisVal = "2월") termParam = "02"
-	else if(thisVal = "3월") termParam = "03"
-	else if(thisVal = "4월") termParam = "04"
-	else if(thisVal = "5월") termParam = "05"
-	else if(thisVal = "6월") termParam = "06"
-	else if(thisVal = "7월") termParam = "07"
-	else if(thisVal = "8월") termParam = "08"
-	else if(thisVal = "9월") termParam = "09"
-	else if(thisVal = "10월") termParam = "10"
-	else if(thisVal = "11월") termParam = "11"
-	else if(thisVal = "12월") termParam = "12"
-	else if(thisVal = "2020년") termParam = "13"					
-	else if(thisVal = "2021년") termParam = "14"
-	
-	$.post("selectOrderCnt", {"termParam" : termParam}, function(data) {
-
-	}).done(function() {
-		cnt_list=[[${cnt_list}]];
-		drawChart();
-	}).fail(function() {
-		alert("조회를 실패했습니다.\n다시 시도하세요.");
-	});
-	
-}
-
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
-
-function drawChart(){
-	$("#chart_div").empty();
-	var dbObj = [{"user_id" : manager}, {"grade" : grade}];
-	//data 입력
-	var dataArray = new Array();
-	dataArray.push(['날짜','건수']);
-	for(var i=0; i<cnt_list.length; i++){
-		dataArray.push([cnt_list[i].term,parseInt(cnt_list[i].cnt_sum)]);
+    amt_list = null;
+    call_list = null;
+	if(first_value == "직접입력" && (srh_sta_date == null || srh_sta_date == "" || srh_end_date == null || srh_end_date == "")){
+		alert("세부정보를 입력해주세요");
+		return;
 	}
-		
-	var data = new google.visualization.arrayToDataTable(dataArray);
-		
-	//속성 입력
-	var options = {
-		title : '',
-		curveType : 'function',
-		legend : {position : 'bottom'},
-		vAxis: {
-            viewWindow: {
-                min: 0
-            }
-        }
-	};
-		
-	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-	chart.draw(data, options);	
+	let today = new Date();
+	if(first_value == "이번달"){
+		var this_year = today.getFullYear().toString();
+		srh_sta_date = this_year+"01"+"01";
+		srh_end_date = "9999-12-31";
+	}else if(first_value == "올해"){
+		var this_month = (today.getMonth()+1).toString();
+		if(this_month<10){
+			this_month = "0"+this_month;
+		}
+		var this_year = today.getFullYear().toString();
+		srh_sta_date = this_year+this_month+"01";
+		srh_end_date = "9999-12-31";
+	}
 	
-	$("#ctm_date").hide();
+	var dbObj = {};
+	if(srh_sta_date != "" && srh_end_date != ""){
+		console.log("srh_sta_date : ", srh_sta_date);
+		srh_sta_date = srh_sta_date.replace(/[\-\.]/g, "");
+		srh_end_date = srh_end_date.replace(/[\-\.]/g, "");
+	}
+	dbObj["srh_sta_date"] = srh_sta_date;
+	dbObj["srh_end_date"] =  srh_end_date;
+	dbObj["first_value"] =  first_value;
+	$.post("/admin/selectRankList", dbObj, function(data) {
+		console.log(data)
+	    this_data = data;
+	}).done(function() {
+		cnt_list = this_data.cnt_list;
+	    amt_list = this_data.amt_list;
+	    call_list = this_data.call_list;
+	    drawCntChart();
+		drawAmtChart();
+		drawCallChart();
+		createTb()
+	});
 }
+
+function createTb(){
+	$("#cnt_table").empty();
+	$("#amt_table").empty();
+	$("#call_table").empty();
+	var cnt_html = null;
+	var amt_html = null;
+	var call_html = null;
+	var cnt_length = cnt_list.length;
+	var amt_length = amt_list.length;
+	var call_length = call_list.length;
+	var min = Math.min(cnt_length, amt_length, call_length);
+	for(var i=0;i<min; i++){
+		if(i == 0){
+			cnt_html = "<tr><td>"+(i+1)+"</td><td>"+cnt_list[i].manager+"</td><td>"+cnt_list[i].order_cnt+"</td></tr>";
+			amt_html = "<tr><td>"+(i+1)+"</td><td>"+amt_list[i].manager+"</td><td>"+amt_list[i].order_amount+"</td></tr>";
+			call_html = "<tr><td>"+(i+1)+"</td><td>"+call_list[i].manager+"</td><td>"+call_list[i].call_cnt+"</td></tr>";
+		}else{
+			cnt_html += "<tr><td>"+(i+1)+"</td><td>"+cnt_list[i].manager+"</td><td>"+cnt_list[i].order_cnt+"</td></tr>";
+			amt_html += "<tr><td>"+(i+1)+"</td><td>"+amt_list[i].manager+"</td><td>"+amt_list[i].order_amount+"</td></tr>";
+			call_html += "<tr><td>"+(i+1)+"</td><td>"+call_list[i].manager+"</td><td>"+call_list[i].call_cnt+"</td></tr>";
+		}
+	};
+	$("#cnt_table").prepend(cnt_html);
+	$("#amt_table").prepend(amt_html);
+	$("#call_table").prepend(call_html);
+	
+}
+
 </script>
 </body>

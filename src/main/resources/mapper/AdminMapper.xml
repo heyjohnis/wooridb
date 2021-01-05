@@ -45,13 +45,12 @@
 				ELSE ''
 		 END 	AS gd_cd
 		,CASE 
-				WHEN gd_buyType = '01' THEN '상담신청' 
-				WHEN gd_buyType = '02' THEN '구매결정'
-				WHEN gd_buyType = '03' THEN '구매취소'
-				WHEN gd_buyType = '04' THEN '결제완료'
-				WHEN gd_buyType = '05' THEN '반품'
-				WHEN gd_buyType = '06' THEN '기타'
-				ELSE ''
+				WHEN gd_buyType = '01' THEN '접수' 
+				WHEN gd_buyType = '02' THEN '부재'
+				WHEN gd_buyType = '03' THEN '보류'
+				WHEN gd_buyType = '04' THEN '구매완료'
+				WHEN gd_buyType = '05' THEN '재구매'
+				ELSE '접수'
 		 END	AS gd_buyType
 		,(SELECT ((SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04')) AS '재고'
 		  FROM dual) AS cnt_sum
@@ -90,18 +89,10 @@
 				
 				)
 			</if>
-			<if test="adminYn == 1">
-				AND manager = #{manager}
-				
-			</if>
 		</where>
 		<if test="page_size > 0 and adminYn == 0">
 		ORDER BY seq DESC
 		LIMIT ${page_size} OFFSET ${page_scope}
-		</if>
-		<if test="adminYn == 1">
-		ORDER BY seq DESC
-		LIMIT 5
 		</if>
 	</select>
 	
@@ -188,67 +179,92 @@
 	
 	<select id="selectCntRank"
 		parameterType="com.iiiset.fm.model.DbVO"
-		resultType="java.lang.Integer">
-	SELECT 
-    		RANK() OVER (ORDER BY (SELECT 
-    										SUM(order_cnt) AS order_cnt 
-    							   FROM 	db_data b
-    							   WHERE 	b.manager = a.manager
-    							   AND 	    b.manager IS NOT NULL
-    							   AND 		b.gd_buyType IN ("04","05")  ) desc) AS cnt_rank 
-		  , nvl(a.manager,'') 													 AS manager
-		  , (SELECT SUM(order_cnt) AS order_cnt 
-    		 FROM   db_data b
-    		 WHERE  b.manager = a.manager
-    		 AND    b.manager IS NOT NULL
-    		 AND 	b.gd_buyType IN ("04","05")) 						 		 AS order_cnt
-	FROM    db_data a 
- 	WHERE   a.manager IS NOT NULL
-	GROUP BY a.manager
-	ORDER BY cnt_rank ASC
+		resultType="com.iiiset.fm.model.DbVO">
+	SELECT  a.* 
+    FROM    (SELECT 
+						(SELECT user_nm FROM user c WHERE c.user_id = a.manager) 			 AS manager
+			  		  , (SELECT SUM(order_cnt) AS order_cnt 
+			 			 FROM   db_data b
+			 			 <where>
+			 			 		b.manager = a.manager
+			 			 AND 	b.gd_buyType IN ("04","05")
+			 			 
+							<if test="first_value != null and first_value != '' and first_value != '전체'">
+			 				AND    b.manager IS NOT NULL
+							</if>
+							<if test="srh_sta_date != null and srh_sta_date != ''">
+			 				AND	   b.reg_date > STR_TO_DATE(#{srh_sta_date}, '%Y%m%d')
+			 				</if>
+			 				<if test="srh_end_date != null and srh_end_date != ''">
+			 				AND    b.reg_date &lt; STR_TO_DATE(#{srh_end_date}, '%Y%m%d')
+			 				</if>
+ 						</where>) 						 		 AS order_cnt
+			 
+			 FROM        db_data a
+			 WHERE 		 a.manager IS NOT NULL
+             GROUP BY a.manager
+             ORDER BY order_cnt DESC) a
+    
+
 	</select>
 	
 	<select id="selectAmtRank"
 		parameterType="com.iiiset.fm.model.DbVO"
-		resultType="java.lang.Integer">
-	SELECT 
-    		RANK() OVER (ORDER BY (SELECT 
-    										SUM(order_amount) AS order_amount 
-    							   FROM 	db_data b
-    							   WHERE 	b.manager = a.manager
-    							   AND 	    b.manager IS NOT NULL
-    							   AND 		b.gd_buyType IN ("04","05")) desc) AS amt_rank 
-		  , a.manager 													 	   AS manager
-		  , (SELECT SUM(order_amount) AS order_amount
-    		 FROM   db_data b
-    		 WHERE  b.manager = a.manager
-    		 AND    b.manager IS NOT NULL
-    		 AND 	b.gd_buyType IN ("04","05")) 						   	   AS order_amount
-	FROM    db_data a 
- 	WHERE   a.manager IS NOT NULL
-	GROUP BY a.manager
-	ORDER BY amt_rank ASC
+		resultType="com.iiiset.fm.model.DbVO">
+	SELECT  a.* 
+    FROM    (SELECT 
+						(SELECT user_nm FROM user c WHERE c.user_id = a.manager) 			 AS manager
+			  		  , (SELECT SUM(order_amount) AS order_amount
+			 			 FROM   db_data b
+			 			 <where>
+			 			 	    b.manager = a.manager
+			 			 AND 	b.gd_buyType IN ("04","05")
+			 			 
+							<if test="first_value != null and first_value != '' and first_value != '전체'">
+			 				AND    b.manager IS NOT NULL
+							</if>
+							<if test="srh_sta_date != null and srh_sta_date != ''">
+			 				AND	   a.reg_date > STR_TO_DATE(#{srh_sta_date}, '%Y%m%d')
+			 				</if>
+			 				<if test="srh_end_date != null and srh_end_date != ''">
+			 				AND    a.reg_date &lt; STR_TO_DATE(#{srh_end_date}, '%Y%m%d')
+			 				</if>
+ 						</where>) 						 		 AS order_amount
+			 FROM        db_data a
+			 WHERE 		 a.manager IS NOT NULL
+             GROUP BY a.manager
+             ORDER BY order_amount DESC) a
+    
 	
 	</select>
 	
 	<select id="selectCallRank"
 		parameterType="com.iiiset.fm.model.DbVO"
-		resultType="java.lang.Integer">
-	SELECT 
-    		RANK() OVER (ORDER BY (SELECT 
-    										SUM(call_cnt) AS call_cnt 
-    							   FROM 	db_data b
-    							   WHERE 	b.manager = a.manager
-    							   AND 	    b.manager IS NOT NULL) desc) AS call_rank 
-		  , a.manager 													 AS manager
-		  , (SELECT SUM(call_cnt) AS call_cnt 
-    		 FROM   db_data b
-    		 WHERE  b.manager = a.manager
-    		 AND    b.manager IS NOT NULL) 								 AS call_cnt
-	FROM    db_data a 
- 	WHERE   a.manager IS NOT NULL
-	GROUP BY a.manager
-	ORDER BY call_rank ASC
+		resultType="com.iiiset.fm.model.DbVO">
+	SELECT  a.* 
+    FROM    (SELECT 
+						(SELECT user_nm FROM user c WHERE c.user_id = a.manager) 			 AS manager
+			  		  , (SELECT SUM(call_cnt) AS call_cnt 
+			 			 FROM   db_data b
+			 			 <where>  
+			 			 		b.manager = a.manager
+			 			 AND 	b.gd_buyType IN ("04","05")
+			 			 
+							<if test="first_value != null and first_value != '' and first_value != '전체'">
+			 				AND    b.manager IS NOT NULL
+							</if>
+							<if test="srh_sta_date != null and srh_sta_date != ''">
+			 				AND	   a.reg_date > STR_TO_DATE(#{srh_sta_date}, '%Y%m%d')
+			 				</if>
+			 				<if test="srh_end_date != null and srh_end_date != ''">
+			 				AND    a.reg_date &lt; STR_TO_DATE(#{srh_end_date}, '%Y%m%d')
+			 				</if>
+ 						</where>) 						 		 AS call_cnt
+			 FROM        db_data a
+			 WHERE 		 a.manager IS NOT NULL
+             GROUP BY a.manager
+             ORDER BY call_cnt DESC) a
+    
 	</select>
 	
 	<select id="countDb" parameterType="com.iiiset.fm.model.DbVO"
