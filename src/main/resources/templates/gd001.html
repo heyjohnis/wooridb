@@ -8,18 +8,33 @@
 <link href="/jslib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/css/style.css" rel="stylesheet" />
 <script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
-
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
 	integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
 	crossorigin="anonymous"></script>
+
+<!-- Global site tag (gtag.js) - Google Ads: 451853656 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-451853656"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-451853656');
+</script>
+
+<!-- Event snippet for 상담신청 conversion page -->
+<script>
+  gtag('event', 'conversion', {'send_to': 'AW-451853656/AmFnCP2EvO8BENj6utcB'});
+</script>
+
 
 <link href="/jslib/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" />
 <link rel="stylesheet" href="/css/style.css" />
 <script type="text/javascript" src="/jslib/jquery/jquery.min.js"></script>
 <style>
-body{font-size:16px;}
+body{height:0; font-size:16px;}
 .container{width:100%; padding:0; max-width:1200px;}
 .input_request{padding:10px;}
 .form-consult{width:100%;}
@@ -28,6 +43,9 @@ body{font-size:16px;}
 .bg_part1{background:#cdb8ea;}
 .bg_part2{background:#5376bc;}
 .bg_part3{background:#e5cdae;}
+.bg_part4{background:#5376bc;}
+
+.bg_part4 p{padding:10px; color:rgba(255,255,255,0.7);}
 
 .wform .input-text, .wform .btn_consult, .wform .check_privacy_policy, .wform label {position:absolute;}
 .input-text{left:20%; width:32% !important; padding:0 !important; font-size:1.8em; border:0px !important;}
@@ -62,6 +80,8 @@ body{font-size:16px;}
 label{z-index:1004;}
 .check_privacy_policy{z-index:1005;}
 
+.br{display:none;}
+
 @media screen and (min-width: 1650px) {
 }
 
@@ -88,6 +108,7 @@ label{z-index:1004;}
 
 @media (max-width:700px)  {
 	body{font-size:10px;}
+	.br{display:block;}
 }
 
 @media (max-width:600px)  {
@@ -104,14 +125,14 @@ label{z-index:1004;}
 	
 	#form1{position:fixed; bottom:0;}
 	#form2{display:none;}
-	.bg_part3{padding-bottom:150px}
+	.bg_part4{padding-bottom:150px}
 	
 }
 
 @media (max-width:550px)  {
 	body{font-size:7px;}
 	.wform1 label{right:8%; }
-	.bg_part3{padding-bottom:140px}
+	.bg_part4{padding-bottom:140px}
 	
 }
 
@@ -127,14 +148,14 @@ label{z-index:1004;}
 		transform: scale(0.8);
 	}
 	.wform1 label{right:5%; font-size:1.5em }
-	.bg_part3{padding-bottom:125px}
+	.bg_part4{padding-bottom:125px}
 	
 	
 }
 @media (max-width:360px)  {
 	body{font-size:5px;}
 	.wform1 label{right:5%; }
-	.bg_part3{padding-bottom:120px}
+	.bg_part4{padding-bottom:120px}
 }
 @media (max-width:320px)  {
 	.bg_part3{padding-bottom:100px}
@@ -205,9 +226,18 @@ label{z-index:1004;}
 				<img width="100%" src="/images/topsfit/form.jpg" />
 			</div>
 		</form>
+
 	</div>
 </div>	
-	
+<div class="bg_part4">
+	<div class="container">
+		<div >
+		<p>상호 : (주)태광바이오  | 대표이사 : 김오동 | 주소 : 서울특별시 영등포구 선유로 49길 23 선유도역 아이에스비즈타워2차 505호<br/>
+		사업자등록번호 : 515-88-00214 | 통신판매업 : 제2016-서울영등포-0007호 | <br class="br" />건강기능식품업 판매번호 : 제2015-0086923호 |<br/>
+		E-mail : tkbio2@daum.net | TEL : 1833-8244 | FAX : 02-2065-0347</p>
+		</div>
+	</div>
+</div>
 	
 <!-- Modal -->
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
@@ -318,7 +348,7 @@ function sendDb(db){
 	db.gd_cd = [[${gd_cd}]];
 
 
-	$.post("/insertDb", db, function(data){
+	$.post("/insertDb", db, function(data){d
 		alert("신청이 완료되었습니다");
 		$("#cust_nm").val("");
 		$("#cust_tel").val("");
