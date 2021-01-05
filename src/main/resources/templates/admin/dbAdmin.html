@@ -210,9 +210,9 @@ $(document).ready(function(){
 			<table class="table table-hover table-condensed">
 				<thead class="thead-light">
 					<tr>
-						<th scope="col">순위</th>
-						<th scope="col">사원명</th>
-						<th scope="col">판매건수</th>
+						<th scope="col" style="width:20%;text-align:center">순위</th>
+						<th scope="col" style="width:35%;text-align:center">사원명</th>
+						<th scope="col" style="width:55%;text-align:center">판매건수</th>
 					</tr>
 				</thead>
 				<tbody id="cnt_table">
@@ -224,9 +224,9 @@ $(document).ready(function(){
 			<table class="table table-hover table-condensed">
 				<thead class="thead-light">
 					<tr>
-						<th scope="col">순위</th>
-						<th scope="col">사원명</th>
-						<th scope="col">판매금액(원)</th>
+						<th scope="col" style="width:20%;text-align:center">순위</th>
+						<th scope="col" style="width:35%;text-align:center">사원명</th>
+						<th scope="col" style="width:55%;text-align:center">판매금액(원)</th>
 					</tr>
 				</thead>
 				<tbody id="amt_table">
@@ -238,9 +238,9 @@ $(document).ready(function(){
 			<table class="table table-hover table-condensed">
 				<thead class="thead-light">
 					<tr>
-						<th scope="col">순위</th>
-						<th scope="col">사원명</th>
-						<th scope="col">콜건수</th>
+						<th scope="col" style="width:20%;text-align:center">순위</th>
+						<th scope="col" style="width:35%;text-align:center">사원명</th>
+						<th scope="col" style="width:55%;text-align:center">콜건수</th>
 					</tr>
 				</thead>
 				<tbody id="call_table">
@@ -339,7 +339,11 @@ function change_Date(){
 		createTb()
 	});
 }
-
+function addComma(num) {
+	  var regexp = /\B(?=(\d{3})+(?!\d))/g;
+	  return num.toString().replace(regexp, ',');
+}
+	
 function createTb(){
 	$("#cnt_table").empty();
 	$("#amt_table").empty();
@@ -353,13 +357,13 @@ function createTb(){
 	var min = Math.min(cnt_length, amt_length, call_length);
 	for(var i=0;i<min; i++){
 		if(i == 0){
-			cnt_html = "<tr><td>"+(i+1)+"</td><td>"+cnt_list[i].manager+"</td><td>"+cnt_list[i].order_cnt+"</td></tr>";
-			amt_html = "<tr><td>"+(i+1)+"</td><td>"+amt_list[i].manager+"</td><td>"+amt_list[i].order_amount+"</td></tr>";
-			call_html = "<tr><td>"+(i+1)+"</td><td>"+call_list[i].manager+"</td><td>"+call_list[i].call_cnt+"</td></tr>";
+			cnt_html = "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+cnt_list[i].manager+"</td><td style='text-align:center;width:55%'>"+cnt_list[i].order_cnt+"</td></tr>";
+			amt_html = "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+amt_list[i].manager+"</td><td style='text-align:right;width:55%'>"+addComma(amt_list[i].order_amount)+"</td></tr>";
+			call_html = "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+call_list[i].manager+"</td><td style='text-align:center;width:55%'>"+call_list[i].call_cnt+"</td></tr>";
 		}else{
-			cnt_html += "<tr><td>"+(i+1)+"</td><td>"+cnt_list[i].manager+"</td><td>"+cnt_list[i].order_cnt+"</td></tr>";
-			amt_html += "<tr><td>"+(i+1)+"</td><td>"+amt_list[i].manager+"</td><td>"+amt_list[i].order_amount+"</td></tr>";
-			call_html += "<tr><td>"+(i+1)+"</td><td>"+call_list[i].manager+"</td><td>"+call_list[i].call_cnt+"</td></tr>";
+			cnt_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+cnt_list[i].manager+"</td><td style='text-align:center;width:55%'>"+cnt_list[i].order_cnt+"</td></tr>";
+			amt_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+amt_list[i].manager+"</td><td style='text-align:right;width:55%'>"+addComma(amt_list[i].order_amount)+"</td></tr>";
+			call_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+call_list[i].manager+"</td><td style='text-align:center;width:55%'>"+call_list[i].call_cnt+"</td></tr>";
 		}
 	};
 	$("#cnt_table").prepend(cnt_html);

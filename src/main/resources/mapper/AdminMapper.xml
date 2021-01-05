@@ -55,6 +55,7 @@
 		,(SELECT ((SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04')) AS '재고'
 		  FROM dual) AS cnt_sum
 		,nvl(call_succRate,"0") AS call_succRate
+		,nvl(call_cnt,"0") AS call_cnt
 		FROM db_data
 		<where>
 			<if test = "adminYn == 0">
@@ -137,8 +138,18 @@
 	
 	<select id="selectMember" parameterType="com.iiiset.fm.model.UserVO"
 		resultType="com.iiiset.fm.model.UserVO">
-		SELECT * FROM user
-		WHERE team_cd = #{team_cd}
+		SELECT seq,
+			   user_nm,
+			   user_tel,
+			   CASE
+					WHEN grade = '01' THEN '팀원'
+					WHEN grade = '05' THEN '팀장'
+					WHEN grade = '10' THEN '관리자'
+					WHEN grade = '11' THEN 'DB업체'
+					WHEN grade = '99' THEN '슈퍼바이저'
+		  	   END AS grade
+		FROM   user
+		WHERE  team_cd = #{team_cd}
 		ORDER BY seq DESC
 	</select>
 	
@@ -148,7 +159,7 @@
 			    , ((SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04'))  AS cnt_sum
 			    , gdnm 
 		FROM	  goods
-		ORDER BY  gdcd DESC
+		ORDER BY  gdcd ASC
 	</select>
 	
 	<select id="selectGoodsDt" parameterType="com.iiiset.fm.model.GoodsVO"

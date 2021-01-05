@@ -25,13 +25,19 @@
 <script th:inline="javascript">
     var user_list = [[${user_list}]];
     var grade = [[${grade}]];
-    var manager = [[${user_id}]];
+    var manager = [[${user_nm}]];
     var user_id = [[${user_id}]];
+    var gd_list = [[${gd_list}]];
+    var gd_nm_list = new Array();
+    for(var i=0;i<gd_list.length;i++){
+    	gd_nm_list.push(gd_list[i].gdnm);
+    }
 </script>
 
 <script th:inline="javascript">
 $(document).ready(function(){
 	createSelectOption(user_list, "modal_manager", "user_id", "user_nm");
+	createSelectOption(gd_list, "modal_gd_cd", "gdcd", "gdnm");
 	if(grade == "10" || grade == "99"){
 		$("#user").show();
 		$("#team").show();
@@ -48,7 +54,7 @@ $(document).ready(function(){
 	$("#team").removeClass('active');
 	$("#user").removeClass('active');
 	$("#dbAdmin").removeClass('active');
-	$("#this_name").text(user_id+"님");
+	$("#this_name").text(manager+"님");
 });
 $("#cnt_sum").change(function(){
 	
@@ -115,6 +121,7 @@ $("#cnt_sum").change(function(){
 					<th scope="col" >제품명</th>
 					<th scope="col" >구매상태</th>
 					<th scope="col" >콜성공률</th>
+					<th scope="col" >콜성공수</th>
 				</tr>
 			</thead>
 			<tbody class="">
@@ -143,6 +150,7 @@ $("#cnt_sum").change(function(){
 					<td class="gd_cd " th:text="${db.getGd_cd()}">제품명</td>
 					<td class="gd_buyType " th:text="${db.getGd_buyType()}">구매상태</td>
 					<td class="call_succRate " th:text="${db.getCall_succRate()}">콜성공률</td>
+					<td class="call_cnt" th:text="${db.getCall_cnt()}">콜성공수</td>
 				</tr>
 			</tbody>
 		</table>
@@ -270,20 +278,25 @@ $("#cnt_sum").change(function(){
 						</div>
 						<div class="row mt-2">
 							<div class="col-4">
-								<label for="modal_gd_cd">제품명</label> <input type="text"
-									id="modal_gd_cd" name="gd_cd"
-									class="form-control gd_cd" />
+								<label for="modal_gd_cd">제품명</label>
+								<select id="modal_gd_cd" name="gd_cd" class="form-control" onchange="setGd_cd(this.value)"></select>
+								<input type="hidden" id="modal_gd_cd" name="gd_cd" class="gd_cd"/>
 							</div>
 							<div class="col-4">
 								<label for="modal_gd_buyType">구매상태</label> <input type="text"
 									id="modal_gd_buyType" name="gd_buyType"
 									class="form-control gd_buyType" />
 							</div>
-							<div class="col-4">
+							<div class="col-2">
 								<label for="modal_call_succRate">콜성공률</label> <input type="text"
 									id="modal_call_succRate" name="call_succRate"
 									class="form-control call_succRate" />
 							</div>
+							<div class="col-2">
+								<label for="modal_call_cnt">콜성공건</label> <input type="text"
+									id="modal_call_cnt" name="call_cnt"
+									class="form-control call_cnt" />
+							</div>							
 						</div>
 					</div>
 				</form>
@@ -361,10 +374,11 @@ $("#cnt_sum").change(function(){
 			var card_number = $(id_obj).find(".card_number").text();
 			var expire_date = $(id_obj).find(".expire_date").text();
 			var site = $(id_obj).find(".site").text();
-			var gd_cd = $(id_obj).find(".gdcd").text();
+			var gd_cd = $(id_obj).find(".gd_cd").text();
 			var gd_buyType = $(id_obj).find(".gd_buyType").text();
 			var cnt_sum = $(id_obj).find(".cnt_sum").text();
 			var call_succRate = $(id_obj).find(".call_succRate").text();
+			var call_cnt = $(id_obj).find(".call_cnt").text();
 			$("#modal_seq").val(seq);
 			$("#modal_reg_date").val(reg_date);
 			$("#modal_cust_nm").val(cust_nm);
@@ -387,7 +401,7 @@ $("#cnt_sum").change(function(){
 			$("#modal_gd_buyType").val(gd_buyType);
 			$("#modal_cnt_sum").val(cnt_sum);
 			$("#modal_call_succRate").val(call_succRate);
-			
+			$("#modal_call_cnt").val(call_cnt);
 			$("#modal_site").val(site);
 
 		});
@@ -448,6 +462,17 @@ $("#cnt_sum").change(function(){
 			});
 		}
 		
+		function setGd_cd(id){
+			console.log("id : ", id);
+			$.each(gd_list, function(idx, item){
+	
+				console.log(" gdnm : ", item.gdnm);
+				if(item.user_id == id){
+					console.log(" id : ", id, item.gdnm);
+					$("#modal_gd_cd").val(item.gdnm);
+				}
+			});
+		}
 		function excelDown(){
 	
 			var srh_sta_date = $("#srh_sta_date").val();

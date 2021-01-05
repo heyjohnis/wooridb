@@ -58,7 +58,7 @@ public class AdminController {
 		} else {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
 			String grade = userVO.getGrade();
-			String manager = userVO.getUser_id();
+			String manager = userVO.getUser_nm();
 			vo.setManager(manager);
 			List<DbVO> cnt_list = service.selectCntRank(vo);
 			List<DbVO> amt_list = service.selectAmtRank(vo);
@@ -84,7 +84,7 @@ public class AdminController {
 			mv.setViewName("admin/login");
 		} else {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
-			String this_manager = userVO.getUser_id();
+			String this_manager = userVO.getUser_nm();
 			List<UserVO> list = service.selectUserDb(vo);
 			List<TeamVO> team_list = service.selectTeamDb(new TeamVO());
 
@@ -116,7 +116,7 @@ public class AdminController {
 			mv.setViewName("admin/login");
 		} else {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
-			String manager = userVO.getUser_id();
+			String manager = userVO.getUser_nm();
 			List<TeamVO> list = service.selectTeamDb(vo);
 			List<UserVO> member_list = service.selectUserDb(userVO);
 			mv.addObject("list", list);
@@ -139,7 +139,7 @@ public class AdminController {
 			mv.setViewName("admin/login");
 		} else {
 			UserVO userVO = (UserVO)session.getAttribute("USER");
-			String manager = userVO.getUser_id();
+			String manager = userVO.getUser_nm();
 			List<GoodsVO> list = service.selectGoods(vo);
 			mv.addObject("user_id", manager);
 			mv.addObject("list", list);
@@ -190,29 +190,32 @@ public class AdminController {
 			
 			UserVO userVO = (UserVO)session.getAttribute("USER");
 			String user_id = userVO.getUser_id();
+			String user_nm = userVO.getUser_nm();
 			String grade = userVO.getGrade();
 			String team_cd = userVO.getTeam_cd();
 			int page = vo.getPage();
 			int page_size = 10;
 			int page_scope = (page - 1) * page_size;
 			vo.setAdminYn(0);
-			vo.setManager(user_id);
+			vo.setManager(user_nm);
 			vo.setGrade(grade);
 			vo.setTeam_cd(team_cd);
 			vo.setPage_size(page_size);
 			vo.setPage_scope(page_scope);
 			List<UserVO> user_list = service.selectUserDb(new UserVO());
 			List<DbVO> list = service.selectDb(vo);
-
+			List<GoodsVO> gd_list=service.selectGoods(new GoodsVO());
 			int total_cnt = service.countDb(vo);
 
 			double total_page_cnt = Math.ceil(total_cnt / (double) page_size);
 			
+			mv.addObject("user_nm", user_nm);
 			mv.addObject("user_id", user_id);
 			mv.addObject("grade", grade);
 			mv.addObject("team_cd", team_cd);
 			mv.addObject("user_list", user_list);
 			mv.addObject("list", list);
+			mv.addObject("gd_list", gd_list);
 			mv.addObject("search", vo);
 			mv.addObject("total_pages", total_page_cnt);
 			mv.addObject("start_page", page);
@@ -239,10 +242,10 @@ public class AdminController {
 	public @ResponseBody List<DbVO> selectOrderCnt(HttpServletRequest request, @ModelAttribute DbVO vo) throws Exception {
 		HttpSession session = request.getSession();
 		UserVO userVO = (UserVO)session.getAttribute("USER");
-		String user_id = userVO.getUser_id();
+		String user_nm = userVO.getUser_nm();
 		String grade = userVO.getGrade();
 		String team_cd = userVO.getTeam_cd();
-		vo.setManager(user_id);
+		vo.setManager(user_nm);
 		vo.setGrade(grade);
 		vo.setTeam_cd(team_cd);
 		List<DbVO> cnt_list = service.selectOrderCnt(vo);
