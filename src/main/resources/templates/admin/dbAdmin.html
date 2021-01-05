@@ -164,47 +164,50 @@ $(document).ready(function(){
 
 <body>
 	<body th:replace="admin/header :: mainHead"> </body>
-	<div style="margin-left:5%"><br/><h3>업적순위</h3></div>
-		<div style="margin-left:5%">
-			<span style="align:right">
-				<select name="기간" id="firstSelect" onchange="optSelect(this)">
+	<div class="container">
+		<h3 class="mt-3">업적현황</h3>
+  		<div class="row mt-3">
+			<div class="col-2">
+				<select class="form-control" name="기간" id="firstSelect" onchange="optSelect(this)" aria-label=".form-select-lg example">
 					<option value="전체" selected="selected">전체</option>
   					<option value="이번달" >이번달</option>
   					<option value="올해" >올해</option>
   					<option value="직접입력">직접입력</option>
 				</select>
-			</span>
-			<span class="row mt-3 mb-3" id="detail_date" style="margin-right:0px" >
-					<div class="col-3 input-group">
+			</div>
+			<div class="col-7" id="detail_date">
+				<div class="row">
+					<div class="col-6 input-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-sm">시작일</span>
 						</div>
 						<input type="date" id="srh_sta_date" class="form-control srh_sta_date"  placeholder="YYYYMMDD">
 					</div>
-					<div class="col-3 input-group">
+					<div class="col-6 input-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-sm">종료일</span>
 						</div>
 						<input type="date" id="srh_end_date" class="form-control srh_end_date" placeholder="YYYYMMDD">
 					</div>
-			</span>
-			<span class="col-3 text-right" style="margin-left:0px;">
+				</div>
+			</div>
+			<div class="col-3" >
 					<div class="btn-group mw-100" role="group" aria-label="Basic example">
 						<button type="button" class="btn btn-primary pr-4 pl-4" onclick="change_Date()">조회</button>
 					</div>
-			</span>
+			</div>
 		</div>
 	<br/>
-	<div style="margin-left:5%; width:90%">
-		<div id="chart_Cnt_div" style="display:inline-block;width:33%"></div>
-		<div id="chart_Amount_div" style="display:inline-block;width:33%"></div>
-		<div id="chart_Call_div" style="display:inline-block;width:33%"></div>
+	<div class="row">
+		<div id="chart_Cnt_div" class="col-4"></div>
+		<div id="chart_Amount_div" class="col-4"></div>
+		<div id="chart_Call_div" class="col-4"></div>
 	</div>
 	<br/>
-	<div style="margin-left:5%; width:90%;">
-		<span style="width:33%; display:inline-block; ">
-			<span class="center">판매건수순위</span>
-			<table class="table table-hover table-condensed "  style="margin-left:auto; margin-right:auto">
+	<div class="row">
+		<div class="col-4">
+			<span class="center">판매 건수 순위</span>
+			<table class="table table-hover table-condensed">
 				<thead class="thead-light">
 					<tr>
 						<th scope="col">순위</th>
@@ -215,10 +218,10 @@ $(document).ready(function(){
 				<tbody id="cnt_table">
 				</tbody>
 			</table>
-		</span>
-		<span style="width:33%; display:inline-block">
-			<span class="center">판매금액순위</span>
-			<table class="table table-hover table-condensed "  style="margin-left:auto; margin-right:auto">
+		</div>
+		<div class="col-4">
+			<span class="center">판매 금액 순위</span>
+			<table class="table table-hover table-condensed">
 				<thead class="thead-light">
 					<tr>
 						<th scope="col">순위</th>
@@ -229,10 +232,10 @@ $(document).ready(function(){
 				<tbody id="amt_table">
 				</tbody>
 			</table>
-		</span>
-		<span style="width:33%; display:inline-block">
-			<span class="center">콜성공순위</span>
-			<table class="table table-hover table-condensed "  style="margin-left:auto; margin-right:auto">
+		</div>
+		<div class="col-4">
+			<span class="center">콜 성공 순위</span>
+			<table class="table table-hover table-condensed">
 				<thead class="thead-light">
 					<tr>
 						<th scope="col">순위</th>
@@ -243,7 +246,7 @@ $(document).ready(function(){
 				<tbody id="call_table">
 				</tbody>
 			</table>
-		</span>
+		</div>
 	</div>
 <br/>
 
@@ -267,7 +270,7 @@ $(document).ready(function(){
 		</div>
 		<div id="chart_div" style="margin-left:0"></div>
 -->
-	
+	</div>
 	
 <script type= "text/javascript">
 

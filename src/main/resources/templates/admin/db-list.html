@@ -93,7 +93,7 @@ $("#cnt_sum").change(function(){
 			<div class="col-12 mb-1" style="text-align:right;"><a id="excel_down" onclick="excelDown();"><button type="button" class="btn btn-secondary">엑셀다운로드</button></a></div>
 		</div>
 		<table class="table table-hover">
-			<thead>
+			<thead class="thead-light">
 				<tr>
 					<th scope="col" class="print">등록번호</th>
 					<th scope="col">접수일자</th>
@@ -166,34 +166,36 @@ $("#cnt_sum").change(function(){
 				</div>
 				<form name="request" id="request">
 					<div class="modal-body">
-						<div class="row">
+						<div class="row mt-2">
 							<div class="col-2">
 								<label for="modal_seq">순번</label> <input type="text"
 									id="modal_seq" name="seq" class="form-control seq" readonly />
 							</div>
-							<div class="col-3">
+							<div class="col-2"></div>
+							
+							<div class="col-4">
 								<label for="modal_reg_date">신청일시</label> <input type="text"
 									id="modal_reg_date" name="reg_date"
 									class="form-control reg_date" readonly />
 							</div>
-							<div class="col-2">
+							<div class="col-4">
 								<label for="modal_site">출처</label> <input type="text"
 									id="modal_site" name="site"
 									class="form-control site" readonly />
 							</div>
-							<div class="col-2">
+						</div>
+						<div class="row mt-2">
+							<div class="col-4">
 								<label for="modal_cust_nm">고객명</label> <input type="text"
 									id="modal_cust_nm" name="cust_nm" class="form-control cust_nm"
 									readonly />
 							</div>
-							<div class="col-3">
+							<div class="col-4">
 								<label for="modal_cust_nm">연락처</label> <input type="text"
 									id="modal_cust_tel" name="cust_tel"
 									class="form-control cust_tel" />
 							</div>
-						</div>
-						<br/>
-						<div class="row">
+
 							<div class="col-2">
 								<label for="modal_gender">성별</label> <input type="text"
 									id="modal_gender" name="gender" class="form-control gender" />
@@ -202,20 +204,27 @@ $("#cnt_sum").change(function(){
 								<label for="modal_age">나이</label> <input type="text"
 									id="modal_age" name="age" class="form-control age" />
 							</div>
-							<div class="col-8">
+						</div>
+						<div class="row mt-2">
+							<div class="col-12">
+								<label for="modal_addr">주소</label> <input type="text"
+									id="modal_addr" name="addr" class="form-control addr" />
+							</div>
+						</div>
+						<div class="row mt-2">
+							<div class="col-12">
 								<label for="modal_comment">문의내용</label>
 								<textarea id="modal_comment" name="comment"
 									class="form-control comment"></textarea>
 							</div>
 						</div>
-						<br/>
-						<div class="row">
-							<div class="col-2">
+						<div class="row mt-2">
+							<div class="col-3">
 								<label for="modal_manager">담당자</label> 
 								<select id="modal_manager" name="manager" class="form-control" onchange="setManagerName(this.value)"></select>
 								<input type="hidden" id="modal_manager_nm" name="manager_nm" class="manager_nm"/>
 							</div>
-							<div class="col-4">
+							<div class="col-3">
 								<label for="modal_following_date">접촉일</label> <input type="text"
 									id="modal_following_date" name="following_date"
 									class="form-control following_date" />
@@ -236,20 +245,14 @@ $("#cnt_sum").change(function(){
 									class="form-control order_amount" />
 							</div>
 						</div>
-						<br/>
-						<div class="row">
-							<div class="col-6">
-								<label for="modal_addr">주소</label> <input type="text"
-									id="modal_addr" name="addr" class="form-control addr" />
-							</div>
-							<div class="col-6">
+						<div class="row mt-2">
+							<div class="col-12">
 								<label for="modal_memo">상담메모</label>
 								<textarea id="modal_memo" name="memo" class="form-control memo"></textarea>
 							</div>
 						</div>
-						<br/>
-						<div class="row">
-							<div class="col-6">
+						<div class="row mt-2">
+							<div class="col-4">
 								<label for="modal_bank_account">계좌번호</label> <input type="text"
 									id="modal_bank_account" name="bank_account"
 									class="form-control bank_account" />
@@ -259,25 +262,24 @@ $("#cnt_sum").change(function(){
 									id="modal_card_number" name="card_number"
 									class="form-control card_number" />
 							</div>
-							<div class="col-2">
+							<div class="col-4">
 								<label for="modal_expire_date">유효기간</label> <input type="text"
 									id="modal_expire_date" name="expire_date"
 									class="form-control expire_date" />
 							</div>
 						</div>
-						<br/>
-						<div class="row">
-							<div class="col-3">
+						<div class="row mt-2">
+							<div class="col-4">
 								<label for="modal_gd_cd">제품명</label> <input type="text"
 									id="modal_gd_cd" name="gd_cd"
 									class="form-control gd_cd" />
 							</div>
-							<div class="col-3">
+							<div class="col-4">
 								<label for="modal_gd_buyType">구매상태</label> <input type="text"
 									id="modal_gd_buyType" name="gd_buyType"
 									class="form-control gd_buyType" />
 							</div>
-							<div class="col-6">
+							<div class="col-4">
 								<label for="modal_call_succRate">콜성공률</label> <input type="text"
 									id="modal_call_succRate" name="call_succRate"
 									class="form-control call_succRate" />
