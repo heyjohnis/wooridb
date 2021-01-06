@@ -348,7 +348,7 @@ function sendDb(db){
 	db.gd_cd = [[${gd_cd}]];
 
 
-	$.post("/insertDb", db, function(data){d
+	$.post("/insertDb", db, function(data){
 		alert("신청이 완료되었습니다");
 		$("#cust_nm").val("");
 		$("#cust_tel").val("");

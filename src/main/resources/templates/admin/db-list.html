@@ -162,7 +162,7 @@ $("#cnt_sum").change(function(){
 
 	<!-- Modal -->
 	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true" style="width:1200px">
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -280,7 +280,7 @@ $("#cnt_sum").change(function(){
 							<div class="col-4">
 								<label for="modal_gd_cd">제품명</label>
 								<select id="modal_gd_cd" name="gd_cd" class="form-control" onchange="setGd_cd(this.value)"></select>
-								<input type="hidden" id="modal_gd_cd" name="gd_cd" class="gd_cd"/>
+								<input type="hidden" id="modal_gdcd" name="gd_cd" class="gd_cd"/>
 							</div>
 							<div class="col-4">
 								<label for="modal_gd_buyType">구매상태</label> <input type="text"
@@ -398,6 +398,7 @@ $("#cnt_sum").change(function(){
 			$("#modal_card_number").val(card_number);
 			$("#modal_expire_date").val(expire_date);
 			$("#modal_gd_cd").val(gd_cd);
+			$("#modal_gdcd").val(gd_cd);
 			$("#modal_gd_buyType").val(gd_buyType);
 			$("#modal_cnt_sum").val(cnt_sum);
 			$("#modal_call_succRate").val(call_succRate);
