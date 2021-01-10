@@ -4,15 +4,59 @@
 
 <mapper namespace="com.iiiset.fm.dao.AdminDao">
 
-
-
 	<insert id="insertDb" parameterType="com.iiiset.fm.model.DbVO">
 		INSERT INTO db_data
 		(cust_nm,cust_tel,comment,site,gd_cd, reg_date,mod_date)
 		VALUES
 		(#{cust_nm},#{cust_tel},#{comment},#{site},#{gd_cd},now(),now())
 	</insert>
-
+	
+	<insert id="insertDb_list" parameterType="com.iiiset.fm.model.DbVO">
+	INSERT INTO db_data(
+		 cust_tel
+		,comment
+		,gender
+		,site
+		,age
+		,memo
+		,addr
+		,order_cnt
+		,order_amount
+		,order_date
+		,bank_account
+		,card_number
+		,expire_date
+		,manager
+		,following_date
+		,reg_date
+		,mod_date
+		,gd_cd
+		,call_succRate
+		,call_cnt
+		)
+		VALUES(
+		 #{cust_tel}
+		,#{comment}
+		,#{gender}
+		,#{site}
+		,#{age}
+		,#{memo}
+		,#{addr}
+		,#{order_cnt}
+		,#{order_amount}
+		,#{order_date}
+		,#{bank_account}
+		,#{card_number}
+		,#{expire_date}
+		,#{manager}
+		,#{following_date}
+		,now()
+		,now()
+		,#{gd_cd}
+		,#{call_succRate}
+		,#{call_cnt}
+		)
+	</insert>
 	<delete id="deleteDb" parameterType="com.iiiset.fm.model.DbVO">
 		DELETE FROM db_data 
 		WHERE cust_nm = #{cust_nm}
@@ -58,10 +102,10 @@
 		,nvl(call_cnt,"0") AS call_cnt
 		FROM db_data
 		<where>
-			<if test = "adminYn == 0">
+			<if test = "adminYn == ''">
 				<choose>
 					<when test="grade == '01'">
-						AND manager = #{manager}
+						AND manager = (select user_id from user where user_nm=#{manager})
 					</when>
 					<when test="grade == '05'">
 						AND manager IN (SELECT user_nm FROM user WHERE team_cd = ${team_cd})
@@ -318,8 +362,11 @@
 			 ,expire_date = #{expire_date}
 			 ,manager = #{manager}
 			 ,following_date = #{following_date}
+			 ,gd_cd = '001'
 			 <!-- ,gd_cd = CASE #{gd_cd} = '탑스핏' THEN '001' ELSE gd_cd END -->
 			 ,mod_date = now()
+			 ,call_succRate = #{call_succRate}
+			 ,call_cnt = #{call_cnt}
 		WHERE seq = #{seq}
 	</update>
 	

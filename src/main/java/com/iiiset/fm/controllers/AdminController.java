@@ -280,7 +280,16 @@ public class AdminController {
 
 		return result;
 	}
+	
+	@RequestMapping(value = "/admin/insertDb")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int insertDb(@ModelAttribute DbVO vo) throws Exception {
 
+		int result = service.insertDb_list(vo);
+
+		return result;
+	}
+	
 	@RequestMapping(value = "/admin/updateDb")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int updateDb(@ModelAttribute DbVO vo) throws Exception {

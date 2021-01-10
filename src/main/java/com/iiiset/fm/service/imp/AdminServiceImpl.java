@@ -35,6 +35,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	public int insertDb_list(DbVO vo) {
+		return dao.insertDb_list(vo);
+	}
+	
+	@Override
 	public List<DbVO> selectDb(DbVO vo) {
 		return dao.selectDb(vo);
 	}
@@ -194,55 +199,31 @@ public class AdminServiceImpl implements AdminService {
 			cell.setCellStyle(headerCellStyle);
 			
 			cell = row.createCell(5);
-			cell.setCellValue("문의사항");
-			cell.setCellStyle(headerCellStyle);
-			
-			cell = row.createCell(6);
 			cell.setCellValue("담당자");
 			cell.setCellStyle(headerCellStyle);
 			
+			cell = row.createCell(6);
+			cell.setCellValue("주문수량");
+			cell.setCellStyle(headerCellStyle);
+			
 			cell = row.createCell(7);
-			cell.setCellValue("성별");
-			cell.setCellStyle(headerCellStyle);
-			
-			cell = row.createCell(8);
-			cell.setCellValue("나이");
-			cell.setCellStyle(headerCellStyle);
-			
-			cell = row.createCell(9);
-			cell.setCellValue("상담내용");
-			cell.setCellStyle(headerCellStyle);
-			
-			cell = row.createCell(10);
-			cell.setCellValue("주소");
-			cell.setCellStyle(headerCellStyle);
-			
-			cell = row.createCell(11);
-			cell.setCellValue("수량");
-			cell.setCellStyle(headerCellStyle);
-			
-			cell = row.createCell(12);
 			cell.setCellValue("금액");
 			cell.setCellStyle(headerCellStyle);
 			
-			cell = row.createCell(13);
-			cell.setCellValue("주문일자");
+			cell = row.createCell(8);
+			cell.setCellValue("제품명");
 			cell.setCellStyle(headerCellStyle);
 			
-			cell = row.createCell(14);
-			cell.setCellValue("무통장");
+			cell = row.createCell(9);
+			cell.setCellValue("구매상태");
 			cell.setCellStyle(headerCellStyle);
 			
-			cell = row.createCell(15);
-			cell.setCellValue("카드번호");
-			cell.setCellStyle(headerCellStyle);
-
-			cell = row.createCell(16);
-			cell.setCellValue("유효기간");
+			cell = row.createCell(10);
+			cell.setCellValue("콜성공률");
 			cell.setCellStyle(headerCellStyle);
 			
-			cell = row.createCell(17);
-			cell.setCellValue("주문유도일자");
+			cell = row.createCell(11);
+			cell.setCellValue("콜성공수");
 			cell.setCellStyle(headerCellStyle);
 			
 			// Creating data rows for each customer
@@ -253,24 +234,18 @@ public class AdminServiceImpl implements AdminService {
 				dataRow.createCell(2).setCellValue(list.get(i).getSite());
 				dataRow.createCell(3).setCellValue(list.get(i).getCust_nm());
 				dataRow.createCell(4).setCellValue(list.get(i).getCust_tel());
-				dataRow.createCell(5).setCellValue(list.get(i).getComment());
-				dataRow.createCell(6).setCellValue(list.get(i).getManager());
-				dataRow.createCell(7).setCellValue(list.get(i).getGender());
-				dataRow.createCell(8).setCellValue(list.get(i).getAge());
-				dataRow.createCell(9).setCellValue(list.get(i).getMemo());
-				dataRow.createCell(10).setCellValue(list.get(i).getAddr());
-				dataRow.createCell(11).setCellValue(list.get(i).getOrder_cnt());
-				dataRow.createCell(12).setCellValue(list.get(i).getOrder_amount());
-				dataRow.createCell(13).setCellValue(list.get(i).getOrder_date());
-				dataRow.createCell(14).setCellValue(list.get(i).getBank_account());
-				dataRow.createCell(15).setCellValue(list.get(i).getCard_number());
-				dataRow.createCell(16).setCellValue(list.get(i).getExpire_date());
-				dataRow.createCell(17).setCellValue(list.get(i).getFollowing_date());
+				dataRow.createCell(5).setCellValue(list.get(i).getManager());
+				dataRow.createCell(6).setCellValue(list.get(i).getOrder_cnt());
+				dataRow.createCell(7).setCellValue(list.get(i).getOrder_amount());
+				dataRow.createCell(8).setCellValue(list.get(i).getGd_cd());
+				dataRow.createCell(9).setCellValue(list.get(i).getGd_buyType());
+				dataRow.createCell(10).setCellValue(list.get(i).getCall_succRate());
+				dataRow.createCell(11).setCellValue(list.get(i).getCall_cnt());
 			}
 
 			// Making size of column auto resize to fit with data
 			
-			for (int i = 0; i < 18; i++) 
+			for (int i = 0; i < 12; i++) 
 				sheet.autoSizeColumn(i);
 
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

@@ -9,6 +9,8 @@ import com.iiiset.fm.model.TeamVO;
 public interface AdminDao {
 
 	int insertDb(DbVO vo);
+	
+	int insertDb_list(DbVO vo);
 
 	List<DbVO> selectDb(DbVO vo);
 

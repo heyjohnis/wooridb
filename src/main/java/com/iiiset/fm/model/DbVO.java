@@ -44,6 +44,7 @@ public class DbVO {
 	String gd_nm = "";
 	String gd_cd = "";				//상품코드
 	String gd_buyType="";			//판매유형 01.접수 02.부재 03.보류 04.구매완료 05.재구매 
+	String gd_buy_Type="";
 	String cnt_sum = "";					//총주문수량
 	int inp_cnt=0;					//재고수량
 	String call_succRate ="";		//콜백성공률

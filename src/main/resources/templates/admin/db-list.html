@@ -32,12 +32,22 @@
     for(var i=0;i<gd_list.length;i++){
     	gd_nm_list.push(gd_list[i].gdnm);
     }
+    var buyType_list = [
+    	{buyType_cd : "01", buyType_nm : "접수"},
+    	{buyType_cd : "02", buyType_nm : "부재"},
+    	{buyType_cd : "03", buyType_nm : "보류"},
+    	{buyType_cd : "04", buyType_nm : "구매완료"},
+    	{buyType_cd : "05", buyType_nm : "재구매"}
+    ];
+    
+    var result = null;
 </script>
 
 <script th:inline="javascript">
 $(document).ready(function(){
 	createSelectOption(user_list, "modal_manager", "user_id", "user_nm");
-	createSelectOption(gd_list, "modal_gd_cd", "gdcd", "gdnm");
+	createSelectOption(gd_list, "modal_gdcd", "gdcd", "gdnm");
+	createSelectOption(buyType_list, "modal_gd_buyType", "buyType_cd", "buyType_nm");
 	if(grade == "10" || grade == "99"){
 		$("#user").show();
 		$("#team").show();
@@ -55,10 +65,15 @@ $(document).ready(function(){
 	$("#user").removeClass('active');
 	$("#dbAdmin").removeClass('active');
 	$("#this_name").text(manager+"님");
-});
-$("#cnt_sum").change(function(){
 	
-})
+	result = get_query();
+	if(result.srh_sta_date != null || result.srh_sta_date != ""){
+		
+	}
+	result.srh_end_date
+	
+});
+
 </script>
 
 </head>
@@ -162,7 +177,7 @@ $("#cnt_sum").change(function(){
 
 	<!-- Modal -->
 	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true" style="width:1200px">
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -279,13 +294,13 @@ $("#cnt_sum").change(function(){
 						<div class="row mt-2">
 							<div class="col-4">
 								<label for="modal_gd_cd">제품명</label>
-								<select id="modal_gd_cd" name="gd_cd" class="form-control" onchange="setGd_cd(this.value)"></select>
-								<input type="hidden" id="modal_gd_cd" name="gd_cd" class="gd_cd"/>
+								<select id="modal_gdcd" name="gd_cd" class="form-control" onchange="setGd_cd(this.value)"></select>
+								<input type="hidden" id="modal_gdcd" name="gd_cd" class="gd_cd"/>
 							</div>
 							<div class="col-4">
-								<label for="modal_gd_buyType">구매상태</label> <input type="text"
-									id="modal_gd_buyType" name="gd_buyType"
-									class="form-control gd_buyType" />
+								<label for="modal_gd_buyType">구매상태</label> 
+								<select id="modal_gd_buyType" name="gd_buyType" class="form-control" onchange="setGd_buyType(this.value)"></select>
+								<input type="hidden" id="modal_gd_buy_Type" name="gd_buyType" class="gd_buyType"/>
 							</div>
 							<div class="col-2">
 								<label for="modal_call_succRate">콜성공률</label> <input type="text"
@@ -296,13 +311,15 @@ $("#cnt_sum").change(function(){
 								<label for="modal_call_cnt">콜성공건</label> <input type="text"
 									id="modal_call_cnt" name="call_cnt"
 									class="form-control call_cnt" />
-							</div>							
+							</div>	
+							<input type="hidden" id="modal_rebuy_Yn" name="rebuy_Yn" class="rebuy_Yn"/>						
 						</div>
 					</div>
 				</form>
 				<div class="modal-footer">
 <!-- 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">닫기</button> -->
+					<button type="button" class="btn btn-primary" id="rebuyBtn" onclick="reBuy();">재구매</button>
 					<button type="button" class="btn btn-primary" id="saveBtn" onclick="saveDb();">저장</button>
 					<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteDb();">삭제</button>
 				</div>
@@ -375,7 +392,20 @@ $("#cnt_sum").change(function(){
 			var expire_date = $(id_obj).find(".expire_date").text();
 			var site = $(id_obj).find(".site").text();
 			var gd_cd = $(id_obj).find(".gd_cd").text();
+			if(gd_cd = "탑스핏") gd_cd = "001";
 			var gd_buyType = $(id_obj).find(".gd_buyType").text();
+			 //판매유형 01.접수 02.부재 03.보류 04.구매완료 05.재구매
+			if(gd_buyType == "접수"){ 
+				gd_buyType="01";
+			}else if(gd_buyType == "부재"){ 
+				gd_buyType="02";
+			}else if(gd_buyType == "보류"){ 
+				gd_buyType="03";
+			}else if(gd_buyType == "구매완료"){
+				gd_buyType="04";
+			}else if(gd_buyType == "재구매"){
+				gd_buyType="05";
+			}
 			var cnt_sum = $(id_obj).find(".cnt_sum").text();
 			var call_succRate = $(id_obj).find(".call_succRate").text();
 			var call_cnt = $(id_obj).find(".call_cnt").text();
@@ -397,33 +427,66 @@ $("#cnt_sum").change(function(){
 			$("#modal_order_amount").val(order_amount);
 			$("#modal_card_number").val(card_number);
 			$("#modal_expire_date").val(expire_date);
-			$("#modal_gd_cd").val(gd_cd);
+			$("#modal_gdcd").val(gd_cd);
+			$("#modal_gdcd").val(gd_cd);
 			$("#modal_gd_buyType").val(gd_buyType);
+			$("#modal_gd_buy_Type").text(gd_buyType);
 			$("#modal_cnt_sum").val(cnt_sum);
 			$("#modal_call_succRate").val(call_succRate);
 			$("#modal_call_cnt").val(call_cnt);
 			$("#modal_site").val(site);
-
+			$("#id").val("1");
+			$("#modal_rebuy_Yn").val("");
+			
 		});
 
+		function reBuy() {
+			$("#modal_order_cnt").val("");
+			$("#modal_order_amount").val("");
+			$("#saveBtn").text("신규추가");
+			$("#modal_rebuy_Yn").val("1");
+			$("#rebuyBtn").hide();
+		}
+		
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
-			
-			$.post("/admin/updateDb", dbObj, function(data) {
-				if (data == "1" || data == 1) {
-					alert("저장되었습니다.");
-				}
+			console.log("dbObj:",dbObj);
+			dbObj.gd_buyType=$("#modal_gd_buy_Type");
+			dbObj.gd_cd = $("#modal_gdcd").val();
+			var rebuy_Yn = $("#modal_rebuy_Yn").val();
+			if(rebuy_Yn == "1"){
+				$.post("/admin/insertDb", dbObj, function(data) {
+					if (data == "1" || data == 1) {
+						alert("저장되었습니다.");
+					}
 
-			}).done(function() {
-				console.log("dbObj : ", dbObj);
-				var id = "#db_" + dbObj.seq;
-				$.each(dbObj, function(key, value) {
-					$(id + " ." + key).text(value);
+				}).done(function() {
+					console.log("dbObj : ", dbObj);
+					var id = "#db_" + dbObj.seq;
+					$.each(dbObj, function(key, value) {
+						$(id + " ." + key).text(value);
+					});
+
+				}).fail(function() {
+					alert("저장이 실패되었습니다.\n다시 시도하세요.");
 				});
+			}else{
+				$.post("/admin/updateDb", dbObj, function(data) {
+					if (data == "1" || data == 1) {
+						alert("저장되었습니다.");
+					}
 
-			}).fail(function() {
-				alert("저장이 실패되었습니다.\n다시 시도하세요.");
-			});
+				}).done(function() {
+					console.log("dbObj : ", dbObj);
+					var id = "#db_" + dbObj.seq;
+					$.each(dbObj, function(key, value) {
+						$(id + " ." + key).text(value);
+					});
+
+				}).fail(function() {
+					alert("저장이 실패되었습니다.\n다시 시도하세요.");
+				});
+			}
 		}
 		
 		function deleteDb(){
@@ -463,13 +526,19 @@ $("#cnt_sum").change(function(){
 		}
 		
 		function setGd_cd(id){
-			console.log("id : ", id);
+			console.log("gd_cd_id : ", id);
 			$.each(gd_list, function(idx, item){
-	
-				console.log(" gdnm : ", item.gdnm);
 				if(item.user_id == id){
-					console.log(" id : ", id, item.gdnm);
-					$("#modal_gd_cd").val(item.gdnm);
+					$("#modal_gd_cd").val(item.gdcd);
+				}
+			});
+		}
+		
+		function setGd_buyType(id){
+			console.log("gd_buyType_id : ", id);
+			$.each(buyType_list, function(idx, item){
+				if(item.user_id == id){
+					$("#modal_gd_buy_Type").val(id);
 				}
 			});
 		}
@@ -517,6 +586,17 @@ $("#cnt_sum").change(function(){
 				alert("오류발생. 조회실패");
 			});
 		}
+		
+		function get_query(){
+		    var url = document.location.href;
+		    var qs = url.substring(url.indexOf('?') + 1).split('&');
+		    for(var i = 0, result = {}; i < qs.length; i++){
+		        qs[i] = qs[i].split('=');
+		        result[qs[i][0]] = decodeURIComponent(qs[i][1]);
+		    }
+		    return result;
+		}
+
 	</script>
 </body>
 </html>
