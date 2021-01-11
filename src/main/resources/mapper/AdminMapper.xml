@@ -13,7 +13,8 @@
 	
 	<insert id="insertDb_list" parameterType="com.iiiset.fm.model.DbVO">
 	INSERT INTO db_data(
-		 cust_tel
+		 cust_nm
+		,cust_tel
 		,comment
 		,gender
 		,site
@@ -35,7 +36,8 @@
 		,call_cnt
 		)
 		VALUES(
-		 #{cust_tel}
+		 #{cust_nm}
+		,#{cust_tel}
 		,#{comment}
 		,#{gender}
 		,#{site}
