@@ -74,7 +74,7 @@ $(document).ready(function(){
 	if(end_date != null || end_date != ""){
 		$("#srh_end_date").val(dateFormat(end_date))
 	}
-	
+	$("#modal_gd_buyType").prop("disabled",false);
 });
 
 function dateFormat(num){
@@ -399,7 +399,7 @@ function checkdate(input) {
 				<div class="modal-footer">
 <!-- 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">닫기</button> -->
-					<button type="button" class="btn btn-primary" id="rebuyBtn" onclick="reBuy();">재구매</button>
+					<button type="button" class="btn btn-primary mr-auto" id="rebuyBtn" onclick="reBuy();">재구매</button>
 					<button type="button" class="btn btn-primary" id="saveBtn" onclick="saveDb();">저장</button>
 					<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteDb();">삭제</button>
 				</div>
@@ -488,6 +488,7 @@ function checkdate(input) {
 				gd_buyType="04";
 			}else if(gd_buyType == "재구매"){
 				gd_buyType="05";
+				$("#modal_gd_buyType").prop("disabled",true);
 			}
 			var cnt_sum = $(id_obj).find(".cnt_sum").text();
 			var call_succRate = $(id_obj).find(".call_succRate").text();
