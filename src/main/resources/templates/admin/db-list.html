@@ -530,6 +530,8 @@ function checkdate(input) {
 			$("#saveBtn").text("신규추가");
 			$("#modal_rebuy_Yn").val("1");
 			$("#rebuyBtn").hide();
+			$("#modal_gd_buyType option[value=05]").prop("selected",true);
+			$("#modal_gd_buyType").prop("disabled",true);
 		}
 		
 		function saveDb() {
@@ -542,7 +544,7 @@ function checkdate(input) {
 				$.post("/admin/insertDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {
 						alert("저장되었습니다.");
-						window.location.reload()
+						window.location.reload();
 					}
 
 			
@@ -551,6 +553,7 @@ function checkdate(input) {
 				$.post("/admin/updateDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {
 						alert("저장되었습니다.");
+						window.location.reload();
 					}
 
 				}).done(function() {
