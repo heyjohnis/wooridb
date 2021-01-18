@@ -23,10 +23,6 @@
   gtag('config', 'AW-451853656');
 </script>
 
-<!-- Event snippet for 상담신청 conversion page -->
-<script>
-  gtag('event', 'conversion', {'send_to': 'AW-451853656/AmFnCP2EvO8BENj6utcB'});
-</script>
 
 <!-- Facebook Pixel Code -->
 <script>
@@ -329,7 +325,6 @@ label{z-index:1004;}
 		</div>
 	</div>
 </div>
-
 	
 </body>
 
@@ -380,10 +375,12 @@ function sendDb(db){
 
 	$.post("/insertDb", db, function(data){
 		alert("신청이 완료되었습니다");
-		$("#cust_nm").val("");
-		$("#cust_tel").val("");
-		$("#comment").val("");
-
+		$(".cust_nm").val("");
+		$(".cust_tel").val("");
+		$(".comment").val("");
+		$.post("/checkLog", function(){
+			console.log("Check Log");
+		});
 	}).fail(function(){
 		alert("실패");
 	});
