@@ -69,8 +69,9 @@ $(document).ready(function(){
 					<td class="seq text-center" th:text="${db.getSeq()}">등록번호</td>
 					<td class="user_id" th:text="${db.getUser_id()}">아이디</td>
 					<td class="user_nm" th:text="${db.getUser_nm()}">이름</td>
-					<td class="grade"  th:text="${db.getGrade_nm()}">등급</td>
+					<td class="grade_nm"  th:text="${db.getGrade_nm()}">등급</td>
 					<td class="team_nm" th:text="${db.getTeam_nm()}">소속</td>
+					<input type="hidden" th:value="${db.getPassword()}" class="password"/>
 					<input type="hidden" th:value="${db.getGrade()}" class="grade"/>
 					<input type="hidden" th:value="${db.getTeam_cd()}" class="team_cd"/>
 				</tr>
@@ -122,7 +123,7 @@ $(document).ready(function(){
 							</div>
 							
 							<div class="col-4">
-								<label for="modal_password">패스워드</label> <input type="text"
+								<label for="modal_password">패스워드</label> <input type="password"
 									id="modal_password" name="password"
 									class="form-control password" readonly />
 							</div>
@@ -150,12 +151,6 @@ $(document).ready(function(){
 		});
 
 		$(document).ready(function(){
-			let grade = $("#userTb tr .grade");
-			console.log("grade : ", grade);
-			/*grade.each((i, v) => {
-				
-				v.text(GRADE[v.text()]);
-			});*/
 		});
 
 		$('#detailModal').on('shown.bs.modal', function(e) {
@@ -166,11 +161,12 @@ $(document).ready(function(){
 			var user_id = $(id_obj).find(".user_id").text();
 			var grade = $(id_obj).find(".grade").val();
 			var team_nm = $(id_obj).find(".team_cd").val();
-			var password = $(id_obj).find(".password").text();
+			var password = $(id_obj).find(".password").val();
 			var tb_length = $("#userTb tr").length;
 			if(newYn == "1"){
 				seq = tb_length;
 			}
+			console.log("grade:",grade);
 			$("#modal_team_nm").val(team_nm);
 			$("#modal_grade").val(grade);
 			$("#modal_seq").val(seq);
@@ -179,7 +175,7 @@ $(document).ready(function(){
 			if(newYn == "1"){
 				$("#modal_password").val("");
 				
-			}else{$("#modal_password").val("********");}
+			}else{$("#modal_password").val(password);}
 			$("#modal_user_nm").attr("readonly", false);
 			$("#modal_password").attr("readonly", false);
 			$("#modal_grade").attr("readonly", false);
@@ -200,16 +196,18 @@ $(document).ready(function(){
 		}
 		
 		function saveDb() {
-			if($("#modal_password").val() == "********"){
-				$("#modal_password").val('');
-			};
 			var dbObj = $("#request").serializeObject();
 			var newYn = $("#newYn").val();
+			var this_password = $("#modal_password").val();
+			if(this_password == "" || this_password == null){
+				alert("비밀번호를 입력해주세요");
+				return;
+			}
 			if(newYn == "0"){
 				$.post("/admin/updateUserDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {
 						alert("저장되었습니다.");
-						location.reload();
+						window.location.reload();
 						
 					}
 				}).done(function() {
@@ -227,7 +225,7 @@ $(document).ready(function(){
 				$.post("/admin/insertUserDb", dbObj, function(data) {
 					if (data == "1" || data == 1) {
 						alert("저장되었습니다.");
-						location.reload();
+						window.location.reload();
 					}
 				}).done(function() {
 					console.log("dbObj : ", dbObj);
