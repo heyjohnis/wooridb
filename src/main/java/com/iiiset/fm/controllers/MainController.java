@@ -37,5 +37,14 @@ public class MainController {
 		mv.addObject("gd_cd", "001");
 		return mv;
 	}
+
+	@RequestMapping(value = "/checkLog")
+	public @ResponseBody ModelAndView checkLog()  throws Exception{
+		
+		ModelAndView mv = new ModelAndView();
+
+		mv.setViewName("checkLog");
+		return mv;
+	}
 	
 }
