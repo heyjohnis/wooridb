@@ -98,8 +98,8 @@
 				WHEN gd_buyType = '05' THEN '재구매'
 				ELSE '접수'
 		 END	AS gd_buyType
-		,(SELECT ((SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04')) AS '재고'
-		  FROM dual) AS cnt_sum
+		,nvl((SELECT ((SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - nvl((SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04'),0)) AS '재고'
+		  FROM dual),0) AS cnt_sum
 		,nvl(call_succRate,"0") AS call_succRate
 		,nvl(call_cnt,"0") AS call_cnt
 		FROM db_data
@@ -228,9 +228,9 @@
 	<select id="selectCnt"
 		parameterType="com.iiiset.fm.model.DbVO"
 		resultType="java.lang.Integer">
-		SELECT ((SELECT (
-							(SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - (SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04'))
-				 FROM DUAL) - #{order_cnt}) AS cnt_sum
+		SELECT nvl(((SELECT (
+							(SELECT sum(inp_cnt) FROM goods_dt WHERE gdcd='001') - nvl((SELECT sum(order_cnt) FROM db_data WHERE gd_cd='001' AND gd_buyType='04'),0))
+				 FROM DUAL) - #{order_cnt}),0) AS cnt_sum
 		FROM   DUAL
 	</select>
 	
