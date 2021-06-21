@@ -99,7 +99,7 @@ $(document).ready(function(){
 	
 	
 	
-		<!-- Modal -->
+	<!-- Modal -->
 	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -116,8 +116,8 @@ $(document).ready(function(){
 						<div class="row">
 							<div class="col-3" style="display:block">
 								<label for="modal_gdcd">상품명</label> 
-								<select id="modal_gdnm" name="gdnm" class="form-control gdnm" onchange="setGdnm()">
-									<option value="킹포스">킹포스</option>
+								<select id="modal_gdcd" name="gdcd" class="form-control gdnm">
+									<option value="001">킹포스</option>
 								</select>
 							</div>
 							<!-- div class="col-5">
@@ -172,7 +172,7 @@ $(document).ready(function(){
 		$("#modal_gdcd").val(gdnm);
 		$("#modal_req_date").val(reg_date);
 		$("#modal_inp_cnt").val(inp_cnt);
-		$("#modal_gdcd").val("001");
+		$("#modal_gdcd").val();
 		$("#modal_seq").val(seq);
 		$("#modal_id").val(user_id);
 		$("#modal_gd_memo").val(gd_memo);
@@ -183,13 +183,14 @@ $(document).ready(function(){
 	});
 	$('#detailModal').on('hidden.bs.modal', function () {
 		  $("#newYn").val("");
-	})
+	});
 		function newYn(){
 			$("#newYn").val("1");	
 		};
 		
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
+			dbObj.gdcd = $('#modal_gdcd').val();
 			console.log("dbObj :", dbObj)
 			var newYn = $("#newYn").val();
 			if(newYn == "1"){

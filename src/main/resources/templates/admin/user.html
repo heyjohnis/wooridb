@@ -132,9 +132,9 @@ $(document).ready(function(){
 					</div>
 				</form>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 					<button type="button" class="btn btn-primary" onclick="saveDb();">저장</button>
+					<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteUser();">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -240,6 +240,24 @@ $(document).ready(function(){
 				
 			}
 			
+		}
+		
+		function deleteUser(){
+			var dbObj = $("#request").serializeObject();
+
+			$.post("/admin/deleteUser", dbObj, function(data) {
+					alert("삭제되었습니다.");
+					location.reload();	
+			}).done(function() {
+				console.log("dbObj : ", dbObj);
+				var id = "#db_" + dbObj.seq;
+				$.each(dbObj, function(key, value) {
+					$(id + " ." + key).text(value);
+				});
+
+			}).fail(function() {
+				alert("삭제가 실패되었습니다.\n다시 시도하세요.");
+			});
 		}
 		
 	</script>

@@ -64,5 +64,7 @@ public interface AdminDao {
 	
 	UserVO loginCheck(UserVO vo);
 
+	int deleteUser(UserVO vo);
+
 
 }
