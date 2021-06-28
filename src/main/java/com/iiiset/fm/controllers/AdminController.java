@@ -365,6 +365,15 @@ public class AdminController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/admin/deleteUser")
+	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
+	public @ResponseBody int deleteUser(@ModelAttribute UserVO vo) throws Exception {
+
+		int result = service.deleteUser(vo);
+
+		return result;
+	}
+	
 	@RequestMapping(value = "/admin/insertGoodsDb")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int regGoodsDb(HttpServletRequest request, @ModelAttribute GoodsVO vo) throws Exception {

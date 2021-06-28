@@ -67,4 +67,6 @@ public interface AdminService {
 
 	List<UserVO> selectMember(UserVO vo);
 
+	int deleteUser(UserVO vo);
+
 }

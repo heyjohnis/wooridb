@@ -310,4 +310,9 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 
+	@Override
+	public int deleteUser(UserVO vo) {
+		return dao.deleteUser(vo);
+	}
+
 }

@@ -83,6 +83,8 @@
 		,manager
 		,(SELECT user_nm FROM db_data A, user B WHERE A.manager = B.user_id AND A.seq = rlseq) AS manager_nm
 		,following_date
+		,bank_account
+		,card_number
 		,site
 		,reg_date
 		,mod_date
@@ -439,6 +441,12 @@
 		SELECT * FROM user WHERE user_id = #{user_id} AND
 		password = #{password}
 	</select>
+
+	<delete id="deleteUser" parameterType="com.iiiset.fm.model.UserVO">
+		DELETE FROM user
+		WHERE seq = #{seq}
+	</delete>
+
 
 
 </mapper>
