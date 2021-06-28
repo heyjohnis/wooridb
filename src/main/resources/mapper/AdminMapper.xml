@@ -363,6 +363,7 @@
 			 ,card_number = #{card_number}
 			 ,expire_date = #{expire_date}
 			 ,manager = #{manager}
+			 ,gd_buyType = #{gd_buyType}
 			 ,following_date = #{following_date}
 			 ,gd_cd = '001'
 			 <!-- ,gd_cd = CASE #{gd_cd} = '탑스핏' THEN '001' ELSE gd_cd END -->

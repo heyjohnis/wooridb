@@ -571,7 +571,9 @@ function checkdate(input) {
 		
 		function deleteDb(){
 			var dbObj = $("#request").serializeObject();
-
+			dbObj.gd_buyType=$("#modal_gd_buyType").val();
+			dbObj.gd_cd = $("#modal_gdcd").val();
+			
 			$.post("/admin/deleteDb", dbObj, function(data) {
 
 			}).done(function() {
