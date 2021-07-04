@@ -120,11 +120,6 @@ $(document).ready(function(){
 									<option value="001">킹포스</option>
 								</select>
 							</div>
-							<!-- div class="col-5">
-								<label for="modal_req_date">입고일</label> <input type="text"
-									id="modal_req_date" name="req_date"
-									class="form-control req_date"  />
-							</div> -->
 							<div class="col-5">
 								<label for="modal_inp_cnt">상품갯수</label> <input type="text"
 									id="modal_inp_cnt" name="inp_cnt"
@@ -162,14 +157,14 @@ $(document).ready(function(){
 	$('#detailModal').on('shown.bs.modal', function(e) {
 		var id_obj = e.relatedTarget;
 		console.log("modal : ", id_obj);
-		var gdnm = "탑스핏";
+		var gdcd = $(id_obj).find("#gdcd").text();
 		var reg_date = $(id_obj).find("#reg_date").text();
 		var inp_cnt = $(id_obj).find("#inp_cnt").text();
 		var seq = $(id_obj).find("#seq").text();
 		var gd_memo = $(id_obj).find("#gd_memo").text();
 		console.log("reg_date : ", reg_date);
 		console.log("inp_cnt : ", inp_cnt);
-		$("#modal_gdcd").val(gdnm);
+		$("#modal_gdcd").val(gdcd);
 		$("#modal_req_date").val(reg_date);
 		$("#modal_inp_cnt").val(inp_cnt);
 		$("#modal_gdcd").val();
@@ -225,6 +220,7 @@ $(document).ready(function(){
 		
 		function deleteDb(){
 			var dbObj = $("#request").serializeObject();
+			delete dbObj.gdcd;
 
 			$.post("/admin/deleteGoodsDb", dbObj, function(data) {
 					alert("삭제되었습니다.");
@@ -247,9 +243,11 @@ $(document).ready(function(){
 			$.post("/admin/goodsDt", {"gdcd" : gdcd}, function(data) {
 				list = data;
 			}).done(function() {
+				console.log(list);
 				var strhtml = null;
 				for(var i=0; i<list.length; i++){
 					strhtml += "<tr id='db_"+i+"' data-toggle='modal' data-target='#detailModal' onclick=''>";
+					strhtml +=	"<td class='gdcd text-center' style='display:none' id='gdcd'>"+list[i].gdcd+"</td>";
 					strhtml +=	"<td class='reg_date text-center' id='reg_date'>"+list[i].reg_date+"</td>";
 					strhtml +=  "<td class='inp_cnt text-center' id='inp_cnt'>"+list[i].inp_cnt+"</td>";
 					strhtml +=	"<td class='gd_memo text-center' id='gd_memo'>"+list[i].gd_memo+"</td>";

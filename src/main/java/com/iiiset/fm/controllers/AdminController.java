@@ -275,6 +275,8 @@ public class AdminController {
 	@RequestMapping(value = "/insertDb")
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int regDb(@ModelAttribute DbVO vo) throws Exception {
+		
+		if("".equals(vo.getCust_nm())) return 0;
 
 		int result = service.insertDb(vo);
 

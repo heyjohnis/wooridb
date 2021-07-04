@@ -88,10 +88,7 @@
 		,site
 		,reg_date
 		,mod_date
-		,CASE
-				WHEN gd_cd = '001' THEN '탑스핏'
-				ELSE ''
-		 END 	AS gd_cd
+		,(SELECT gdnm FROM goods A WHERE A.gdcd = gd_cd)	AS gd_cd
 		,CASE 
 				WHEN gd_buyType = '01' THEN '접수' 
 				WHEN gd_buyType = '02' THEN '부재'
@@ -213,6 +210,7 @@
 	<select id="selectGoodsDt" parameterType="com.iiiset.fm.model.GoodsVO"
 		resultType="com.iiiset.fm.model.GoodsVO">
 		SELECT    reg_date
+				, gdcd
 				, inp_cnt
 				, gd_memo
 				, seq
@@ -245,7 +243,8 @@
 			  		  , (SELECT SUM(order_cnt) AS order_cnt 
 			 			 FROM   db_data b
 			 			 <where>
-			 			 		b.manager = a.manager
+			 			 		b.manager IS NOT NULL
+			 			 AND    b.manager = a.manager
 			 			 AND 	b.gd_buyType IN ("04","05")
 			 			 
 							<if test="first_value != null and first_value != '' and first_value != '전체'">
@@ -260,7 +259,6 @@
  						</where>) 						 		 AS order_cnt
 			 
 			 FROM        db_data a
-			 WHERE 		 a.manager IS NOT NULL
              GROUP BY a.manager
              ORDER BY order_cnt DESC) a
     
@@ -276,7 +274,8 @@
 			  		  , (SELECT SUM(order_amount) AS order_amount
 			 			 FROM   db_data b
 			 			 <where>
-			 			 	    b.manager = a.manager
+			 			 		b.manager IS NOT NULL
+			 			 AND    b.manager = a.manager
 			 			 AND 	b.gd_buyType IN ("04","05")
 			 			 
 							<if test="first_value != null and first_value != '' and first_value != '전체'">
@@ -290,7 +289,7 @@
 			 				</if>
  						</where>) 						 		 AS order_amount
 			 FROM        db_data a
-			 WHERE 		 a.manager IS NOT NULL
+			 
              GROUP BY a.manager
              ORDER BY order_amount DESC) a
     
@@ -306,7 +305,8 @@
 			  		  , (SELECT SUM(call_cnt) AS call_cnt 
 			 			 FROM   db_data b
 			 			 <where>  
-			 			 		b.manager = a.manager
+			 			 		b.manager IS NOT NULL
+			 			 AND	b.manager = a.manager
 			 			 AND 	b.gd_buyType IN ("04","05")
 			 			 
 							<if test="first_value != null and first_value != '' and first_value != '전체'">
@@ -320,7 +320,6 @@
 			 				</if>
  						</where>) 						 		 AS call_cnt
 			 FROM        db_data a
-			 WHERE 		 a.manager IS NOT NULL
              GROUP BY a.manager
              ORDER BY call_cnt DESC) a
     

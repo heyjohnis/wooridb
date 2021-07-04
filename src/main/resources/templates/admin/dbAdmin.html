@@ -25,10 +25,14 @@
 	
 	var manager = [[${user_id}]];
     var grade = [[${grade}]];
-    var cnt_list = [[${cnt_list}]];
-    var amt_list = [[${amt_list}]];
-    var call_list = [[${call_list}]];
+    var cntList = [[${cnt_list}]];
+    var amtList = [[${amt_list}]];
+    var callList = [[${call_list}]];
+    var cnt_list = cntList.filter(function(data) {return data != null});
+    var amt_list = amtList.filter(function(data) {return data != null});
+    var call_list = callList.filter(function(data) {return data != null});
 
+    
   
 </script>
 
@@ -355,17 +359,22 @@ function createTb(){
 	var amt_length = amt_list.length;
 	var call_length = call_list.length;
 	var min = Math.min(cnt_length, amt_length, call_length);
-	for(var i=0;i<min; i++){
-		if(i == 0){
-			cnt_html = "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+cnt_list[i].manager+"</td><td style='text-align:center;width:55%'>"+cnt_list[i].order_cnt+"</td></tr>";
-			amt_html = "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+amt_list[i].manager+"</td><td style='text-align:right;width:55%'>"+addComma(amt_list[i].order_amount)+"</td></tr>";
-			call_html = "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+call_list[i].manager+"</td><td style='text-align:center;width:55%'>"+call_list[i].call_cnt+"</td></tr>";
-		}else{
-			cnt_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+cnt_list[i].manager+"</td><td style='text-align:center;width:55%'>"+cnt_list[i].order_cnt+"</td></tr>";
-			amt_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+amt_list[i].manager+"</td><td style='text-align:right;width:55%'>"+addComma(amt_list[i].order_amount)+"</td></tr>";
-			call_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+call_list[i].manager+"</td><td style='text-align:center;width:55%'>"+call_list[i].call_cnt+"</td></tr>";
-		}
-	};
+	
+	cnt_list.forEach(function(data, i){
+		console.log(data);
+		cnt_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+data.manager+"</td><td style='text-align:center;width:55%'>"+data.order_cnt+"</td></tr>";
+	});
+	
+	amt_list.forEach(function(data, i){
+		amt_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+data.manager+"</td><td style='text-align:right;width:55%'>"+addComma(data.order_amount)+"</td></tr>";
+	});
+	
+	call_list.forEach(function(data, i){
+		call_html += "<tr><td style='width:20%;text-align:center'>"+(i+1)+"</td><td style='width:35%;text-align:center'>"+data.manager+"</td><td style='text-align:center;width:55%'>"+data.call_cnt+"</td></tr>";
+	});
+	
+	
+
 	$("#cnt_table").prepend(cnt_html);
 	$("#amt_table").prepend(amt_html);
 	$("#call_table").prepend(call_html);
