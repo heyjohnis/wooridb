@@ -69,4 +69,6 @@ public interface AdminService {
 
 	int deleteUser(UserVO vo);
 
+	String getManager(DbVO vo);
+
 }

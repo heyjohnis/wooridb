@@ -242,7 +242,8 @@ function checkdate(input) {
 					<td class="expire_date print" th:text="${db.getExpire_date()}">유효기간</td>
 					<td class="following_date print"
 						th:text="${db.getFollowing_date()}">구매접촉일</td>
-					<td class="gd_cd " th:text="${db.getGd_cd()}">제품명</td>
+					<td class="gd_cd print" th:text="${db.getGd_cd()}">코드</td>
+					<td class="gd_nm" th:text="${db.getGd_nm()}">제품명</td>
 					<td class="gd_buyType " th:text="${db.getGd_buyType()}">구매상태</td>
 					<td class="call_succRate " th:text="${db.getCall_succRate()}">콜성공률</td>
 					<td class="call_cnt" th:text="${db.getCall_cnt()}">콜성공수</td>
@@ -374,8 +375,7 @@ function checkdate(input) {
 						<div class="row mt-2">
 							<div class="col-4">
 								<label for="modal_gd_cd">제품명</label>
-								<select id="modal_gdcd" name="gd_cd" class="form-control" onchange="setGd_cd(this.value)"></select>
-								<input type="hidden" id="modal_gdcd" name="gd_cd" class="gd_cd"/>
+								<select id="modal_gdcd" name="gd_cd" class="form-control"></select>
 							</div>
 							<div class="col-4">
 								<label for="modal_gd_buyType">구매상태</label> 
@@ -475,7 +475,6 @@ function checkdate(input) {
 			var expire_date = $(id_obj).find(".expire_date").text();
 			var site = $(id_obj).find(".site").text();
 			var gd_cd = $(id_obj).find(".gd_cd").text();
-			if(gd_cd = "탑스핏") gd_cd = "001";
 			var gd_buyType = $(id_obj).find(".gd_buyType").text();
 			 //판매유형 01.접수 02.부재 03.보류 04.구매완료 05.재구매
 			if(gd_buyType == "접수"){ 
@@ -512,7 +511,6 @@ function checkdate(input) {
 			$("#modal_card_number").val(card_number);
 			$("#modal_expire_date").val(expire_date);
 			$("#modal_gdcd").val(gd_cd);
-			$("#modal_gdcd").val(gd_cd);
 			$("#modal_gd_buyType").val(gd_buyType);
 			$("#modal_gd_buy_Type").text(gd_buyType);
 			$("#modal_cnt_sum").val(cnt_sum);
@@ -537,8 +535,8 @@ function checkdate(input) {
 		function saveDb() {
 			var dbObj = $("#request").serializeObject();
 			console.log("dbObj:",dbObj);
+			dbObj.gd_cd = $("#modal_gdcd option:selected").val();
 			dbObj.gd_buyType=$("#modal_gd_buyType").val();
-			dbObj.gd_cd = $("#modal_gdcd").val();
 			var rebuy_Yn = $("#modal_rebuy_Yn").val();
 			if(rebuy_Yn == "1"){
 				$.post("/admin/insertDb", dbObj, function(data) {
@@ -606,16 +604,7 @@ function checkdate(input) {
 				}
 			});
 		}
-		
-		function setGd_cd(id){
-			console.log("gd_cd_id : ", id);
-			$.each(gd_list, function(idx, item){
-				if(item.user_id == id){
-					$("#modal_gd_cd").val(item.gdcd);
-				}
-			});
-		}
-		
+				
 		function setGd_buyType(id){
 			console.log("gd_buyType_id : ", id);
 			$.each(buyType_list, function(idx, item){

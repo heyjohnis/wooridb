@@ -66,5 +66,7 @@ public interface AdminDao {
 
 	int deleteUser(UserVO vo);
 
+	String getManager(DbVO vo);
+
 
 }

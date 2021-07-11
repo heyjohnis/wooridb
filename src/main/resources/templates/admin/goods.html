@@ -68,8 +68,8 @@ $(document).ready(function(){
 					</tr>
 				</thead>
 				<tbody id="goodsTb">
-					<tr th:id="db_+${db.gdcd}" th:each="db, stat: ${list}"
-					data-toggle="modal" onclick="showGoodsDt()">
+					<tr class="good" th:id="db_+${db.gdcd}" th:each="db, stat: ${list}"
+					data-toggle="modal" th:attr="onclick=|showGoodsDt('${db.gdcd}')|">
 						<td id="thisGdcd" class="gdcd text-center" th:text="${db.getGdcd()}">상품코드</td>
 						<td class="gdnm text-center" th:text="${db.getGdnm()}">상품명</td>
 						<td class="cnt_sum text-center" th:text="${db.getCnt_sum()}">누적재고량</td>
@@ -117,7 +117,7 @@ $(document).ready(function(){
 							<div class="col-3" style="display:block">
 								<label for="modal_gdcd">상품명</label> 
 								<select id="modal_gdcd" name="gdcd" class="form-control gdnm">
-									<option value="001">킹포스</option>
+									<option th:value="${db.getGdcd()}" th:each="db, stat: ${list}" th:text="${db.getGdnm()}"></option>
 								</select>
 							</div>
 							<div class="col-5">
@@ -237,10 +237,13 @@ $(document).ready(function(){
 			});
 		}
 		
-		function showGoodsDt(){
-			var gdcd = $("#thisGdcd").text();
+		function showGoodsDt(id){
+			
+			$(".good").removeClass("on");
+			$("#db_"+id).addClass("on");
+			
 			var list;
-			$.post("/admin/goodsDt", {"gdcd" : gdcd}, function(data) {
+			$.post("/admin/goodsDt", {"gdcd" : id}, function(data) {
 				list = data;
 			}).done(function() {
 				console.log(list);

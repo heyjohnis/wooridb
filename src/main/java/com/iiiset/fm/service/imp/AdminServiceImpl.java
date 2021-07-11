@@ -315,4 +315,9 @@ public class AdminServiceImpl implements AdminService {
 		return dao.deleteUser(vo);
 	}
 
+	@Override
+	public String getManager(DbVO vo) {
+		return dao.getManager(vo);
+	}
+
 }

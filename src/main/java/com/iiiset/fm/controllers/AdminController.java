@@ -276,8 +276,9 @@ public class AdminController {
 	@CrossOrigin(origins = "*", maxAge = 4800, allowCredentials = "false")
 	public @ResponseBody int regDb(@ModelAttribute DbVO vo) throws Exception {
 		
+		String manager = service.getManager(vo);
+		vo.setManager(manager);
 		if("".equals(vo.getCust_nm())) return 0;
-
 		int result = service.insertDb(vo);
 
 		return result;
